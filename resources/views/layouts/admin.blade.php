@@ -10,6 +10,7 @@
             {{ $instituteName }}
         @endif
     </title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -32,7 +33,9 @@
     </style>
     @stack('styles')
 </head>
-<body class="bg-gray-100 font-sans antialiased" x-data="{ sidebarOpen: false }">
+<body class="bg-slate-50 font-sans antialiased text-slate-800" 
+      x-data="adminLayout()"
+      x-on:notify.window="addToast($event.detail)">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
         <aside class="fixed inset-y-0 left-0 z-50 w-64 transform bg-slate-900 transition-transform duration-300 lg:static lg:translate-x-0"
@@ -158,6 +161,69 @@
             </main>
         </div>
     </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="fixed bottom-4 right-4 z-[9999] flex flex-col gap-2">
+        <template x-for="toast in toasts" :key="toast.id">
+            <div x-show="true" 
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 transform translate-y-2"
+                 x-transition:enter-end="opacity-100 transform translate-y-0"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100 transform translate-y-0"
+                 x-transition:leave-end="opacity-0 transform translate-y-2"
+                 class="flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg border text-sm font-medium min-w-[250px]"
+                 :class="toast.type === 'success' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : (toast.type === 'error' ? 'bg-red-50 border-red-200 text-red-800' : 'bg-white border-slate-200 text-slate-800')">
+                 
+                <i class="fas" :class="toast.type === 'success' ? 'fa-check-circle text-emerald-500' : (toast.type === 'error' ? 'fa-exclamation-circle text-red-500' : 'fa-info-circle text-slate-500')"></i>
+                <span x-text="toast.message"></span>
+            </div>
+        </template>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('adminLayout', () => ({
+                sidebarOpen: false,
+                toasts: [],
+                addToast(detail) {
+                    const id = Date.now();
+                    this.toasts.push({ id, ...detail });
+                    setTimeout(() => {
+                        this.toasts = this.toasts.filter(t => t.id !== id);
+                    }, 3000);
+                }
+            }));
+            
+            // Global Auto-save Helpers
+            window.autoSaveOption = async (url, key, value) => {
+                try {
+                    let data = {};
+                    data[key] = value;
+                    const response = await window.axios.post(url, data);
+                    window.dispatchEvent(new CustomEvent('notify', { detail: { type: 'success', message: 'Saved successfully' }}));
+                } catch (error) {
+                    console.error("Save error", error);
+                    window.dispatchEvent(new CustomEvent('notify', { detail: { type: 'error', message: 'Failed to save' }}));
+                }
+            };
+            
+            window.autoSaveFileOption = async (url, key, file) => {
+                if(!file) return;
+                try {
+                    const formData = new FormData();
+                    formData.append(key, file);
+                    const response = await window.axios.post(url, formData, {
+                        headers: { 'Content-Type': 'multipart/form-data' }
+                    });
+                    window.dispatchEvent(new CustomEvent('notify', { detail: { type: 'success', message: 'Uploaded successfully' }}));
+                } catch(error) {
+                    console.error("Upload error", error);
+                    window.dispatchEvent(new CustomEvent('notify', { detail: { type: 'error', message: 'Failed to upload' }}));
+                }
+            };
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>

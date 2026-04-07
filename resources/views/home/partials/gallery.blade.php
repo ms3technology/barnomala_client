@@ -27,9 +27,6 @@
                     <div class="absolute inset-0 p-6 flex flex-col justify-end translate-y-8 group-hover:translate-y-0 transition-all duration-500 opacity-0 group-hover:opacity-100">
                         <p class="text-[10px] font-black text-accent uppercase tracking-[0.2em] mb-2">{{ $news->published_at ? $news->published_at->format('M d, Y') : '' }}</p>
                         <h4 class="text-sm font-bold text-white leading-tight line-clamp-2">{{ $news->title }}</h4>
-                        <a href="{{ route('news.show', $news) }}" class="mt-4 inline-flex items-center gap-2 text-[10px] font-black text-white uppercase tracking-widest pointer-events-auto">
-                            Details <i class="fas fa-chevron-right text-[8px] text-accent"></i>
-                        </a>
                     </div>
                 </div>
             @empty

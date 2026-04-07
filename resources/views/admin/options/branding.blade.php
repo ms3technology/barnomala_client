@@ -69,7 +69,7 @@
                     
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
                         <!-- Logo (3 cols) -->
-                        <div class="md:col-span-3 space-y-3">
+                        <div class="md:col-span-3 space-y-3 w-48">
                             <label class="block text-xs font-black text-slate-500 uppercase tracking-widest">Logo</label>
                             <div class="relative group aspect-square bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl overflow-hidden flex items-center justify-center transition-all hover:border-indigo-300" x-data="{ 
                                 logoPreview: '{{ isset($logo['url']) ? $logo['url'] : '' }}',

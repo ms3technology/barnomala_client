@@ -38,9 +38,11 @@
                                 {{ Str::limit($news->title, 60) }}
                             </a>
                         </h3>
-                        <p class="text-slate-500 text-xs leading-relaxed line-clamp-2 mb-6">
-                            {{ $news->summary ?? Str::limit(strip_tags($news->content), 80) }}
-                        </p>
+                        @if ($news->summary)
+                            <p class="text-slate-500 text-xs leading-relaxed line-clamp-2 mb-6">
+                                {{ $news->summary }}
+                            </p>
+                        @endif
                         <div class="mt-auto">
                             <a href="{{ route('news.show', $news) }}" class="inline-flex items-center gap-1 text-[9px] font-black text-accent uppercase tracking-widest transform group-hover:translate-x-1 transition-all duration-500">
                                 Read More <i class="fas fa-arrow-right text-xs"></i>
