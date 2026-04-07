@@ -10,6 +10,8 @@
     $estd = $options['institute.identity.established_year'] ?? ($options['institute.estd_year'] ?? '1995');
     $logoUrl = $options['institute.branding.logo_json']['url'] ?? ($options['logo_url'] ?? asset('images/school-logo.png'));
     $headerBg = $options['institute.branding.header_bg'] ?? '#ffffff';
+    $schoolTenantId = trim($options['institute.tenant.id'] ?? request()->getHost());
+    $portalLoginUrl = 'https://cloud.barnomala.com/login?school=' . rawurlencode($schoolTenantId !== '' ? $schoolTenantId : 'demo');
 @endphp
 
 <header class="overflow-visible relative z-50 transition-colors duration-300" style="background-color: {{ $headerBg }};" x-data="{ mobileMenuOpen: false }">
@@ -199,7 +201,7 @@
                     </div>
                     
                     {{-- PORTAL LOGIN --}}
-                    <a href="https://cloud.barnomala.com/login?school=demo" target="_blank" class="ml-4 px-3 py-1.5 text-white hover:text-yellow-400 font-bold transition-all rounded-md hover:bg-white/5 text-xs xl:text-sm">
+                    <a href="{{ $portalLoginUrl }}" target="_blank" class="ml-4 px-3 py-1.5 text-white hover:text-yellow-400 font-bold transition-all rounded-md hover:bg-white/5 text-xs xl:text-sm">
                         Portal Login
                     </a>
                 </div>
@@ -241,7 +243,7 @@
                     @endif
                 @endforeach
                 <div class="pt-4 mt-4 border-t border-white/10">
-                    <a href="https://cloud.barnomala.com/login?school=demo" target="_blank" class="block px-4 py-2 text-sm font-bold text-yellow-400 hover:bg-white/10 rounded-md transition-all">
+                    <a href="{{ $portalLoginUrl }}" target="_blank" class="block px-4 py-2 text-sm font-bold text-yellow-400 hover:bg-white/10 rounded-md transition-all">
                         Portal Login
                     </a>
                 </div>

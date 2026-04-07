@@ -6,6 +6,7 @@ use App\Http\Controllers\Concerns\BuildsPublicPageData;
 use App\Models\Notice;
 use App\Models\News;
 use App\Models\Speech;
+use App\Models\Teacher;
 
 class HomeController extends Controller
 {
@@ -46,12 +47,10 @@ class HomeController extends Controller
             $sliderImages = json_decode($sliderImages, true) ?: [];
         }
 
-        $teachers = [
-            ['teacherid' => 1, 'teacherName' => 'Lead Teacher', 'teacherDesignation' => 'Principal', 'teacherImg' => asset('images/teacher.png')],
-            ['teacherid' => 2, 'teacherName' => 'Academic Coordinator', 'teacherDesignation' => 'Vice Principal', 'teacherImg' => asset('images/teacher.png')],
-            ['teacherid' => 3, 'teacherName' => 'Senior Teacher', 'teacherDesignation' => 'Department Head', 'teacherImg' => asset('images/teacher.png')],
-            ['teacherid' => 4, 'teacherName' => 'Faculty Member', 'teacherDesignation' => 'Senior Instructor', 'teacherImg' => asset('images/teacher.png')],
-        ];
+        $teachers = Teacher::where('status', true)
+            ->orderBy('priority_index', 'asc')
+            ->take(12)
+            ->get();
 
         $stats = [
             ['label' => 'Classes', 'count' => $options['institute.stats.classes_count'] ?? $options['totalClasses'] ?? null, 'img' => asset('images/slider-1.png')],

@@ -6,13 +6,22 @@
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-6">
         @foreach($teachers as $teacher)
-            <div class="bg-white rounded-xl shadow-md overflow-hidden group hover:shadow-xl transition duration-300">
-                <div class="aspect-3/4 overflow-hidden">
-                    <img src="{{ $teacher['teacherImg'] ?? $teacher->teacherImg }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="{{ $teacher['teacherName'] ?? $teacher->teacherName }}">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden group hover:shadow-xl transition duration-300 border border-slate-100">
+                <div class="aspect-square overflow-hidden bg-slate-100">
+                    @if($teacher->photo)
+                        <img src="{{ asset('storage/' . $teacher->photo) }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="{{ $teacher->teacher_name }}">
+                    @elseif($teacher->teacher_image)
+                        <img src="{{ $teacher->teacher_image }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="{{ $teacher->teacher_name }}">
+                    @else
+                        <div class="w-full h-full flex items-center justify-center text-slate-300">
+                            <i class="fas fa-user-tie text-4xl"></i>
+                        </div>
+                    @endif
                 </div>
-                <div class="p-4 text-center">
-                    <h4 class="font-bold text-gray-900 text-sm mb-1 truncate">{{ $teacher['teacherName'] ?? $teacher->teacherName }}</h4>
-                    <p class="text-xs text-gray-500 truncate">{{ $teacher['teacherDesignation'] ?? $teacher->teacherDesignation }}</p>
+                <div class="p-3 text-center">
+                    <h4 class="font-bold text-gray-900 text-xs md:text-sm mb-0.5 truncate">{{ $teacher->teacher_name }}</h4>
+                    <p class="text-[10px] md:text-xs text-indigo-600 font-semibold truncate">{{ $teacher->designation }}</p>
+                    <p class="text-[9px] text-gray-400 truncate">{{ $teacher->department }}</p>
                 </div>
             </div>
         @endforeach

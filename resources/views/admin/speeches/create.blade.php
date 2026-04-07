@@ -58,7 +58,7 @@
 
             <!-- Right Column: Image Upload -->
             <div class="md:col-span-1">
-                <div class="bg-slate-50 rounded-lg border-2 border-dashed border-slate-200 p-4 flex flex-col items-center justify-center h-full min-h-[400px]">
+                <div class="bg-slate-50 rounded-lg border-2 border-dashed border-slate-200 p-4 flex flex-col items-center justify-center h-full min-h-100">
                     <div class="w-full text-center">
                         <input type="file" id="image-input" name="image" accept="image/*" class="hidden" onchange="previewImage(event)">
                         

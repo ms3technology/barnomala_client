@@ -163,7 +163,7 @@
     </div>
 
     <!-- Toast Notifications Container -->
-    <div class="fixed bottom-4 right-4 z-[9999] flex flex-col gap-2">
+    <div class="fixed bottom-4 right-4 z-9999 flex flex-col gap-2">
         <template x-for="toast in toasts" :key="toast.id">
             <div x-show="true" 
                  x-transition:enter="transition ease-out duration-300"
@@ -172,7 +172,7 @@
                  x-transition:leave="transition ease-in duration-200"
                  x-transition:leave-start="opacity-100 transform translate-y-0"
                  x-transition:leave-end="opacity-0 transform translate-y-2"
-                 class="flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg border text-sm font-medium min-w-[250px]"
+                 class="flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg border text-sm font-medium min-w-62.5"
                  :class="toast.type === 'success' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : (toast.type === 'error' ? 'bg-red-50 border-red-200 text-red-800' : 'bg-white border-slate-200 text-slate-800')">
                  
                 <i class="fas" :class="toast.type === 'success' ? 'fa-check-circle text-emerald-500' : (toast.type === 'error' ? 'fa-exclamation-circle text-red-500' : 'fa-info-circle text-slate-500')"></i>

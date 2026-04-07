@@ -323,7 +323,14 @@ class OptionController extends Controller
 
             if ($option) {
                 $option->update(['option_value' => $value]);
+                continue;
             }
+
+            Option::create([
+                'option_key' => $formattedKey,
+                'option_value' => $value,
+                'value_type' => 'string',
+            ]);
         }
 
         return redirect()->back()->with('success', 'Settings updated successfully.');
