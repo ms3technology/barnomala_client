@@ -19,7 +19,7 @@
         
         <!-- Slider -->
         @if($sliderDesign === 'overlay')
-            <div class="relative w-full mt-4 h-[30vh] md:h-[60vh] overflow-hidden group font-sans" 
+            <div class="relative w-full h-[30vh] md:h-[65vh] overflow-hidden group font-sans" 
                  x-data="{ currentSlide: 0, totalSlides: {{ count($sliderImages) }}, next() { this.currentSlide = (this.currentSlide + 1) % this.totalSlides }, prev() { this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides } }" 
                  x-init="setInterval(() => next(), 7000)">
                 

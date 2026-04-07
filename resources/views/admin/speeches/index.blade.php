@@ -1,73 +1,82 @@
 @extends('layouts.admin')
 
-@section('title', 'Speeches')
+@section('title', 'Speech Management')
 
 @section('content')
-<div class="mb-6 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-gray-800">Speech Management</h1>
-    <a href="{{ route('admin.speeches.create') }}" class="inline-flex items-center px-4 py-2 bg-accent text-white rounded-lg hover:opacity-90 transition-opacity">
-        <i class="fas fa-plus mr-2"></i> Create Speech
-    </a>
-</div>
+<div class="space-y-12">
+    @foreach($rows as $rowIndex)
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-slate-50/50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <h2 class="text-lg font-bold text-slate-800">Row {{ $rowIndex }}</h2>
+                <form action="{{ route('admin.speeches.row-config') }}" method="POST" class="flex items-center gap-2">
+                    @csrf
+                    <input type="hidden" name="row_index" value="{{ $rowIndex }}">
+                    <select name="config" onchange="this.form.submit()" class="text-xs font-bold uppercase tracking-wider bg-white border-slate-200 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 py-1">
+                        @php $currentConfig = \App\Models\Option::get("speech.row.{$rowIndex}.config", '1 item'); @endphp
+                        <option value="1 item" {{ $currentConfig == '1 item' ? 'selected' : '' }}>1 Item</option>
+                        <option value="2 items" {{ $currentConfig == '2 items' ? 'selected' : '' }}>2 Items</option>
+                        <option value="3 items" {{ $currentConfig == '3 items' ? 'selected' : '' }}>3 Items</option>
+                    </select>
+                </form>
+            </div>
+        </div>
 
-<div class="bg-white rounded-lg shadow overflow-hidden">
-    <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-            <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Speaker</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title/Designation</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-            </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-            @forelse($speeches as $speech)
-            <tr>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                        <div class="shrink-0 h-10 w-10">
-                            <img class="h-10 w-10 rounded-full object-cover" src="{{ $speech->image_url }}" alt="">
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                @php
+                    $maxCols = 3;
+                    if($currentConfig == '1 item') $maxCols = 1;
+                    elseif($currentConfig == '2 items') $maxCols = 2;
+                @endphp
+
+                @for($colIndex = 1; $colIndex <= $maxCols; $colIndex++)
+                    @php
+                        $item = $speeches->get($rowIndex)?->where('column_index', $colIndex)->first();
+                    @endphp
+
+                    @if($item)
+                    <div onclick="window.location='{{ route('admin.speeches.edit', $item) }}'" 
+                        class="relative group cursor-pointer bg-slate-50 rounded-xl border-2 border-dashed border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/30 transition-all p-4 flex flex-col items-center justify-center text-center min-h-50">
+                        <img src="{{ $item->image_url }}" alt="" class="w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm mb-3">
+                        <h3 class="font-bold text-slate-800 line-clamp-1">{{ $item->title }}</h3>
+                        <p class="text-xs text-slate-500 mt-1">{{ $item->name }}</p>
+                        <div class="mt-3">
+                            @if($item->is_active)
+                                <span class="inline-flex text-[10px] font-bold uppercase px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full">Active</span>
+                            @else
+                                <span class="inline-flex text-[10px] font-bold uppercase px-2 py-0.5 bg-slate-200 text-slate-600 rounded-full">Inactive</span>
+                            @endif
                         </div>
-                        <div class="ml-4">
-                            <div class="text-sm font-medium text-gray-900">{{ $speech->name }}</div>
+                        
+                        <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <form action="{{ route('admin.speeches.destroy', $item) }}" method="POST" onsubmit="return confirm('Delete this speech?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" onclick="event.stopPropagation()" class="p-1.5 bg-white text-red-500 rounded-lg shadow-sm hover:text-red-700">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900 font-semibold">{{ $speech->title }}</div>
-                    <div class="text-xs text-gray-500">{{ $speech->designation }}</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    @if($speech->is_active)
-                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
                     @else
-                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Inactive</span>
+                    <form action="{{ route('admin.speeches.quick') }}" method="POST" class="h-full">
+                        @csrf
+                        <input type="hidden" name="row_index" value="{{ $rowIndex }}">
+                        <input type="hidden" name="column_index" value="{{ $colIndex }}">
+                        <button type="submit" class="w-full h-full min-h-50 border-2 border-dashed border-slate-200 rounded-xl flex flex-col items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50/50 transition-all group">
+                            <div class="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center mb-3 group-hover:bg-indigo-100 transition-colors">
+                                <i class="fas fa-plus text-lg"></i>
+                            </div>
+                            <span class="text-sm font-bold">Add Speech</span>
+                            <span class="text-[10px] uppercase mt-1 opacity-60">Column {{ $colIndex }}</span>
+                        </button>
+                    </form>
                     @endif
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div class="flex justify-end space-x-2">
-                        <a href="{{ route('admin.speeches.edit', $speech) }}" class="text-indigo-600 hover:text-indigo-900">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <form action="{{ route('admin.speeches.destroy', $speech) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this speech?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-900">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan="4" class="px-6 py-4 text-center text-gray-500">No speeches found.</td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
-    <div class="px-6 py-4">
-        {{ $speeches->links() }}
+                @endfor
+            </div>
+        </div>
     </div>
+    @endforeach
 </div>
 @endsection

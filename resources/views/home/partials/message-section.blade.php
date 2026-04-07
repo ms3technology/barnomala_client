@@ -1,11 +1,10 @@
 @php
-    function getColSpanClass($colspan) {
-        switch ($colspan) {
-            case 1: return 'md:col-span-2'; // 1/3 of 6
-            case 2: return 'md:col-span-4'; // 2/3 of 6
-            case 3: return 'md:col-span-6'; // Full width
-            default: return 'md:col-span-3'; // 1/2 of 6 (Default for "2 items in row")
-        }
+    function getRowItemClass(string $config): string {
+        return match ($config) {
+            '1 item' => 'md:col-span-6',
+            '2 items' => 'md:col-span-3',
+            default => 'md:col-span-2',
+        };
     }
 
     function getImageUrl($speech) {
@@ -42,33 +41,51 @@
         </div>
     </div>
 
-    <!-- Dynamic Speech Section (6-Column Grid for 2 items per row capability) -->
-    <div class="grid grid-cols-1 md:grid-cols-6 gap-8 mb-16">
-        @foreach($speeches as $speech)
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden group flex flex-col {{ getColSpanClass($speech['colspan'] ?? $speech->colspan) }}">
-                <div class="p-8 flex-1 flex flex-col">
-                    <div class="flex flex-col items-center mb-6">
-                        <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-indigo-50 shadow-inner mb-4">
-                            <img src="{{ getImageUrl($speech) }}" 
-                                 class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500" 
-                                 alt="{{ $speech['name'] ?? $speech->name }}">
+    <!-- Dynamic Speech Section (row/column placement driven by row config) -->
+    @php
+        $rows = [1, 2, 3];
+    @endphp
+    <div class="space-y-8 mb-16">
+        @foreach($rows as $rowIndex)
+            @php
+                $rowConfig = $options["speech.row.{$rowIndex}.config"] ?? '1 item';
+                $maxItems = $rowConfig === '1 item' ? 1 : ($rowConfig === '2 items' ? 2 : 3);
+                $rowItems = collect($speeches)
+                    ->where('row_index', $rowIndex)
+                    ->sortBy('column_index')
+                    ->take($maxItems);
+            @endphp
+
+            @if($rowItems->isNotEmpty())
+                <div class="grid grid-cols-1 md:grid-cols-6 gap-8">
+                    @foreach($rowItems as $speech)
+                        <div class="bg-white rounded-2xl shadow-xl overflow-hidden group flex flex-col {{ getRowItemClass($rowConfig) }}">
+                            <div class="p-8 flex-1 flex flex-col">
+                                <div class="flex flex-col items-center mb-6">
+                                    <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-indigo-50 shadow-inner mb-4">
+                                        <img src="{{ getImageUrl($speech) }}"
+                                             class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500"
+                                             alt="{{ $speech['name'] ?? $speech->name }}">
+                                    </div>
+                                    <h3 class="text-xl font-bold text-indigo-900 text-center">{{ $speech['title'] ?? $speech->title }}</h3>
+                                </div>
+                                <div class="relative flex-1">
+                                    <svg class="absolute -top-4 -left-2 w-10 h-10 text-indigo-50 opacity-50" fill="currentColor" viewBox="0 0 32 32">
+                                        <path d="M10 12c-2.209 0-4 1.791-4 4s1.791 4 4 4c0.75 0 1.444-0.213 2.031-0.563 1.156 2.406 3.444 4.063 6.094 4.313a1.001 1.001 0 100.188-1.969c-3.125-0.281-5.656-2.5-6.188-5.594C12.313 15.688 11.25 12 10 12zm12 0c-2.209 0-4 1.791-4 4s1.791 4 4 4c0.75 0 1.444-0.213 2.031-0.563 1.156 2.406 3.444 4.063 6.094 4.313a1.001 1.001 0 100.188-1.969c-3.125-0.281-5.656-2.5-6.188-5.594C24.313 15.688 23.25 12 22 12z"></path>
+                                    </svg>
+                                    <p class="text-gray-600 italic text-center px-4 relative z-10 line-clamp-6 group-hover:line-clamp-none transition-all duration-500">
+                                        {{ $speech['speech'] ?? $speech->speech }}
+                                    </p>
+                                </div>
+                                <div class="mt-6 text-right pt-4 border-t border-gray-50">
+                                    <div class="font-bold text-indigo-900">{{ $speech['name'] ?? $speech->name }}</div>
+                                    <div class="text-xs text-indigo-600 font-medium tracking-wide uppercase">{{ $speech['designation'] ?? $speech->designation }}</div>
+                                </div>
+                            </div>
                         </div>
-                        <h3 class="text-xl font-bold text-indigo-900 text-center">{{ $speech['title'] ?? $speech->title }}</h3>
-                    </div>
-                    <div class="relative flex-1">
-                        <svg class="absolute -top-4 -left-2 w-10 h-10 text-indigo-50 opacity-50" fill="currentColor" viewBox="0 0 32 32">
-                            <path d="M10 12c-2.209 0-4 1.791-4 4s1.791 4 4 4c0.75 0 1.444-0.213 2.031-0.563 1.156 2.406 3.444 4.063 6.094 4.313a1.001 1.001 0 100.188-1.969c-3.125-0.281-5.656-2.5-6.188-5.594C12.313 15.688 11.25 12 10 12zm12 0c-2.209 0-4 1.791-4 4s1.791 4 4 4c0.75 0 1.444-0.213 2.031-0.563 1.156 2.406 3.444 4.063 6.094 4.313a1.001 1.001 0 100.188-1.969c-3.125-0.281-5.656-2.5-6.188-5.594C24.313 15.688 23.25 12 22 12z"></path>
-                        </svg>
-                        <p class="text-gray-600 italic text-center px-4 relative z-10 line-clamp-6 group-hover:line-clamp-none transition-all duration-500">
-                            {{ $speech['speech'] ?? $speech->speech }}
-                        </p>
-                    </div>
-                    <div class="mt-6 text-right pt-4 border-t border-gray-50">
-                        <div class="font-bold text-indigo-900">{{ $speech['name'] ?? $speech->name }}</div>
-                        <div class="text-xs text-indigo-600 font-medium tracking-wide uppercase">{{ $speech['designation'] ?? $speech->designation }}</div>
-                    </div>
+                    @endforeach
                 </div>
-            </div>
+            @endif
         @endforeach
     </div>
 </div>

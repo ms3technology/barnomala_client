@@ -49,4 +49,18 @@ class Option extends Model
             $this->attributes['value_type'] = 'string';
         }
     }
+
+    public static function set($key, $value)
+    {
+        $option = self::updateOrCreate(['option_key' => $key], ['option_value' => '']); // Initial create for key
+        $option->setValueAttribute($value); // This will handle type casting
+        $option->save();
+        return $option;
+    }
+
+    public static function get($key, $default = null)
+    {
+        $option = self::where('option_key', $key)->first();
+        return $option ? $option->value : $default;
+    }
 }

@@ -31,6 +31,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('notices', AdminNoticeController::class);
     Route::resource('news', AdminNewsController::class);
     Route::resource('speeches', AdminSpeechController::class);
+    Route::post('speeches/quick', [AdminSpeechController::class, 'storeQuick'])->name('speeches.quick');
+    Route::post('speeches/row-config', [AdminSpeechController::class, 'updateRowConfig'])->name('speeches.row-config');
 
     Route::get('branding', [AdminOptionController::class, 'branding'])->name('branding.index');
     Route::post('branding', [AdminOptionController::class, 'updateBranding'])->name('branding.update');

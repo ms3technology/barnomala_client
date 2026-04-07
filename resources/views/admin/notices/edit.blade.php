@@ -15,7 +15,6 @@
         <a href="{{ route('admin.notices.index') }}" class="text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors flex items-center mb-2">
             <i class="fas fa-arrow-left mr-2"></i> Back to Notices
         </a>
-        <h1 class="text-2xl font-bold text-slate-800">Edit Notice</h1>
     </div>
 </div>
 

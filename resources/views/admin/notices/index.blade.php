@@ -1,11 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Notices')
+@section('title', 'Notice Management')
 
 @section('content')
 <div class="mb-6 flex justify-between items-center">
     <div>
-        <h1 class="text-2xl font-bold text-slate-800">Notice Management</h1>
         <p class="text-sm text-slate-500 mt-1">Manage all public and internal institution notices.</p>
     </div>
     <a href="{{ route('admin.notices.create') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-bold shadow-sm">
@@ -26,7 +25,7 @@
             </thead>
             <tbody class="divide-y divide-slate-100">
                 @forelse($notices as $notice)
-                <tr class="hover:bg-slate-50/50 transition-colors group">
+                <tr onclick="window.location='{{ route('admin.notices.edit', $notice) }}'" class="hover:bg-slate-100 transition-colors group cursor-pointer">
                     <td class="px-6 py-4">
                         <div class="flex flex-col">
                             <span class="font-bold text-slate-800 line-clamp-1">{{ $notice->title }}</span>
@@ -60,13 +59,10 @@
                     </td>
                     <td class="px-6 py-4 text-right">
                         <div class="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <a href="{{ route('admin.notices.edit', $notice) }}" class="text-slate-400 hover:text-indigo-600 transition-colors" title="Edit">
-                                <i class="fas fa-edit fa-lg"></i>
-                            </a>
                             <form action="{{ route('admin.notices.destroy', $notice) }}" method="POST" class="inline" onsubmit="return confirm('Delete this notice?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-slate-400 hover:text-red-600 transition-colors" title="Delete">
+                                <button type="submit" onclick="event.stopPropagation()" class="text-slate-400 hover:text-red-600 transition-colors" title="Delete">
                                     <i class="fas fa-trash-alt fa-lg"></i>
                                 </button>
                             </form>

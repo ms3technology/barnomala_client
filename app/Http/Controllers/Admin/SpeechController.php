@@ -13,8 +13,59 @@ class SpeechController extends Controller
      */
     public function index()
     {
-        $speeches = Speech::latest()->paginate(10);
-        return view('admin.speeches.index', compact('speeches'));
+        $rows = [1, 2, 3];
+        $speeches = Speech::query()
+            ->orderBy('row_index')
+            ->orderBy('column_index')
+            ->orderBy('id')
+            ->get()
+            ->groupBy('row_index');
+        
+        return view('admin.speeches.index', compact('speeches', 'rows'));
+    }
+
+    public function storeQuick(Request $request)
+    {
+        $request->validate([
+            'row_index' => 'required|integer|between:1,3',
+            'column_index' => 'required|integer|between:1,3',
+        ]);
+
+        $existing = Speech::where('row_index', $request->row_index)
+            ->where('column_index', $request->column_index)
+            ->first();
+
+        if ($existing) {
+            return redirect()->route('admin.speeches.edit', $existing);
+        }
+
+        $speech = Speech::create([
+            'name' => 'New Speaker',
+            'title' => 'Speech Title',
+            'designation' => 'Speaker Designation',
+            'speech' => 'Enter speech here...',
+            'row_index' => $request->row_index,
+            'column_index' => $request->column_index,
+            'colspan' => 1,
+            'is_active' => true,
+        ]);
+
+        return redirect()->route('admin.speeches.edit', $speech);
+    }
+
+    public function updateRowConfig(Request $request)
+    {
+        $request->validate([
+            'row_index' => 'required|integer|between:1,3',
+            'config' => 'required|string|in:1 item,2 items,3 items',
+        ]);
+
+        // Option::updateOrCreate(['key' => "speech.row.{$request->row_index}.config"], ['value' => $request->config]);
+        // For now, we will just use a generic way or assume user can store it in options table if it exists.
+        // Given your workspace has OptionsSeeder.php and Option.php model.
+        \App\Models\Option::set("speech.row.{$request->row_index}.config", $request->config);
+
+        return back()->with('success', 'Row configuration updated.');
     }
 
     /**
@@ -35,8 +86,21 @@ class SpeechController extends Controller
             'title' => 'required|string|max:255',
             'designation' => 'required|string|max:255',
             'speech' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'is_active' => 'boolean',
         ]);
+
+        $imageJson = null;
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $path = $file->store('speeches', 'public');
+            $imageJson = [
+                'url' => asset('storage/' . $path),
+                'path' => $path,
+                'name' => $file->getClientOriginalName(),
+            ];
+            $validated['image_json'] = $imageJson;
+        }
 
         Speech::create($validated);
 
@@ -70,8 +134,19 @@ class SpeechController extends Controller
             'title' => 'required|string|max:255',
             'designation' => 'required|string|max:255',
             'speech' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'is_active' => 'boolean',
         ]);
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $path = $file->store('speeches', 'public');
+            $validated['image_json'] = [
+                'url' => asset('storage/' . $path),
+                'path' => $path,
+                'name' => $file->getClientOriginalName(),
+            ];
+        }
 
         $speech->update($validated);
 
