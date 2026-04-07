@@ -2,6 +2,13 @@
 
 @section('title', 'Edit Speech')
 
+@push('header_actions')
+<button type="submit" form="speech-form" class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-bold rounded-lg shadow-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
+    <i class="fas fa-save mr-2"></i>
+    Update Speech
+</button>
+@endpush
+
 @section('content')
 <div class="mb-6">
     <a href="{{ route('admin.speeches.index') }}" class="text-sm font-medium text-accent hover:underline flex items-center">
@@ -11,7 +18,7 @@
 </div>
 
 <div class="bg-white rounded-lg shadow max-w-4xl p-8">
-    <form action="{{ route('admin.speeches.update', $speech) }}" method="POST">
+    <form id="speech-form" action="{{ route('admin.speeches.update', $speech) }}" method="POST">
         @csrf
         @method('PUT')
 
@@ -53,12 +60,6 @@
                     <img src="{{ $speech->image_url }}" alt="{{ $speech->name }}" class="h-16 w-16 rounded-full object-cover border border-gray-200">
                     <p class="ml-3 text-xs text-gray-500">Image is managed from synced source.</p>
                 </div>
-            </div>
-
-            <div class="flex justify-end mt-8">
-                <button type="submit" class="px-6 py-2 bg-accent text-white font-medium rounded-lg hover:opacity-90 transition-opacity">
-                    Update Speech
-                </button>
             </div>
         </div>
     </form>

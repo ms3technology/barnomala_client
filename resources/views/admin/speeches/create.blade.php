@@ -2,6 +2,13 @@
 
 @section('title', 'Create Speech')
 
+@push('header_actions')
+<button type="submit" form="speech-form" class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-bold rounded-lg shadow-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
+    <i class="fas fa-save mr-2"></i>
+    Create Speech
+</button>
+@endpush
+
 @section('content')
 <div class="mb-6">
     <a href="{{ route('admin.speeches.index') }}" class="text-sm font-medium text-accent hover:underline flex items-center">
@@ -11,7 +18,7 @@
 </div>
 
 <div class="bg-white rounded-lg shadow max-w-4xl p-8">
-    <form action="{{ route('admin.speeches.store') }}" method="POST">
+    <form id="speech-form" action="{{ route('admin.speeches.store') }}" method="POST">
         @csrf
 
         <div class="grid grid-cols-1 gap-y-6">
@@ -44,12 +51,6 @@
                 <input type="hidden" name="is_active" value="0">
                 <input type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }} class="h-4 w-4 text-accent border-gray-300 rounded">
                 <label for="is_active" class="ml-2 block text-sm text-gray-700 font-medium">Active</label>
-            </div>
-
-            <div class="flex justify-end mt-8">
-                <button type="submit" class="px-6 py-2 bg-accent text-white font-medium rounded-lg hover:opacity-90 transition-opacity">
-                    Create Speech
-                </button>
             </div>
         </div>
     </form>
