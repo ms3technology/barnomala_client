@@ -2,6 +2,13 @@
 
 @section('title', 'Manage Sliders')
 
+@push('header_actions')
+<button type="submit" form="slider-form" class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-bold rounded-lg shadow-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
+    <i class="fas fa-save mr-2"></i>
+    Save Sliders
+</button>
+@endpush
+
 @section('content')
 <div class="max-w-6xl mx-auto">
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -11,7 +18,7 @@
                 Home Slider Management
             </h1>
 
-            <form action="{{ route('admin.sliders.update') }}" method="POST" enctype="multipart/form-data" x-data="{ 
+            <form id="slider-form" action="{{ route('admin.sliders.update') }}" method="POST" enctype="multipart/form-data" x-data="{ 
                 newSliders: [],
                 addSlider() {
                     this.newSliders.push({title: '', order: 0});
@@ -27,22 +34,30 @@
                     <h2 class="text-sm font-black text-indigo-900 uppercase tracking-widest mb-4 flex items-center">
                         <i class="fas fa-th-large mr-2"></i> Hero Section Layout
                     </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <label class="relative flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-colors">
                             <input type="radio" name="hero_type" value="slider_only" {{ ($options['institute.hero.type'] ?? '') == 'slider_only' ? 'checked' : '' }} class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
                             <div class="ml-4">
-                                <span class="block text-sm font-bold text-slate-900">Full Width Slider</span>
-                                <span class="block text-xs text-slate-500">Only slider images will be shown across the screen.</span>
+                                <span class="block text-sm font-bold text-slate-900">Standard Slider</span>
+                                <span class="block text-xs text-slate-500">Standard full width slider layout.</span>
                             </div>
                         </label>
                         <label class="relative flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-colors">
                             <input type="radio" name="hero_type" value="slider_with_notice" {{ ($options['institute.hero.type'] ?? 'slider_with_notice') == 'slider_with_notice' ? 'checked' : '' }} class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
                             <div class="ml-4">
-                                <span class="block text-sm font-bold text-slate-900">Slider with Notice Panel</span>
-                                <span class="block text-xs text-slate-500">Slider alongside a vertical notice list (Default).</span>
+                                <span class="block text-sm font-bold text-slate-900">With Notice Panel</span>
+                                <span class="block text-xs text-slate-500">Slider alongside a notice list.</span>
+                            </div>
+                        </label>
+                        <label class="relative flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-colors">
+                            <input type="radio" name="hero_type" value="overlay" {{ ($options['institute.hero.type'] ?? '') == 'overlay' ? 'checked' : '' }} class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <div class="ml-4">
+                                <span class="block text-sm font-bold text-slate-900">Overlay / Netflix</span>
+                                <span class="block text-xs text-slate-500">Modern cinematic full-screen look.</span>
                             </div>
                         </label>
                     </div>
+                </div>
                 </div>
 
                 <!-- Existing Sliders Section -->
@@ -128,12 +143,6 @@
                             </div>
                         </template>
                     </div>
-                </div>
-
-                <div class="mt-12 flex justify-end">
-                    <button type="submit" class="inline-flex items-center px-10 py-4 bg-slate-900 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl hover:bg-slate-800 transition transform hover:scale-105">
-                        <i class="fas fa-save mr-3"></i> Sync All Changes
-                    </button>
                 </div>
             </form>
         </div>

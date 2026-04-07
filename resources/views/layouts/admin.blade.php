@@ -39,7 +39,7 @@
                :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
             <div class="flex h-full flex-col">
                 <!-- Sidebar Header -->
-                <div class="flex items-center justify-between px-6 py-4 bg-slate-950">
+                <div class="h-20 flex items-center justify-between px-6 py-4 bg-slate-950">
                     <a href="{{ route('admin.dashboard') }}" class="text-xl font-bold text-white flex items-center">
                         <i class="fas fa-shield-halved mr-2 text-accent"></i>
                         <span>Admin Panel</span>
@@ -134,7 +134,7 @@
         <!-- Main Content Area -->
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Header -->
-            <header class="h-16 bg-white border-b flex items-center px-6">
+            <header class="h-20 bg-white flex items-center px-6">
                 <button @click="sidebarOpen = true" class="text-gray-500 focus:outline-none lg:hidden mr-4">
                     <i class="fas fa-bars fa-lg"></i>
                 </button>
@@ -142,13 +142,19 @@
                     <div class="flex items-center space-x-3">
                         <h2 class="text-lg font-semibold text-gray-800">@yield('title')</h2>
                     </div>
+
+                    <div class="flex items-center">
+                        @stack('header_actions')
+                    </div>
                 </div>
             </header>
 
             <!-- Page Content -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
                 @include('partials.flash')
-                @yield('content')
+                <div class="p-6">
+                    @yield('content')
+                </div>
             </main>
         </div>
     </div>

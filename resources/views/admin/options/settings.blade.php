@@ -2,29 +2,47 @@
 
 @section('title', 'Institution Settings')
 
+@push('header_actions')
+<button type="submit" form="settings-form" class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-bold rounded-lg shadow-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
+    <i class="fas fa-save mr-2"></i>
+    Save Settings
+</button>
+@endpush
+
 @section('content')
-<div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+<div class="bg-white overflow-hidden shadow-sm sm:rounded-lg" x-data="{ activeTab: 'about' }">
     <div class="p-8 text-gray-900">
-        <div class="flex items-center justify-between mb-8 border-b border-gray-100 pb-6">
-            <div>
-                <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Institution Settings</h1>
-                <p class="mt-2 text-sm text-slate-500">Manage your institution's profile, contact information, and about us section.</p>
-            </div>
+        <!-- Tabs Navigation -->
+        <div class="flex space-x-1 bg-slate-100 p-1 rounded-xl mb-8">
+            @foreach(['about', 'identity', 'contact'] as $category)
+                @if(isset($options[$category]))
+                    <button @click="activeTab = '{{ $category }}'"
+                            :class="activeTab === '{{ $category }}' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'"
+                            class="flex-1 py-2.5 text-sm font-bold rounded-lg transition-all duration-200 uppercase tracking-wider">
+                        {{ $category }}
+                    </button>
+                @endif
+            @endforeach
         </div>
 
-        <form action="{{ route('admin.settings.update') }}" method="POST">
+        <form id="settings-form" action="{{ route('admin.settings.update') }}" method="POST">
             @csrf
 
             <div class="space-y-12">
                 @foreach(['about', 'identity', 'contact'] as $category)
                     @if(isset($options[$category]))
-                    <div class="animate-fade-in">
+                    <div x-show="activeTab === '{{ $category }}'" 
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="opacity-0 transform translate-y-4"
+                         x-transition:enter-end="opacity-100 transform translate-y-0"
+                         class="animate-fade-in">
+                        
                         <div class="flex items-center space-x-4 mb-6">
                             <h2 class="text-xl font-bold text-slate-800 uppercase tracking-wide">{{ $category }}</h2>
                             <div class="flex-1 h-px bg-slate-200"></div>
                         </div>
 
-                        <div class="w-full md:w-1/2 space-y-3">
+                        <div class="w-full md:w-2/3 space-y-3">
                             @foreach($options[$category] as $option)
                                 <div class="grid grid-cols-3 border border-slate-200 rounded-xl p-4 bg-slate-50/50 hover:bg-white transition-all duration-200">
                                     <label for="{{ str_replace('.', '_', $option->option_key) }}" class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">
@@ -62,16 +80,6 @@
                     </div>
                     @endif
                 @endforeach
-            </div>
-
-            <div class="mt-12 pt-8 border-t border-slate-200 flex items-center justify-between">
-                <p class="text-sm text-slate-500">
-                    <i class="fas fa-info-circle mr-1 text-indigo-500"></i> These settings affect how your institution's info appears on the public website.
-                </p>
-                <button type="submit" class="inline-flex items-center px-10 py-4 border border-transparent text-base font-bold rounded-xl shadow-xl text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 transition-all transform hover:-translate-y-1 active:scale-95">
-                    <i class="fas fa-save mr-3"></i>
-                    Save All Changes
-                </button>
             </div>
         </form>
     </div>

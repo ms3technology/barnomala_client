@@ -9,9 +9,10 @@
     $eiin = $options['institute.identity.eiin'] ?? ($options['institute.eiin'] ?? '123456');
     $estd = $options['institute.identity.established_year'] ?? ($options['institute.estd_year'] ?? '1995');
     $logoUrl = $options['institute.branding.logo_json']['url'] ?? ($options['logo_url'] ?? asset('images/school-logo.png'));
+    $headerBg = $options['institute.branding.header_bg'] ?? '#ffffff';
 @endphp
 
-<header class="bg-white overflow-visible relative z-50" x-data="{ mobileMenuOpen: false }">
+<header class="overflow-visible relative z-50 transition-colors duration-300" style="background-color: {{ $headerBg }};" x-data="{ mobileMenuOpen: false }">
     <!-- Banner and Overlay Information -->
     <div class="max-w-7xl mx-auto md:px-4 sm:px-6 lg:px-8">
         <!-- 1. Only Banner Image -->
@@ -20,7 +21,7 @@
                 <a href="{{ route('home') }}" class="block">
                     <img src="{{ $bannerUrl }}" 
                          alt="Institute Banner" 
-                         class="w-full h-auto min-h-35 md:min-h-45 object-cover transform transition-transform duration-700 group-hover:scale-105">
+                         class="w-full h-auto object-contain transform transition-transform duration-700 group-hover:scale-105">
                 </a>
             </div>
 
@@ -31,7 +32,7 @@
                 <a href="{{ route('home') }}" class="block">
                     <img src="{{ $bannerUrl }}" 
                          alt="Institute Banner" 
-                         class="w-full h-auto min-h-35 md:min-h-45 object-cover transform transition-transform duration-700 group-hover:scale-105">
+                         class="w-full h-auto object-contain transform transition-transform duration-700 group-hover:scale-105">
                 </a>
 
                 <!-- Information Overlay -->
@@ -67,11 +68,11 @@
         <!-- 3. Banner Left and Info Right -->
         @elseif ($bannerType === 'banner_split')
             <div class="flex flex-col md:flex-row items-center justify-between gap-6 py-4 bg-white">
-                <div class="overflow-hidden shadow-lg group">
+                <div class="overflow-hidden shadow-lg group w-full md:w-auto">
                     <a href="{{ route('home') }}">
                         <img src="{{ $bannerUrl }}" 
                              alt="Institute Banner" 
-                             class="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105">
+                             class="w-full h-auto object-contain transform transition-transform duration-700 group-hover:scale-105">
                     </a>
                 </div>
                 <div class="flex flex-col gap-4">
@@ -99,20 +100,20 @@
         <!-- 4. Only Informations -->
         @elseif ($bannerType === 'info_only')
             <div class="bg-white py-4 md:py-6 lg:py-8">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-10">
+                <div class="flex flex-row items-center justify-between gap-4 md:gap-10 px-4 md:px-0">
                     <!-- Left: Logo and Basic Identity -->
-                    <div class="flex items-center gap-4 md:gap-6 flex-1">
-                        <div class="relative group shrink-0">
+                    <div class="flex items-center gap-3 md:gap-6 flex-1">
+                        <div class="relative group shrink-0 ml-2 md:ml-0">
                             <div class="absolute -inset-2 bg-indigo-600/10 rounded-full blur-xl group-hover:bg-indigo-600/20 transition-all duration-500"></div>
-                            <img src="{{ $logoUrl }}" alt="{{ $instituteName }}" class="relative w-16 h-16 md:w-24 md:h-24 lg:w-28 lg:h-28 object-contain drop-shadow-2xl transform transition-transform duration-500 group-hover:scale-110">
+                            <img src="{{ $logoUrl }}" alt="{{ $instituteName }}" class="relative w-12 h-12 md:w-24 md:h-24 lg:w-28 lg:h-28 object-contain drop-shadow-2xl transform transition-transform duration-500 group-hover:scale-110">
                         </div>
                         <div class="flex flex-col">
-                            <h1 class="text-xl md:text-3xl lg:text-4xl font-black text-indigo-950 tracking-tight leading-tight uppercase font-serif drop-shadow-sm">{{ $instituteName }}</h1>
-                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2">
-                                <span class="bg-indigo-900 text-white text-[10px] md:text-xs font-bold px-3 py-1 rounded-full shadow-sm">EIIN: {{ $eiin }}</span>
-                                <span class="bg-yellow-500 text-indigo-950 text-[10px] md:text-xs font-bold px-3 py-1 rounded-full shadow-sm">ESTD: {{ $estd }}</span>
-                                <p class="text-xs md:text-sm font-semibold text-indigo-900/60 flex items-center gap-1">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <h1 class="text-lg md:text-3xl lg:text-4xl font-black text-indigo-950 tracking-tight leading-tight uppercase font-sans drop-shadow-sm">{{ $instituteName }}</h1>
+                            <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 md:mt-2">
+                                <span class="bg-indigo-900 text-white text-[8px] md:text-xs font-bold px-2 md:px-3 py-0.5 md:py-1 rounded-full shadow-sm">EIIN: {{ $eiin }}</span>
+                                <span class="bg-yellow-500 text-indigo-950 text-[8px] md:text-xs font-bold px-2 md:px-3 py-0.5 md:py-1 rounded-full shadow-sm">ESTD: {{ $estd }}</span>
+                                <p class="hidden sm:flex text-xs md:text-sm font-semibold text-indigo-900/60 items-center gap-1 font-sans">
+                                    <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                                     {{ $address }}
                                 </p>
                             </div>

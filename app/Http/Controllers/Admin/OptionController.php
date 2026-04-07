@@ -218,6 +218,7 @@ class OptionController extends Controller
             'institute.branding.name',
             'institute.branding.accent_color',
             'institute.branding.banner_type',
+            'institute.branding.header_bg',
         ];
 
         foreach ($keys as $key) {
@@ -276,15 +277,30 @@ class OptionController extends Controller
      */
     public function settings()
     {
-        $categories = ['about', 'identity', 'contact'];
+        $categories = ['about', 'identity', 'contact', 'branding'];
         $options = Option::where(function($query) use ($categories) {
             foreach ($categories as $category) {
                 $query->orWhere('option_key', 'like', "institute.$category.%");
             }
-        })->get()->groupBy(function($item) {
-            $parts = explode('.', $item->option_key);
-            return $parts[1] ?? 'general';
-        });
+        })->get()
+        ->filter(function($option) {
+            // Only include 'name' from branding, others stay in branding view
+            if (str_contains($option->option_key, 'institute.branding.')) {
+                return $option->option_key === 'institute.branding.name';
+            }
+            return true;
+        })
+        ->map(function($option) {
+            // Force branding name into contact for UI grouping
+            if ($option->option_key === 'institute.branding.name') {
+                $option->ui_category = 'contact';
+            } else {
+                $parts = explode('.', $option->option_key);
+                $option->ui_category = $parts[1] ?? 'general';
+            }
+            return $option;
+        })
+        ->groupBy('ui_category');
 
         return view('admin.options.settings', compact('options'));
     }

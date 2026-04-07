@@ -2,6 +2,13 @@
 
 @section('title', 'Homepage Layout Settings')
 
+@push('header_actions')
+<button type="submit" form="layout-form" class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-bold rounded-lg shadow-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
+    <i class="fas fa-save mr-2"></i>
+    Save Layout
+</button>
+@endpush
+
 @section('content')
 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
     <div class="p-6 text-gray-900 border-b border-gray-200">
@@ -13,7 +20,7 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.layout.update') }}" method="POST">
+        <form id="layout-form" action="{{ route('admin.layout.update') }}" method="POST">
             @csrf
             
             <div class="space-y-6">
@@ -57,13 +64,6 @@
                         </div>
                     @endforeach
                 </div>
-            </div>
-
-            <div class="mt-8 pt-6 border-t border-slate-200">
-                <button type="submit" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
-                    <i class="fas fa-save mr-2"></i>
-                    Update Layout Settings
-                </button>
             </div>
         </form>
     </div>

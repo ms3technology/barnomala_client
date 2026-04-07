@@ -2,6 +2,13 @@
 
 @section('title', 'Branding Settings')
 
+@push('header_actions')
+<button type="submit" form="branding-form" class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-bold rounded-lg shadow-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
+    <i class="fas fa-save mr-2"></i>
+    Save Branding
+</button>
+@endpush
+
 @section('content')
 <div class="max-w-4xl mx-auto">
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -11,17 +18,11 @@
                 Branding & Visuals
             </h1>
 
-            <form action="{{ route('admin.branding.update') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+            <form id="branding-form" action="{{ route('admin.branding.update') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                 @csrf
 
                 <!-- Identity Section -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="space-y-4">
-                        <label class="block text-sm font-bold text-slate-700">Institute Display Name</label>
-                        <input type="text" name="institute_branding_name" value="{{ $options['institute.branding.name'] ?? '' }}" 
-                               class="w-full border-slate-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
-
+                <div class="grid grid-cols-1 md:grid-cols-1 gap-8">
                     <div class="space-y-4">
                         <label class="block text-sm font-bold text-slate-700">Accent Color</label>
                         <div x-data="{ 
@@ -48,66 +49,98 @@
                 </div>
 
                 <!-- Banner Section -->
-                <div class="space-y-6 pt-6 border-t border-slate-100">
-                    <h2 class="text-lg font-bold text-slate-900">Header Visuals</h2>
+                @php
+                    $logo = json_decode($options['institute.branding.logo_json'] ?? '{}', true);
+                    $bannerData = json_decode($options['institute.branding.banner_json'] ?? '{}', true);
+                @endphp
+                <div class="space-y-6 pt-6 border-t border-slate-100" x-data="{ 
+                    bannerPreview: '{{ $bannerData['url'] ?? '' }}',
+                    handleBannerChange(e) {
+                        const file = e.target.files[0];
+                        if (file) {
+                            this.bannerPreview = URL.createObjectURL(file);
+                        }
+                    }
+                }">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-lg font-bold text-slate-900">Header Visuals</h2>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Recommended: 1920x450px</p>
+                    </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-2">Logo Upload</label>
-                            <div class="relative group aspect-square max-w-37.5 bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl overflow-hidden flex items-center justify-center">
-                                @php
-                                    $logo = json_decode($options['institute.branding.logo_json'] ?? '{}', true);
-                                @endphp
-                                @if(isset($logo['url']))
-                                    <img src="{{ $logo['url'] }}" class="max-w-full max-h-full object-contain p-4">
-                                @else
-                                    <i class="fas fa-image text-slate-300 text-3xl"></i>
-                                @endif
-                                <label class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
-                                    <span class="text-white text-xs font-bold">Replace Logo</span>
-                                    <input type="file" name="logo" class="hidden" accept="image/*">
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                        <!-- Logo (3 cols) -->
+                        <div class="md:col-span-3 space-y-3">
+                            <label class="block text-xs font-black text-slate-500 uppercase tracking-widest">Logo</label>
+                            <div class="relative group aspect-square bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl overflow-hidden flex items-center justify-center transition-all hover:border-indigo-300" x-data="{ 
+                                logoPreview: '{{ isset($logo['url']) ? $logo['url'] : '' }}',
+                                handleLogoChange(e) {
+                                    const file = e.target.files[0];
+                                    if (file) this.logoPreview = URL.createObjectURL(file);
+                                }
+                            }">
+                                <template x-if="logoPreview">
+                                    <img :src="logoPreview" class="max-w-full max-h-full object-contain p-4">
+                                </template>
+                                <template x-if="!logoPreview">
+                                    <i class="fas fa-image text-slate-300 text-2xl"></i>
+                                </template>
+                                <label class="absolute inset-0 bg-indigo-900/60 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center cursor-pointer backdrop-blur-sm">
+                                    <span class="text-white text-[10px] font-black uppercase tracking-widest">Change Logo</span>
+                                    <input type="file" name="logo" class="hidden" accept="image/*" @change="handleLogoChange">
                                 </label>
                             </div>
                         </div>
 
-                        <div class="space-y-4">
-                            <label class="block text-sm font-bold text-slate-700">Header Design Style</label>
-                            <select name="institute_branding_banner_type" class="w-full border-slate-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                                <option value="banner_only" {{ ($options['institute.branding.banner_type'] ?? '') == 'banner_only' ? 'selected' : '' }}>Full Width Banner Only</option>
-                                <option value="banner_with_overlay" {{ ($options['institute.branding.banner_type'] ?? '') == 'banner_with_overlay' ? 'selected' : '' }}>Banner with Text Overlay</option>
-                                <option value="banner_split" {{ ($options['institute.branding.banner_type'] ?? '') == 'banner_split' ? 'selected' : '' }}>Split: Image Left / Info Right</option>
-                                <option value="info_only" {{ ($options['institute.branding.banner_type'] ?? '') == 'info_only' ? 'selected' : '' }}>No Banner (Identity & Contacts Only)</option>
-                            </select>
+                        <!-- Banner (9 cols) -->
+                        <div class="md:col-span-9 space-y-3">
+                            <label class="block text-xs font-black text-slate-500 uppercase tracking-widest">Main Banner</label>
+                            <div class="relative group min-h-37.5 w-full bg-slate-100 border-2 border-dashed border-slate-200 rounded-2xl overflow-hidden flex items-center justify-center transition-all hover:border-indigo-300">
+                                <template x-if="bannerPreview">
+                                    <img :src="bannerPreview" class="w-full h-auto object-contain max-h-100">
+                                </template>
+                                <template x-if="!bannerPreview">
+                                    <div class="text-center">
+                                        <i class="fas fa-mountain text-slate-300 text-4xl mb-2"></i>
+                                        <p class="text-slate-400 text-[10px] font-bold uppercase">No Banner Set</p>
+                                    </div>
+                                </template>
+                                <label class="absolute inset-0 bg-indigo-900/60 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center cursor-pointer backdrop-blur-sm">
+                                    <div class="text-center transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                                        <i class="fas fa-cloud-upload-alt text-2xl text-white mb-2"></i>
+                                        <p class="text-white text-[10px] font-black uppercase tracking-widest">Update Banner Image</p>
+                                    </div>
+                                    <input type="file" name="banner" class="hidden" accept="image/*" @change="handleBannerChange">
+                                </label>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="space-y-4">
-                        <label class="block text-sm font-bold text-slate-700">Main Banner Image</label>
-                        <div class="relative group aspect-21/9 w-full bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl overflow-hidden flex items-center justify-center">
-                            @php
-                                $banner = json_decode($options['institute.branding.banner_json'] ?? '{}', true);
-                            @endphp
-                            @if(isset($banner['url']))
-                                <img src="{{ $banner['url'] }}" class="w-full h-full object-cover">
-                            @else
-                                <i class="fas fa-image text-slate-300 text-5xl"></i>
-                            @endif
-                            <label class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
-                                <div class="text-center">
-                                    <i class="fas fa-cloud-upload-alt text-2xl text-white mb-2"></i>
-                                    <p class="text-white text-sm font-bold">Upload New Banner</p>
-                                </div>
-                                <input type="file" name="banner" class="hidden" accept="image/*">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-3">
+                            <label class="block text-xs font-black text-slate-500 uppercase tracking-widest">Header Style</label>
+                            <select name="institute_branding_banner_type" class="w-full border-slate-200 rounded-xl shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm font-bold py-3">
+                                <option value="banner_only" {{ ($options['institute.branding.banner_type'] ?? '') == 'banner_only' ? 'selected' : '' }}>Standard Full Banner</option>
+                                <option value="banner_with_overlay" {{ ($options['institute.branding.banner_type'] ?? '') == 'banner_with_overlay' ? 'selected' : '' }}>Banner with Text Overlay</option>
+                                <option value="banner_split" {{ ($options['institute.branding.banner_type'] ?? '') == 'banner_split' ? 'selected' : '' }}>Split (Image Left / Info Right)</option>
+                                <option value="info_only" {{ ($options['institute.branding.banner_type'] ?? '') == 'info_only' ? 'selected' : '' }}>No Banner (Identity Only)</option>
+                            </select>
+                        </div>
+
+                        <!-- Header Background Color -->
+                        <div class="space-y-3">
+                            <label class="block text-xs font-black text-slate-500 uppercase tracking-widest">Header Background</label>
+                            <div class="flex items-center gap-4 p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+                                <input type="color" name="institute_branding_header_bg" value="{{ $options['institute.branding.header_bg'] ?? '#ffffff' }}" 
+                                       class="h-8 w-16 rounded cursor-pointer border-none bg-transparent">
+                                <span class="text-xs font-mono font-bold text-slate-600 uppercase">{{ $options['institute.branding.header_bg'] ?? '#ffffff' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                             </label>
                         </div>
                         <p class="text-xs text-slate-400">Recommended size: 1920x800px. Used in Full Width and Overlay styles.</p>
                     </div>
-                </div>
-
-                <div class="pt-8 flex justify-end">
-                    <button type="submit" class="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">
-                        <i class="fas fa-save mr-2"></i> Update Branding
-                    </button>
                 </div>
             </form>
         </div>
