@@ -2,7 +2,7 @@
     "$schema": "https://www.schemastore.org/package.json",
     "private": true,
     "type": "module",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "scripts": {
         "build": "vite build",
         "postbuild": "powershell Compress-Archive -Path public/build -DestinationPath public/build.zip -Force",
