@@ -10,7 +10,9 @@
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
                     @php
-                        $classes = $options['institute.demographics.classes'] ?? [];
+                        $classes = collect($options['institute.demographics.classes'] ?? [])
+                            ->filter(fn($count) => $count > 10)
+                            ->all();
                     @endphp
                     @forelse($classes as $class => $count)
                         <div class="flex flex-col items-center">

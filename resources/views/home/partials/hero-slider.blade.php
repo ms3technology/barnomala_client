@@ -1,7 +1,7 @@
 @php
     $heroType = $options['institute.hero.type'] ?? 'slider_with_notice';
-    $sliderDesign = $options['institute.hero.slider_design'] ?? 'slider_1';
-    $isSliderOnly = $heroType === 'slider_only';
+    $sliderDesign = $options['institute.hero.type'] === 'overlay' ? 'overlay' : ($options['institute.hero.slider_design'] ?? 'slider_1');
+    $isSliderOnly = $heroType === 'slider_only' || $heroType === 'overlay';
 
     function formatDateBN($dateString, $type = 'day') {
         $date = new \DateTime($dateString);
@@ -14,10 +14,78 @@
     }
 @endphp
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-16">
-    <div class="flex flex-col lg:flex-row gap-8">
+<div class="{{ $sliderDesign === 'overlay' ? 'w-full mb-16' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-16' }}">
+    <div class="flex flex-col lg:flex-row {{ $sliderDesign === 'overlay' ? '' : 'gap-8' }}">
+        
         <!-- Slider -->
-        @if($sliderDesign === 'slider_1')
+        @if($sliderDesign === 'overlay')
+            <div class="relative w-full mt-4 h-[60vh] md:h-[75vh] lg:h-[85vh] overflow-hidden group font-sans" 
+                 x-data="{ currentSlide: 0, totalSlides: {{ count($sliderImages) }}, next() { this.currentSlide = (this.currentSlide + 1) % this.totalSlides }, prev() { this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides } }" 
+                 x-init="setInterval(() => next(), 7000)">
+                
+                @foreach($sliderImages as $index => $slide)
+                    <div class="absolute inset-0 transition-opacity duration-1500 ease-in-out"
+                         :class="currentSlide === {{ $index }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+                        <img src="{{ is_array($slide) ? $slide['url'] : $slide->url }}" 
+                             class="w-full h-full object-cover transform duration-10000 ease-linear"
+                             :class="currentSlide === {{ $index }} ? 'scale-110' : 'scale-100'"
+                             alt="Slide">
+                        
+                        <!-- Netflix style gradients -->
+                        <div class="absolute inset-0 bg-linear-to-t from-black via-black/20 to-transparent"></div>
+                        <div class="absolute inset-0 bg-linear-to-r from-black/60 via-transparent to-transparent"></div>
+
+                        <!-- Text Content -->
+                        <div class="absolute bottom-0 left-0 w-full p-6 md:p-16 lg:p-24 z-20" 
+                             x-show="currentSlide === {{ $index }}"
+                             x-transition:enter="transition ease-out duration-700 delay-300"
+                             x-transition:enter-start="opacity-0 translate-y-10"
+                             x-transition:enter-end="opacity-100 translate-y-0">
+                            
+                            <div class="max-w-4xl">
+                                @if(isset($slide['published_at']))
+                                    <div class="flex items-center gap-3 mb-2 md:mb-4">
+                                        <span class="bg-indigo-600 text-white text-[10px] md:text-xs font-bold px-2 md:px-3 py-0.5 md:py-1 rounded-sm uppercase tracking-widest bg-opacity-90">
+                                            {{ \Carbon\Carbon::parse($slide['published_at'])->format('d M Y') }}
+                                        </span>
+                                        <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                        <span class="text-gray-300 text-xs md:text-sm font-medium tracking-wide">Featured</span>
+                                    </div>
+                                @endif
+
+                                <h2 class="text-2xl md:text-5xl lg:text-7xl font-black text-white mb-4 md:mb-6 leading-tight drop-shadow-2xl">
+                                    {{ $slide['title'] ?? 'Institute Update' }}
+                                </h2>
+
+                                @if(isset($slide['description']))
+                                    <p class="text-sm md:text-xl text-gray-200 line-clamp-2 md:line-clamp-3 max-w-2xl font-medium mb-6 md:mb-8 drop-shadow-md leading-relaxed">
+                                        {{ $slide['description'] }}
+                                    </p>
+                                @endif
+
+                                <div class="flex items-center gap-3 md:gap-4">
+                                    <button class="bg-white text-black px-4 md:px-8 py-2 md:py-3 rounded-md font-bold text-sm md:text-lg flex items-center gap-2 hover:bg-white/90 transition-all transform hover:scale-105">
+                                        <svg class="w-4 h-4 md:w-6 md:h-6 fill-current" viewBox="0 0 24 24"><path d="M7 6v12l10-6z"/></svg>
+                                        <span>Read More</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+
+                <!-- Progressive Dots (Netflix Bottom Bar style) -->
+                <div class="absolute bottom-8 right-8 lg:right-24 z-30 flex gap-2">
+                    @foreach($sliderImages as $index => $slide)
+                        <div @click="currentSlide = {{ $index }}"
+                             class="h-1.5 w-12 md:w-20 bg-gray-600/50 cursor-pointer overflow-hidden rounded-full">
+                            <div class="h-full bg-white transition-all duration-7000 ease-linear"
+                                 :style="currentSlide === {{ $index }} ? 'width: 100%' : 'width: 0%'"></div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @elseif($sliderDesign === 'slider_1')
         <div class="relative group rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(8,112,184,0.1)] border border-gray-100 transform hover:-translate-y-1 transition-transform duration-500 h-64 md:h-80 lg:h-96 {{ $isSliderOnly ? 'w-full' : 'lg:w-2/3' }}" x-data="{ currentSlide: 0, totalSlides: {{ count($sliderImages) }}, next() { this.currentSlide = (this.currentSlide + 1) % this.totalSlides }, prev() { this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides } }" x-init="setInterval(() => next(), 5000)">
             @foreach($sliderImages as $index => $slide)
                 <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out"

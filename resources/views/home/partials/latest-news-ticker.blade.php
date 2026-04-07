@@ -1,5 +1,5 @@
 @if(isset($notices) && count($notices) > 0)
-    <div class="relative z-40">
+    <div class="relative z-40 mt-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center font-bn">
             <div class="bg-linear-to-r from-rose-600 to-red-600 text-white px-5 py-1.5 font-bold text-sm whitespace-nowrap rounded-l-lg shadow-md relative z-10 hidden sm:block">
                 নোটিশ:
