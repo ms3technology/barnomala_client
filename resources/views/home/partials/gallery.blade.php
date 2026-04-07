@@ -1,0 +1,43 @@
+<section class="py-12 bg-slate-900 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-6">
+            <div class="relative">
+                <div class="absolute -left-4 -top-4 w-12 h-12 bg-accent/20 rounded-full blur-xl animate-pulse"></div>
+                <p class="text-accent font-black uppercase tracking-[0.3em] text-xs mb-4 relative z-10">Visual Journey</p>
+                <h2 class="text-4xl md:text-5xl font-black text-white relative z-10"><span class="text-accent">Gallery</span></h2>
+                <div class="mt-4 w-20 h-1.5 bg-accent rounded-full"></div>
+            </div>
+            <a href="{{ route('news.index') }}" class="group flex items-center gap-3 text-white/60 hover:text-white transition-all font-bold uppercase tracking-widest text-xs">
+                View All Stories
+                <span class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-accent group-hover:border-accent transition-all duration-500">
+                    <i class="fas fa-arrow-right text-[10px] transform group-hover:translate-x-1 transition-transform"></i>
+                </span>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            @forelse($galleryNews as $news)
+                <div class="group relative aspect-square overflow-hidden rounded-3xl bg-slate-800 border border-white/5 shadow-2xl transition-all duration-700 hover:-translate-y-2">
+                    <img src="{{ $news->image_url }}" 
+                         alt="{{ $news->title }}" 
+                         class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-125 group-hover:rotate-3 opacity-60 group-hover:opacity-100">
+                    
+                    <div class="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"></div>
+                    
+                    <div class="absolute inset-0 p-6 flex flex-col justify-end translate-y-8 group-hover:translate-y-0 transition-all duration-500 opacity-0 group-hover:opacity-100">
+                        <p class="text-[10px] font-black text-accent uppercase tracking-[0.2em] mb-2">{{ $news->published_at ? $news->published_at->format('M d, Y') : '' }}</p>
+                        <h4 class="text-sm font-bold text-white leading-tight line-clamp-2">{{ $news->title }}</h4>
+                        <a href="{{ route('news.show', $news) }}" class="mt-4 inline-flex items-center gap-2 text-[10px] font-black text-white uppercase tracking-widest pointer-events-auto">
+                            Details <i class="fas fa-chevron-right text-[8px] text-accent"></i>
+                        </a>
+                    </div>
+                </div>
+            @empty
+                <div class="col-span-full py-20 text-center bg-white/5 rounded-3xl border-2 border-dashed border-white/10">
+                    <i class="fas fa-camera text-white/20 text-6xl mb-6"></i>
+                    <p class="text-white/40 font-bold">No images available in the gallery yet.</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+</section>
