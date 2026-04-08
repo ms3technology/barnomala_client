@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Option;
+use App\Registries\OptionRegistry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -192,6 +193,66 @@ class OptionController extends Controller
     }
 
     /**
+     * Display settings based on registry.
+     */
+    public function settings()
+    {
+        $registry = OptionRegistry::getRegistration();
+        $optionKeys = OptionRegistry::getAllKeys();
+
+        $existingOptions = Option::whereIn('option_key', $optionKeys)->get()->keyBy('option_key');
+
+        return view('admin.options.settings', compact('registry', 'existingOptions'));
+    }
+
+    /**
+     * Update settings.
+     */
+    public function updateSettings(Request $request)
+    {
+        $registry = OptionRegistry::getRegistration();
+        $optionKeys = OptionRegistry::getAllKeys();
+
+        // Handle Image Uploads from Registry
+        foreach ($registry as $category) {
+            foreach ($category['options'] as $key => $meta) {
+                if ($meta['type'] === 'image' && $request->hasFile($key)) {
+                    $oldOption = Option::where('option_key', $key)->first();
+                    if ($oldOption) {
+                        $oldData = json_decode($oldOption->option_value, true);
+                        if (isset($oldData['path'])) {
+                            Storage::disk('public')->delete($oldData['path']);
+                        }
+                    }
+
+                    $path = $request->file($key)->store('settings', 'public');
+                    Option::updateOrCreate(
+                        ['option_key' => $key],
+                        [
+                            'option_value' => json_encode(['url' => Storage::url($path), 'path' => $path]),
+                            'value_type' => 'json'
+                        ]
+                    );
+                }
+            }
+        }
+
+        // Handle regular settings
+        if ($request->has('settings')) {
+            foreach ($request->get('settings') as $key => $value) {
+                if (in_array($key, $optionKeys)) {
+                    Option::updateOrCreate(
+                        ['option_key' => $key],
+                        ['option_value' => $value]
+                    );
+                }
+            }
+        }
+
+        return redirect()->back()->with('success', 'Settings updated successfully.');
+    }
+
+    /**
      * Update branding
      */
     public function updateBranding(Request $request)
@@ -243,73 +304,6 @@ class OptionController extends Controller
         }
 
         return redirect()->back()->with('success', 'Branding updated successfully.');
-    }
-
-    /**
-     * Display settings management (About, Identity, Contact).
-     */
-    public function settings()
-    {
-        $categories = ['about', 'identity', 'contact', 'branding'];
-        $options = Option::where(function($query) use ($categories) {
-            foreach ($categories as $category) {
-                $query->orWhere('option_key', 'like', "institute.$category.%");
-            }
-        })->get()
-        ->filter(function($option) {
-            // Only include 'name' from branding, others stay in branding view
-            if (str_contains($option->option_key, 'institute.branding.')) {
-                return $option->option_key === 'institute.branding.name';
-            }
-            return true;
-        })
-        ->map(function($option) {
-            // Force branding name into contact for UI grouping
-            if ($option->option_key === 'institute.branding.name') {
-                $option->ui_category = 'contact';
-            } else {
-                $parts = explode('.', $option->option_key);
-                $option->ui_category = $parts[1] ?? 'general';
-            }
-            return $option;
-        })
-        ->groupBy('ui_category');
-
-        return view('admin.options.settings', compact('options'));
-    }
-
-    /**
-     * Update settings.
-     */
-    public function updateSettings(Request $request)
-    {
-        // Handle About Us Image Upload
-        if ($request->hasFile('about_image')) {
-            $oldOption = Option::where('option_key', 'institute.about.image_json')->first();
-            if ($oldOption) {
-                $oldData = json_decode($oldOption->option_value, true);
-                if (isset($oldData['path'])) {
-                    Storage::disk('public')->delete($oldData['path']);
-                }
-            }
-
-            $path = $request->file('about_image')->store('about', 'public');
-            Option::updateOrCreate(
-                ['option_key' => 'institute.about.image_json'],
-                [
-                    'option_value' => json_encode(['url' => Storage::url($path), 'path' => $path]),
-                    'value_type' => 'json'
-                ]
-            );
-        }
-
-        $settings = $request->get('settings', []);
-
-        foreach ($settings as $key => $value) {
-            Option::where('option_key', $key)->update(['option_value' => $value]);
-        }
-
-        return redirect()->back()->with('success', 'Settings updated successfully.');
     }
 
     /**
