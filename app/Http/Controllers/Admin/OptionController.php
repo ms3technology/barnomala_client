@@ -155,23 +155,6 @@ class OptionController extends Controller
     }
 
     /**
-     * Display stats and demographics management.
-     */
-    public function stats()
-    {
-        $stats = Option::where('option_key', 'like', 'institute.stats.%')->get();
-        
-        $demographicsOptions = Option::where('option_key', 'like', 'institute.demographics.%')->get();
-        $demographics = [];
-        foreach ($demographicsOptions as $opt) {
-            $key = str_replace('institute.demographics.', '', $opt->option_key);
-            $demographics[$key] = json_decode($opt->option_value, true) ?: [];
-        }
-
-        return view('admin.options.stats', compact('stats', 'demographics'));
-    }
-
-    /**
      * Update stats and demographics.
      */
     public function updateStats(Request $request)

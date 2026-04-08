@@ -112,13 +112,6 @@
                         Institution Settings
                     </a>
 
-                    <a href="{{ route('admin.stats.index') }}" 
-                       class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.stats.*') ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                        <i class="fas fa-chart-pie w-5 mr-3"></i>
-                        Stats & Demographics
-                    </a>
-
-
                     <div class="pt-4 pb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider px-4">Links</div>
                     
                     <a href="{{ route('home') }}" target="_blank" class="flex items-center px-4 py-2.5 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg transition-colors">

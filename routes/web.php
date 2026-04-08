@@ -49,9 +49,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('settings', [AdminOptionController::class, 'settings'])->name('settings.index');
     Route::post('settings', [AdminOptionController::class, 'updateSettings'])->name('settings.update');
 
-    Route::get('stats', [AdminOptionController::class, 'stats'])->name('stats.index');
-    Route::post('stats', [AdminOptionController::class, 'updateStats'])->name('stats.update');
-
     Route::get('layout', [AdminOptionController::class, 'layout'])->name('layout.index');
     Route::post('layout', [AdminOptionController::class, 'updateLayout'])->name('layout.update');
 });

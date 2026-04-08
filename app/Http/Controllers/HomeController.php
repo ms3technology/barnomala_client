@@ -58,19 +58,20 @@ class HomeController extends Controller
             ['label' => 'Staffs', 'count' => $options['institute.stats.staffs_count'] ?? $options['totalStaffs'] ?? null, 'img' => asset('images/teacher.png')],
         ];
 
+
         $quickLinks = [
-            ['label' => 'Students', 'url' => '#'],
-            ['label' => 'Teachers', 'url' => '#'],
-            ['label' => 'Attendance', 'url' => '#'],
-            ['label' => 'Result', 'url' => '#'],
-            ['label' => 'Routine', 'url' => '#'],
-            ['label' => 'Syllabus', 'url' => '#'],
-            ['label' => 'Academic Calendar', 'url' => '#'],
-            ['label' => 'Photo Gallery', 'url' => route('gallery.index')],
-            ['label' => 'Downloads', 'url' => '#'],
-            ['label' => 'News', 'url' => '#'],
-            ['label' => 'Notice', 'url' => route('notices.index')],
-            ['label' => 'Career', 'url' => '#'],
+            ['label' => 'Students', 'icon' => 'user-graduate', 'color' => 'bg-green-600', 'url' => '/students'],
+            ['label' => 'Teachers', 'icon' => 'user', 'color' => 'bg-orange-500', 'url' => '/teachers'],
+            ['label' => 'Attendance', 'icon' => 'check', 'color' => 'bg-blue-600', 'url' => '/attendance'],
+            ['label' => 'Result', 'icon' => 'bolt', 'color' => 'bg-red-600', 'url' => '/results'],
+            ['label' => 'Routine', 'icon' => 'bell', 'color' => 'bg-green-600', 'url' => '/routine'],
+            ['label' => 'Syllabus', 'icon' => 'book', 'color' => 'bg-orange-500', 'url' => '/syllabus'],
+            ['label' => 'Academic Calendar', 'icon' => 'calendar', 'color' => 'bg-blue-600', 'url' => '/academic-calendar'],
+            ['label' => 'Photo Gallery', 'icon' => 'camera', 'color' => 'bg-red-600', 'url' => '/gallery'],
+            ['label' => 'Download', 'icon' => 'download', 'color' => 'bg-green-600', 'url' => '/downloads'],
+            ['label' => 'News', 'icon' => 'bell', 'color' => 'bg-orange-500', 'url' => '/news'],
+            ['label' => 'Notice', 'icon' => 'quote-left', 'color' => 'bg-blue-600', 'url' => '/notices'],
+            ['label' => 'Career', 'icon' => 'briefcase', 'color' => 'bg-red-600', 'url' => '/careers'],
         ];
 
         return view('home.index', array_merge($publicData, [

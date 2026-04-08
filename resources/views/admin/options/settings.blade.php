@@ -85,6 +85,9 @@
                             @endif
 
                             @foreach($options[$category] as $option)
+                                @if(str_contains($option->option_key, 'image_json'))
+                                    @continue
+                                @endif
                                 <div class="grid grid-cols-3 border border-slate-200 rounded-xl p-4 bg-slate-50/50 hover:bg-white transition-all duration-200">
                                     <label for="{{ str_replace('.', '_', $option->option_key) }}" class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">
                                         {{ ucwords(str_replace(['institute', $category, '.', '_'], ' ', $option->option_key)) }}

@@ -10,21 +10,6 @@
             ['label' => 'Teachers', 'count' => $options['institute.stats.teachers_count'] ?? $options['totalTeachers'] ?? 0],
             ['label' => 'Staffs', 'count' => $options['institute.stats.staffs_count'] ?? $options['totalStaffs'] ?? 0],
         ];
-
-        $quickLinks = [
-            ['label' => 'Students', 'icon' => 'user-graduate', 'color' => 'bg-green-600', 'url' => '#'],
-            ['label' => 'Teachers', 'icon' => 'user', 'color' => 'bg-orange-500', 'url' => '#'],
-            ['label' => 'Attendance', 'icon' => 'check', 'color' => 'bg-blue-600', 'url' => '#'],
-            ['label' => 'Result', 'icon' => 'bolt', 'color' => 'bg-red-600', 'url' => '#'],
-            ['label' => 'Routine', 'icon' => 'bell', 'color' => 'bg-green-600', 'url' => '#'],
-            ['label' => 'Syllabus', 'icon' => 'book', 'color' => 'bg-orange-500', 'url' => '#'],
-            ['label' => 'Academic Calendar', 'icon' => 'calendar', 'color' => 'bg-blue-600', 'url' => '#'],
-            ['label' => 'Photo Gallery', 'icon' => 'camera', 'color' => 'bg-red-600', 'url' => '#'],
-            ['label' => 'Download', 'icon' => 'download', 'color' => 'bg-green-600', 'url' => '#'],
-            ['label' => 'News', 'icon' => 'bell', 'color' => 'bg-orange-500', 'url' => '#'],
-            ['label' => 'Notice', 'icon' => 'quote-left', 'color' => 'bg-blue-600', 'url' => '#'],
-            ['label' => 'Career', 'icon' => 'briefcase', 'color' => 'bg-red-600', 'url' => '#'],
-        ];
     @endphp
 
     <div x-data="{}">
@@ -65,7 +50,7 @@
         @if($layout['quick_links'] ?? true)
             @include('home.partials.quick-links', [
                 'quickLinks' => $quickLinks,
-                'importantLinks' => $importantLinks
+                'importantLinks' => $importantLinks ?? []
                 ])
         @endif
 
