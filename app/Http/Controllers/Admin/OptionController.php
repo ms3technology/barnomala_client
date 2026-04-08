@@ -310,7 +310,27 @@ class OptionController extends Controller
      */
     public function updateSettings(Request $request)
     {
-        $data = $request->except(['_token', '_method']);
+        // Handle About Us Image Upload
+        if ($request->hasFile('about_image')) {
+            $oldOption = Option::where('option_key', 'institute.about.image_json')->first();
+            if ($oldOption) {
+                $oldData = json_decode($oldOption->option_value, true);
+                if (isset($oldData['path'])) {
+                    Storage::disk('public')->delete($oldData['path']);
+                }
+            }
+
+            $path = $request->file('about_image')->store('about', 'public');
+            Option::updateOrCreate(
+                ['option_key' => 'institute.about.image_json'],
+                [
+                    'option_value' => json_encode(['url' => Storage::url($path), 'path' => $path]),
+                    'value_type' => 'json'
+                ]
+            );
+        }
+
+        $data = $request->except(['_token', '_method', 'about_image']);
 
         foreach ($data as $key => $value) {
             $formattedKey = str_replace('_', '.', $key);

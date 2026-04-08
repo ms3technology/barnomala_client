@@ -5,7 +5,7 @@
 @section('content')
 <section class="py-16">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="rounded-4xl bg-white p-8 md:p-12 shadow-sm ring-1 ring-slate-200">
+        <div>
             <div class="mb-12">
                 <p class="text-[10px] font-black uppercase tracking-[0.35em] text-accent mb-4 flex items-center gap-2">
                     <i class="far fa-calendar-alt"></i>
@@ -27,18 +27,47 @@
                         {!! nl2br($news->content) !!}
                     </div>
 
-                    @if($news->artifacts->count())
+                    @php
+                        $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+                        $imageArtifacts = $news->artifacts->filter(fn($a) => in_array(strtolower(pathinfo($a->file_path, PATHINFO_EXTENSION)), $imageExtensions));
+                        $otherArtifacts = $news->artifacts->filter(fn($a) => !in_array(strtolower(pathinfo($a->file_path, PATHINFO_EXTENSION)), $imageExtensions));
+                    @endphp
+
+                    @if($imageArtifacts->isNotEmpty())
+                        <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            @foreach($imageArtifacts as $image)
+                                <div class="rounded-3xl overflow-hidden shadow-xl border border-slate-100 group">
+                                    <a href="{{ Storage::url($image->file_path) }}" target="_blank">
+                                        <img src="{{ Storage::url($image->file_path) }}" alt="{{ $image->file_name }}" class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500">
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    @if($otherArtifacts->count())
                         <div class="mt-16 pt-12 border-t border-slate-100">
                             <h3 class="text-xl font-black text-slate-950 mb-8 flex items-center gap-3">
                                 <i class="fas fa-paperclip text-accent"></i> Attached Documents
                             </h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                @foreach($news->artifacts as $artifact)
+                                @foreach($otherArtifacts as $artifact)
                                     <a href="{{ Storage::url($artifact->file_path) }}" target="_blank" 
                                        class="p-5 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between group hover:bg-white hover:border-accent hover:shadow-xl hover:shadow-accent/5 hover:-translate-y-1 transition-all duration-300">
                                         <div class="flex items-center gap-4 overflow-hidden">
+                                            @php
+                                                $ext = strtolower(pathinfo($artifact->file_path, PATHINFO_EXTENSION));
+                                                $icon = match($ext) {
+                                                    'pdf' => 'fa-file-pdf',
+                                                    'doc', 'docx' => 'fa-file-word',
+                                                    'xls', 'xlsx' => 'fa-file-excel',
+                                                    'ppt', 'pptx' => 'fa-file-powerpoint',
+                                                    'zip', 'rar' => 'fa-file-archive',
+                                                    default => 'fa-file',
+                                                };
+                                            @endphp
                                             <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-accent shadow-sm ring-1 ring-slate-200 group-hover:bg-accent group-hover:text-white group-hover:ring-accent transition-all">
-                                                <i class="fas fa-file-pdf text-xl"></i>
+                                                <i class="fas {{ $icon }} text-xl"></i>
                                             </div>
                                             <div class="overflow-hidden">
                                                 <p class="text-sm font-black text-slate-900 truncate">{{ $artifact->file_name }}</p>

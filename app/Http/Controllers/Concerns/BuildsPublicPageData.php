@@ -10,10 +10,7 @@ trait BuildsPublicPageData
     {
         $this->incrementVisitorCount();
 
-        $options = Option::query()
-            ->get()
-            ->pluck('value', 'option_key')
-            ->toArray();
+        $options = Option::all()->pluck('value', 'option_key')->toArray();
 
         return [
             'options' => $options,
@@ -55,14 +52,13 @@ trait BuildsPublicPageData
             $option = Option::where('option_key', 'site.visitor_count')->first();
 
             if (!$option) {
-                $option = Option::create([
+                Option::create([
                     'option_key' => 'site.visitor_count',
-                    'value' => 1,
+                    'option_value' => '1',
+                    'value_type' => 'integer',
                 ]);
             } else {
-                $option->update([
-                    'value' => (int) $option->value + 1,
-                ]);
+                $option->increment('option_value');
             }
 
             session()->put($sessionKey, true);

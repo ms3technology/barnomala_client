@@ -25,7 +25,7 @@
             @endforeach
         </div>
 
-        <form id="settings-form" action="{{ route('admin.settings.update') }}" method="POST">
+        <form id="settings-form" action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="space-y-12">
@@ -43,6 +43,47 @@
                         </div>
 
                         <div class="w-full md:w-2/3 space-y-3">
+                            @if ($category === 'about')
+                                <div class="grid grid-cols-3 border border-slate-200 rounded-xl p-4 bg-slate-50/50 hover:bg-white transition-all duration-200">
+                                    <label class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">
+                                        About Us Image
+                                    </label>
+
+                                    <div class="col-span-2 space-y-4" x-data="{ photoName: null, photoPreview: null }">
+                                        <div class="mt-2" x-show="! photoPreview">
+                                            @php
+                                                $aboutImage = \App\Models\Option::where('option_key', 'institute.about.image_json')->first();
+                                                $imageUrl = $aboutImage ? (json_decode($aboutImage->option_value, true)['url'] ?? asset('images/about-us-1.png')) : asset('images/about-us-1.png');
+                                            @endphp
+                                            <img src="{{ $imageUrl }}" class="h-40 w-full object-cover rounded-xl shadow-sm border border-slate-200">
+                                        </div>
+
+                                        <div class="mt-2" x-show="photoPreview" style="display: none;">
+                                            <span class="block h-40 w-full rounded-xl shadow-sm border border-slate-200 bg-cover bg-no-repeat bg-center"
+                                                  x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
+                                            </span>
+                                        </div>
+
+                                        <input type="file" class="hidden"
+                                               name="about_image"
+                                               x-ref="photo"
+                                               x-on:change="
+                                                    photoName = $refs.photo.files[0].name;
+                                                    const reader = new FileReader();
+                                                    reader.onload = (e) => {
+                                                        photoPreview = e.target.result;
+                                                    };
+                                                    reader.readAsDataURL($refs.photo.files[0]);
+                                               ">
+
+                                        <button type="button" class="inline-flex items-center px-4 py-2 bg-white border border-slate-300 rounded-lg font-bold text-xs text-slate-700 uppercase tracking-widest shadow-sm hover:text-slate-500 focus:outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 active:text-slate-800 active:bg-slate-50 disabled:opacity-25 transition" 
+                                                x-on:click.prevent="$refs.photo.click()">
+                                            Select New Image
+                                        </button>
+                                    </div>
+                                </div>
+                            @endif
+
                             @foreach($options[$category] as $option)
                                 <div class="grid grid-cols-3 border border-slate-200 rounded-xl p-4 bg-slate-50/50 hover:bg-white transition-all duration-200">
                                     <label for="{{ str_replace('.', '_', $option->option_key) }}" class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">

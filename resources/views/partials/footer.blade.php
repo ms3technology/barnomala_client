@@ -7,7 +7,7 @@
     $eiin = $options['institute.eiin'] ?? ($options['institute.identity.eiin'] ?? 'N/A');
     $code = $options['institute.code'] ?? 'N/A';
     $logoUrl = $options['institute.logo_json']['url'] ?? ($options['logo_url'] ?? asset('images/school-logo.png'));
-    $visitorCount = $options['site.visitor_count'] ?? '0';
+    $visitorCount = \App\Models\Option::get('site.visitor_count', 0);
 @endphp
 
 <footer class="bg-[#002147] border-t-4 border-yellow-500 text-white font-sans tracking-wide relative overflow-hidden mt-20">

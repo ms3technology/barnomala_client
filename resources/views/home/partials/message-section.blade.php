@@ -13,30 +13,92 @@
         }
         return $speech->image_json['url'] ?? '/images/teacher.png';
     }
+
+    $aboutImageOption = \App\Models\Option::where('option_key', 'institute.about.image_json')->first();
+    $aboutImageUrl = $aboutImageOption ? (json_decode($aboutImageOption->option_value, true)['url'] ?? asset('images/about-us-1.png')) : asset('images/about-us-1.png');
 @endphp
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 font-bn">
-    <!-- About Us -->
-    <div class="bg-white rounded-2xl shadow-xl p-8 lg:p-12 mb-12 transform hover:shadow-2xl transition duration-500">
-        <div class="flex flex-col lg:flex-row gap-12 items-center">
-            <div class="w-full lg:w-1/3">
-                <div class="relative">
-                    <div class="absolute -inset-2 bg-indigo-100 rounded-full blur-xl opacity-50"></div>
-                    <img src="{{ $options['institute.branding.logo_json']['url'] ?? '/images/school-logo.png' }}" class="relative w-64 h-64 mx-auto object-contain rounded-full border-8 border-white shadow-lg" alt="About">
+    <!-- About Us Redesign -->
+    <div class="relative overflow-hidden bg-white rounded-[3rem] shadow-[0_32px_120px_-20px_rgba(30,41,59,0.08)] mb-20 group border border-slate-100">
+        <!-- Decorative Background Elements -->
+        <div class="absolute -top-24 -left-24 w-96 h-96 bg-indigo-50 rounded-full mix-blend-multiply filter blur-3xl opacity-30 group-hover:opacity-50 transition duration-1000"></div>
+        <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-50 rounded-full mix-blend-multiply filter blur-3xl opacity-30 group-hover:opacity-50 transition duration-1000"></div>
+
+        <div class="relative flex flex-col lg:flex-row items-stretch min-h-125">
+            <!-- Content Side -->
+            <div class="lg:w-3/5 p-8 lg:p-16 flex flex-col justify-center">
+                <div class="space-y-8">
+                    <div>
+                        <h2 class="text-4xl lg:text-5xl font-black text-slate-900 leading-[1.1] tracking-tight">
+                            {{ $options['institute.about.title'] ?? 'আমাদের প্রতিষ্ঠান সম্পর্কে' }}
+                        </h2>
+                        <div class="w-20 h-2 bg-indigo-600 rounded-full mt-6 group-hover:w-32 transition-all duration-500"></div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <p class="text-slate-600 text-lg leading-relaxed font-medium">
+                            {{ $options['institute.about.text'] ?? 'আমাদের শিক্ষা প্রতিষ্ঠান একটি ঐতিহ্যবাহী বিদ্যাপীঠ। দীর্ঘ পথচলায় আমরা অসংখ্য মেধাবী শিক্ষার্থী উপহার দিয়েছি যারা দেশ ও দশের কল্যাণে নিয়োজিত।' }}
+                        </p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                            <div class="flex items-center gap-3 text-slate-700">
+                                <div class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                    <i class="fas fa-check text-[10px]"></i>
+                                </div>
+                                <span class="text-sm font-bold">Smart Classrooms</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-slate-700">
+                                <div class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                    <i class="fas fa-check text-[10px]"></i>
+                                </div>
+                                <span class="text-sm font-bold">Expert Faculty</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-slate-700">
+                                <div class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                    <i class="fas fa-check text-[10px]"></i>
+                                </div>
+                                <span class="text-sm font-bold">Modern Library</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-slate-700">
+                                <div class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                    <i class="fas fa-check text-[10px]"></i>
+                                </div>
+                                <span class="text-sm font-bold">ICT Lab</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-8">
+                        <a href="/about-us" class="group/btn relative inline-flex items-center gap-4 text-white pl-4 pr-4 py-2 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-2xl shadow-slate-900/20 bg-indigo-600 transition-all duration-300">
+                            {{ $options['institute.about.button_text'] ?? 'Learn More' }}
+                            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center group-hover/btn:bg-white group-hover/btn:text-indigo-600 transition-colors">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="w-full lg:w-2/3">
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="w-12 h-1 bg-indigo-600 rounded"></div>
-                    <h2 class="text-3xl font-extrabold text-indigo-900">{{ $options['institute.about.title'] ?? 'আমাদের প্রতিষ্ঠান সম্পর্কে' }}</h2>
+
+            <!-- Image Side -->
+            <div class="lg:w-2/5 relative overflow-hidden group/image">
+                <div class="absolute inset-0 bg-indigo-600/10 z-20 group-hover/image:bg-transparent transition-colors duration-700"></div>
+                <img src="{{ $aboutImageUrl }}" alt="About Us Image" 
+                     class="w-full h-full object-cover relative z-10 transition-all duration-1000 group-hover:scale-110"
+                     style="clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);">
+                
+                <!-- Floating Decorative Card -->
+                <div class="absolute bottom-10 -left-10 z-30 bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-2xl border border-white/50 transform -rotate-3 group-hover:rotate-0 transition-transform duration-500 hidden lg:block">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+                            <i class="fas fa-graduation-cap text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-black text-indigo-600 uppercase tracking-widest leading-none">Quality</div>
+                            <div class="text-lg font-black text-slate-900 mt-1">Education</div>
+                        </div>
+                    </div>
                 </div>
-                <p class="text-gray-600 leading-relaxed text-lg mb-8">
-                    {{ $options['institute.about.text'] ?? 'আমাদের শিক্ষা প্রতিষ্ঠান একটি ঐতিহ্যবাহী বিদ্যাপীঠ। দীর্ঘ পথচলায় আমরা অসংখ্য মেধাবী শিক্ষার্থী উপহার দিয়েছি যারা দেশ ও দশের কল্যাণে নিয়োজিত।' }}
-                </p>
-                <a href="/about-us" class="inline-flex items-center bg-indigo-600 text-white px-8 py-3 rounded-full font-bold hover:bg-indigo-700 transition shadow-lg hover:shadow-indigo-200">
-                    {{ $options['institute.about.button_text'] ?? 'আরও পড়ুন' }}
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                </a>
             </div>
         </div>
     </div>
@@ -59,27 +121,34 @@
             @if($rowItems->isNotEmpty())
                 <div class="grid grid-cols-1 md:grid-cols-6 gap-8">
                     @foreach($rowItems as $speech)
-                        <div class="bg-white rounded-2xl shadow-xl overflow-hidden group flex flex-col {{ getRowItemClass($rowConfig) }}">
-                            <div class="p-8 flex-1 flex flex-col">
-                                <div class="flex flex-col items-center mb-6">
-                                    <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-indigo-50 shadow-inner mb-4">
-                                        <img src="{{ getImageUrl($speech) }}"
-                                             class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500"
-                                             alt="{{ $speech['name'] ?? $speech->name }}">
+                        <div class="bg-white rounded-4xl hover:shadow-[0_40px_80px_rgba(79,70,229,0.2)] transition-all duration-700 group flex flex-col border border-indigo-50/50 {{ getRowItemClass($rowConfig) }}">
+                            <div class="p-10 flex-1 flex flex-col relative overflow-hidden">
+                                <!-- Background Decoration -->
+                                <div class="absolute -top-24 -right-24 w-48 h-48 bg-indigo-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-1000"></div>
+                                
+                                <div class="flex flex-col items-center mb-8 relative z-10">
+                                    <div class="relative">
+                                        <div class="absolute inset-0 bg-indigo-600 rounded-full blur-lg opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+                                        <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-2xl mb-4 relative">
+                                            <img src="{{ getImageUrl($speech) }}"
+                                                 class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition duration-700"
+                                                 alt="{{ $speech['name'] ?? $speech->name }}">
+                                        </div>
                                     </div>
-                                    <h3 class="text-xl font-bold text-indigo-900 text-center">{{ $speech['title'] ?? $speech->title }}</h3>
+                                    <h3 class="text-xl font-black text-indigo-950 text-center tracking-tight">{{ $speech['title'] ?? $speech->title }}</h3>
+                                    <div class="w-12 h-1 bg-indigo-100 rounded-full mt-3 group-hover:w-20 group-hover:bg-indigo-600 transition-all duration-500"></div>
                                 </div>
-                                <div class="relative flex-1">
-                                    <svg class="absolute -top-4 -left-2 w-10 h-10 text-indigo-50 opacity-50" fill="currentColor" viewBox="0 0 32 32">
-                                        <path d="M10 12c-2.209 0-4 1.791-4 4s1.791 4 4 4c0.75 0 1.444-0.213 2.031-0.563 1.156 2.406 3.444 4.063 6.094 4.313a1.001 1.001 0 100.188-1.969c-3.125-0.281-5.656-2.5-6.188-5.594C12.313 15.688 11.25 12 10 12zm12 0c-2.209 0-4 1.791-4 4s1.791 4 4 4c0.75 0 1.444-0.213 2.031-0.563 1.156 2.406 3.444 4.063 6.094 4.313a1.001 1.001 0 100.188-1.969c-3.125-0.281-5.656-2.5-6.188-5.594C24.313 15.688 23.25 12 22 12z"></path>
-                                    </svg>
-                                    <p class="text-gray-600 italic text-center px-4 relative z-10 line-clamp-6 group-hover:line-clamp-none transition-all duration-500">
+
+                                <div class="relative flex-1 z-10">
+                                    <span class="text-7xl font-serif text-indigo-100 absolute -top-8 -left-2 select-none group-hover:text-indigo-200 transition-colors">“</span>
+                                    <p class="text-slate-600 italic text-center px-4 leading-relaxed line-clamp-6 group-hover:line-clamp-none transition-all duration-500">
                                         {{ $speech['speech'] ?? $speech->speech }}
                                     </p>
                                 </div>
-                                <div class="mt-6 text-right pt-4 border-t border-gray-50">
-                                    <div class="font-bold text-indigo-900">{{ $speech['name'] ?? $speech->name }}</div>
-                                    <div class="text-xs text-indigo-600 font-medium tracking-wide uppercase">{{ $speech['designation'] ?? $speech->designation }}</div>
+
+                                <div class="mt-8 text-right pt-6 border-t border-indigo-50 relative z-10">
+                                    <div class="font-black text-indigo-950 text-lg">{{ $speech['name'] ?? $speech->name }}</div>
+                                    {{-- <div class="text-[10px] text-indigo-600 font-black tracking-[0.2em] uppercase mt-1">{{ $speech['designation'] ?? $speech->designation }}</div> --}}
                                 </div>
                             </div>
                         </div>
