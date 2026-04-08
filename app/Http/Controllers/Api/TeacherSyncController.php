@@ -54,7 +54,7 @@ class TeacherSyncController extends Controller
                     'permanent_address' => $teacher['permanent_address'] ?? null,
                     'gender' => $teacher['gender'] ?? null,
                     'priority_index' => $teacher['priority_index'] ?? 0,
-                    'teacher_image' => $teacher['photo'] ?? null,
+                    'photo' => $teacher['photo'] ?? null,
                     'teacher_code' => $teacher['teacher_code'] ?? null,
                     'phone' => $teacher['phone'] ?? null,
                     'email' => $teacher['email'] ?? null,

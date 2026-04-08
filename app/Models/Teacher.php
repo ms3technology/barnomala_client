@@ -24,7 +24,6 @@ class Teacher extends Model
         'gender',
         'priority_index',
         'photo',
-        'teacher_image',
         'teacher_code',
         'phone',
         'email',

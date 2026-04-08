@@ -12,14 +12,14 @@ use App\Http\Controllers\Admin\NoticeController as AdminNoticeController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\Admin\SpeechController as AdminSpeechController;
 use App\Http\Controllers\Admin\OptionController as AdminOptionController;
-use App\Http\Controllers\Admin\TeacherController as AdminTeacherController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/up', function () {
-    Artisan::call('migrate');
+    Artisan::call('migrate', ['--force' => true]);
     Artisan::call('optimize:clear');
-    return 'Database migrated and cache cleared!';
+    
+    return redirect('/')->with('status', 'Application is up to date!');
 });
 
 Route::get('/sso/login', [SSOController::class, 'login'])->name('sso.login');
@@ -31,7 +31,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     Route::resource('notices', AdminNoticeController::class);
     Route::resource('news', AdminNewsController::class);
-    Route::resource('teachers', AdminTeacherController::class);
     Route::resource('speeches', AdminSpeechController::class);
     Route::post('speeches/quick', [AdminSpeechController::class, 'storeQuick'])->name('speeches.quick');
     Route::post('speeches/row-config', [AdminSpeechController::class, 'updateRowConfig'])->name('speeches.row-config');
