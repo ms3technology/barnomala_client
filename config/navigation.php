@@ -27,12 +27,12 @@ return [
             ['label' => 'Daily Activities', 'route' => 'home'],
             ['label' => 'Mobile Banking', 'route' => 'home'],
         ]],
-        ['label' => 'Result', 'route' => 'results.index', 'children' => []],
-        ['label' => 'Notice', 'route' => 'news.index', 'children' => []],
+        ['label' => 'Notice', 'route' => 'notices.index', 'children' => []],
         ['label' => 'News', 'route' => 'news.index', 'children' => []],
         ['label' => 'Gallery', 'route' => 'gallery.index', 'children' => []],
-        ['label' => 'Contact', 'route' => 'news.index', 'children' => []],
-        ['label' => 'Apply Online', 'route' => 'apply.index', 'children' => []],
+        ['label' => 'Contact', 'route' => 'contact.index', 'children' => []],
+        // ['label' => 'Result', 'route' => 'results.index', 'children' => []],
+        // ['label' => 'Apply Online', 'route' => 'apply.index', 'children' => []],
     ],
 
     'important_links' => [

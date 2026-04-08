@@ -63,6 +63,7 @@ Route::get('/achievements', [PageController::class, 'achievements'])->name('achi
 Route::get('/academic', [PageController::class, 'academic'])->name('academic.index');
 Route::get('/results', [PageController::class, 'results'])->name('results.index');
 Route::get('/teachers', [PageController::class, 'teachers'])->name('teachers.index');
+Route::get('/teachers/{teacher}', [PageController::class, 'teacherDetail'])->name('teachers.show');
 Route::get('/contact-us', [PageController::class, 'contact'])->name('contact.index');
 Route::get('/apply', [PageController::class, 'apply'])->name('apply.index');
 Route::post('/contact-us', [PageController::class, 'contactSubmit'])->name('contact.submit');

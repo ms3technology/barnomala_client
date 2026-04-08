@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Concerns\BuildsPublicPageData;
 use App\Models\Speech;
 use App\Models\PhotoGallery;
+use App\Models\Teacher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -78,7 +79,16 @@ class PageController extends Controller
 
     public function teachers(): View
     {
-        return view('pages.teachers', $this->getPublicPageData());
+        $teachers = Teacher::where('status', true)
+            ->orderBy('priority_index', 'asc')
+            ->get();
+        return view('pages.teachers', array_merge($this->getPublicPageData(), compact('teachers')));
+    }
+
+    public function teacherDetail(Teacher $teacher): View
+    {
+        $teacher->load(['qualifications', 'trainings']);
+        return view('pages.teacher-detail', array_merge($this->getPublicPageData(), compact('teacher')));
     }
 
     public function apply(): View
