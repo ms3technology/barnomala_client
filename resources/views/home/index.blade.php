@@ -77,8 +77,8 @@
             @include('home.partials.news-section', ['featuredNews' => $featuredNews ?? []])
         @endif
 
-        @if(($layout['gallery'] ?? true) && isset($galleryNews) && $galleryNews->isNotEmpty())
-            @include('home.partials.gallery', ['galleryNews' => $galleryNews ?? []])
+        @if($layout['gallery'] ?? true)
+            @include('home.partials.gallery', ['galleryPhotos' => $galleryPhotos ?? []])
         @endif
 
         @if($layout['student_demographics'] ?? true)

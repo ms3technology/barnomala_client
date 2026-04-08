@@ -7,6 +7,7 @@ use App\Models\Notice;
 use App\Models\News;
 use App\Models\Speech;
 use App\Models\Teacher;
+use App\Models\PhotoGallery;
 
 class HomeController extends Controller
 {
@@ -36,9 +37,7 @@ class HomeController extends Controller
             ->take(6)
             ->get();
 
-        $galleryNews = News::where('is_active', true)
-            ->whereNotNull('image_json')
-            ->orderBy('published_at', 'desc')
+        $galleryPhotos = PhotoGallery::orderBy('date', 'desc')
             ->take(8)
             ->get();
 
@@ -67,7 +66,7 @@ class HomeController extends Controller
             ['label' => 'Routine', 'url' => '#'],
             ['label' => 'Syllabus', 'url' => '#'],
             ['label' => 'Academic Calendar', 'url' => '#'],
-            ['label' => 'Photo Gallery', 'url' => '#'],
+            ['label' => 'Photo Gallery', 'url' => route('gallery.index')],
             ['label' => 'Downloads', 'url' => '#'],
             ['label' => 'News', 'url' => '#'],
             ['label' => 'Notice', 'url' => route('notices.index')],
@@ -79,7 +78,7 @@ class HomeController extends Controller
             'notices' => $notices,
             'speeches' => $speeches,
             'featuredNews' => $featuredNews,
-            'galleryNews' => $galleryNews,
+            'galleryPhotos' => $galleryPhotos,
             'sliderImages' => $sliderImages,
             'teachers' => $teachers,
             'stats' => $stats,

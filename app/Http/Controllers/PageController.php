@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Concerns\BuildsPublicPageData;
 use App\Models\Speech;
+use App\Models\PhotoGallery;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -29,6 +30,30 @@ class PageController extends Controller
     public function history(): View
     {
         return view('pages.history', $this->getPublicPageData());
+    }
+
+    public function gallery(Request $request): View
+    {
+        $query = PhotoGallery::query();
+
+        if ($request->has('category') && $request->category !== 'All') {
+            $query->where('category', $request->category);
+        }
+
+        $photos = $query->orderBy('date', 'desc')->paginate(12);
+        
+        $categories = PhotoGallery::whereNotNull('category')
+            ->distinct()
+            ->pluck('category')
+            ->sort()
+            ->values();
+
+        return view('pages.gallery', array_merge($this->getPublicPageData(), compact('photos', 'categories')));
+    }
+
+    public function galleryDetail(PhotoGallery $photoGallery): View
+    {
+        return view('pages.gallery-detail', array_merge($this->getPublicPageData(), ['photo' => $photoGallery]));
     }
 
     public function achievements(): View

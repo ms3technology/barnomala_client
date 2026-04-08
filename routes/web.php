@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\NoticeController as AdminNoticeController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\Admin\SpeechController as AdminSpeechController;
 use App\Http\Controllers\Admin\OptionController as AdminOptionController;
+use App\Http\Controllers\Admin\PhotoGalleryController as AdminPhotoGalleryController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -22,6 +23,9 @@ Route::get('/up', function () {
     return redirect('/')->with('status', 'Application is up to date!');
 });
 
+Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery.index');
+Route::get('/gallery/{photoGallery}', [PageController::class, 'galleryDetail'])->name('gallery.show');
+
 Route::get('/sso/login', [SSOController::class, 'login'])->name('sso.login');
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
@@ -31,6 +35,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     Route::resource('notices', AdminNoticeController::class);
     Route::resource('news', AdminNewsController::class);
+    Route::resource('photo-gallery', AdminPhotoGalleryController::class);
     Route::resource('speeches', AdminSpeechController::class);
     Route::post('speeches/quick', [AdminSpeechController::class, 'storeQuick'])->name('speeches.quick');
     Route::post('speeches/row-config', [AdminSpeechController::class, 'updateRowConfig'])->name('speeches.row-config');

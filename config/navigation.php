@@ -30,7 +30,7 @@ return [
         ['label' => 'Result', 'route' => 'results.index', 'children' => []],
         ['label' => 'Notice', 'route' => 'news.index', 'children' => []],
         ['label' => 'News', 'route' => 'news.index', 'children' => []],
-        ['label' => 'Gallery', 'route' => 'news.index', 'children' => []],
+        ['label' => 'Gallery', 'route' => 'gallery.index', 'children' => []],
         ['label' => 'Contact', 'route' => 'news.index', 'children' => []],
         ['label' => 'Apply Online', 'route' => 'apply.index', 'children' => []],
     ],
