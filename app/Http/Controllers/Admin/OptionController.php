@@ -103,11 +103,10 @@ class OptionController extends Controller
             ['option_value' => json_encode($sliders), 'value_type' => 'json']
         );
 
-        if ($request->has('hero_type')) {
-            Option::updateOrCreate(
-                ['option_key' => 'institute.hero.type'],
-                ['option_value' => $request->hero_type, 'value_type' => 'string']
-            );
+        if ($request->has('settings')) {
+            foreach ($request->get('settings') as $key => $value) {
+                Option::where('option_key', $key)->update(['option_value' => $value]);
+            }
         }
 
         return redirect()->back()->with('success', 'Sliders updated successfully.');
@@ -197,19 +196,10 @@ class OptionController extends Controller
      */
     public function updateBranding(Request $request)
     {
-        $keys = [
-            'institute.branding.name',
-            'institute.branding.accent_color',
-            'institute.branding.banner_type',
-            'institute.branding.header_bg',
-        ];
+        $settings = $request->get('settings', []);
 
-        foreach ($keys as $key) {
-            if ($request->has(str_replace('.', '_', $key))) {
-                Option::where('option_key', $key)->update([
-                    'option_value' => $request->get(str_replace('.', '_', $key))
-                ]);
-            }
+        foreach ($settings as $key => $value) {
+            Option::where('option_key', $key)->update(['option_value' => $value]);
         }
 
         // Handle Logo Upload
@@ -313,27 +303,10 @@ class OptionController extends Controller
             );
         }
 
-        $data = $request->except(['_token', '_method', 'about_image']);
+        $settings = $request->get('settings', []);
 
-        foreach ($data as $key => $value) {
-            $formattedKey = str_replace('_', '.', $key);
-            
-            $option = Option::where('option_key', $formattedKey)->first();
-            
-            if (!$option) {
-                $option = Option::where('option_key', $key)->first();
-            }
-
-            if ($option) {
-                $option->update(['option_value' => $value]);
-                continue;
-            }
-
-            Option::create([
-                'option_key' => $formattedKey,
-                'option_value' => $value,
-                'value_type' => 'string',
-            ]);
+        foreach ($settings as $key => $value) {
+            Option::where('option_key', $key)->update(['option_value' => $value]);
         }
 
         return redirect()->back()->with('success', 'Settings updated successfully.');
@@ -344,21 +317,10 @@ class OptionController extends Controller
      */
     public function update(Request $request)
     {
-        $data = $request->except(['_token', '_method']);
+        $settings = $request->get('options', []);
 
-        foreach ($data as $key => $value) {
-            $formattedKey = str_replace('_', '.', $key);
-            // Some keys might have underscores that are NOT separators, but for our options key naming convention, 
-            // the seeder uses dots. Our request input converts dots to underscores.
-            // However, this might match multiple times if key has dots AND underscores.
-            // Simplified logic: find by key and update.
-            
-            $option = Option::where('option_key', $formattedKey)->first();
-            
-            // If not found, try to find by exact key if the underscore replacement was wrong
-            if (!$option) {
-                $option = Option::where('option_key', $key)->first();
-            }
+        foreach ($settings as $key => $value) {
+            $option = Option::where('option_key', $key)->first();
 
             if ($option) {
                 if ($option->value_type === 'boolean') {

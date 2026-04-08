@@ -41,7 +41,7 @@
                             </div>
                             <div class="flex items-center gap-3">
                                 <input type="color" x-model="selectedColor" class="w-10 h-10 border-none p-0 cursor-pointer">
-                                <input type="text" name="institute_branding_accent_color" x-model="selectedColor"
+                                <input type="text" name="settings[institute.branding.accent_color]" x-model="selectedColor"
                                        class="flex-1 border-slate-300 rounded-lg text-sm font-mono uppercase">
                             </div>
                         </div>
@@ -118,7 +118,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-3">
                             <label class="block text-xs font-black text-slate-500 uppercase tracking-widest">Header Style</label>
-                            <select name="institute_branding_banner_type" class="w-full border-slate-200 rounded-xl shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm font-bold py-3">
+                            <select name="settings[institute.branding.banner_type]" class="w-full border-slate-200 rounded-xl shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm font-bold py-3">
                                 <option value="banner_only" {{ ($options['institute.branding.banner_type'] ?? '') == 'banner_only' ? 'selected' : '' }}>Standard Full Banner</option>
                                 <option value="banner_with_overlay" {{ ($options['institute.branding.banner_type'] ?? '') == 'banner_with_overlay' ? 'selected' : '' }}>Banner with Text Overlay</option>
                                 <option value="banner_split" {{ ($options['institute.branding.banner_type'] ?? '') == 'banner_split' ? 'selected' : '' }}>Split (Image Left / Info Right)</option>
@@ -130,7 +130,7 @@
                         <div class="space-y-3">
                             <label class="block text-xs font-black text-slate-500 uppercase tracking-widest">Header Background</label>
                             <div class="flex items-center gap-4 p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
-                                <input type="color" name="institute_branding_header_bg" value="{{ $options['institute.branding.header_bg'] ?? '#ffffff' }}" 
+                                <input type="color" name="settings[institute.branding.header_bg]" value="{{ $options['institute.branding.header_bg'] ?? '#ffffff' }}" 
                                        class="h-8 w-16 rounded cursor-pointer border-none bg-transparent">
                                 <span class="text-xs font-mono font-bold text-slate-600 uppercase">{{ $options['institute.branding.header_bg'] ?? '#ffffff' }}</span>
                             </div>

@@ -31,21 +31,21 @@
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <label class="relative flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-colors group">
-                            <input type="radio" name="hero_type" value="slider_only" {{ ($options['institute.hero.type'] ?? '') == 'slider_only' ? 'checked' : '' }} class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <input type="radio" name="settings[institute.hero.type]" value="slider_only" {{ ($options['institute.hero.type'] ?? '') == 'slider_only' ? 'checked' : '' }} class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
                             <div class="ml-4">
                                 <span class="block text-sm font-bold text-slate-900">Standard Slider</span>
                                 <span class="block text-xs text-slate-500">Standard full width slider layout.</span>
                             </div>
                         </label>
                         <label class="relative flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-colors group">
-                            <input type="radio" name="hero_type" value="slider_with_notice" {{ ($options['institute.hero.type'] ?? 'slider_with_notice') == 'slider_with_notice' ? 'checked' : '' }} class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <input type="radio" name="settings[institute.hero.type]" value="slider_with_notice" {{ ($options['institute.hero.type'] ?? 'slider_with_notice') == 'slider_with_notice' ? 'checked' : '' }} class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
                             <div class="ml-4">
                                 <span class="block text-sm font-bold text-slate-900">With Notice Panel</span>
                                 <span class="block text-xs text-slate-500">Slider alongside a notice list.</span>
                             </div>
                         </label>
                         <label class="relative flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-colors group">
-                            <input type="radio" name="hero_type" value="overlay" {{ ($options['institute.hero.type'] ?? '') == 'overlay' ? 'checked' : '' }} class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <input type="radio" name="settings[institute.hero.type]" value="overlay" {{ ($options['institute.hero.type'] ?? '') == 'overlay' ? 'checked' : '' }} class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
                             <div class="ml-4">
                                 <span class="block text-sm font-bold text-slate-900">Overlay / Netflix</span>
                                 <span class="block text-xs text-slate-500">Modern cinematic full-screen look.</span>

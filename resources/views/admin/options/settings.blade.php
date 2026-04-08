@@ -89,31 +89,31 @@
                                     @continue
                                 @endif
                                 <div class="grid grid-cols-3 border border-slate-200 rounded-xl p-4 bg-slate-50/50 hover:bg-white transition-all duration-200">
-                                    <label for="{{ str_replace('.', '_', $option->option_key) }}" class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">
+                                    <label for="settings[{{ $option->option_key }}]" class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">
                                         {{ ucwords(str_replace(['institute', $category, '.', '_'], ' ', $option->option_key)) }}
                                     </label>
 
                                     <div class="col-span-2">
                                         @if($option->value_type === 'boolean')
-                                            <select name="{{ str_replace('.', '_', $option->option_key) }}" id="{{ str_replace('.', '_', $option->option_key) }}" class="block w-full text-sm rounded-lg border border-slate-300 bg-white/80 backdrop-blur-sm px-4 py-2.5 text-slate-800 shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 hover:border-slate-400">
+                                            <select name="settings[{{ $option->option_key }}]" id="settings[{{ $option->option_key }}]" class="block w-full text-sm rounded-lg border border-slate-300 bg-white/80 backdrop-blur-sm px-4 py-2.5 text-slate-800 shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 hover:border-slate-400">
                                                 <option value="1" {{ $option->option_value == '1' ? 'selected' : '' }}>Enabled</option>
                                                 <option value="0" {{ $option->option_value == '0' ? 'selected' : '' }}>Disabled</option>
                                             </select>
                                         @elseif($option->value_type === 'integer')
                                             <input type="number" 
-                                                name="{{ str_replace('.', '_', $option->option_key) }}" 
-                                                id="{{ str_replace('.', '_', $option->option_key) }}" 
+                                                name="settings[{{ $option->option_key }}]" 
+                                                id="settings[{{ $option->option_key }}]" 
                                                 value="{{ $option->option_value }}"
                                                 class="block w-full text-sm rounded-lg border border-slate-300 bg-white/80 backdrop-blur-sm px-4 py-2.5 text-slate-800 placeholder-slate-400 shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 hover:border-slate-400">
                                         @elseif(str_contains($option->option_key, 'text') || str_contains($option->option_key, 'address'))
-                                            <textarea name="{{ str_replace('.', '_', $option->option_key) }}" 
-                                                    id="{{ str_replace('.', '_', $option->option_key) }}" 
+                                            <textarea name="settings[{{ $option->option_key }}]" 
+                                                    id="settings[{{ $option->option_key }}]" 
                                                     rows="3" 
                                                     class="block w-full text-sm rounded-lg border border-slate-300 bg-white/80 backdrop-blur-sm px-4 py-2.5 text-slate-800 placeholder-slate-400 shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 hover:border-slate-400">{{ $option->option_value }}</textarea>
                                         @else
                                             <input type="text" 
-                                                name="{{ str_replace('.', '_', $option->option_key) }}" 
-                                                id="{{ str_replace('.', '_', $option->option_key) }}" 
+                                                name="settings[{{ $option->option_key }}]" 
+                                                id="settings[{{ $option->option_key }}]" 
                                                 value="{{ $option->option_value }}"
                                                 class="block w-full text-sm rounded-lg border border-slate-300 bg-white/80 backdrop-blur-sm px-4 py-2.5 text-slate-800 placeholder-slate-400 shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 hover:border-slate-400">
                                         @endif
