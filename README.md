@@ -62,6 +62,13 @@ DB_DATABASE=your_database_name
 DB_USERNAME=your_database_user
 DB_PASSWORD=your_database_password
 
+WP_DB_HOST=127.0.0.1
+WP_DB_PORT=3306
+WP_DB_DATABASE=old_wordpress
+WP_DB_USERNAME=root
+WP_DB_PASSWORD=
+WP_UPLOAD_PATH=/path/to/old/wp-content/uploads
+
 CLIENT_SSO_KEY=your_sso_shared_secret
 CLIENT_ADMIN_EMAIL=admin@barnomala.com
 ```
@@ -125,6 +132,7 @@ php artisan test
 - `/contact-us` - Contact page and form submission
 - `/sso/login` - SSO entry endpoint
 - `/admin` - Admin dashboard (auth + verified)
+- `/admin/transfer` - Data transfer manager (legacy DB preview + WordPress API preview + teacher import)
 
 ## SSO Login Flow
 

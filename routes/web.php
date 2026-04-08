@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\Admin\SpeechController as AdminSpeechController;
 use App\Http\Controllers\Admin\OptionController as AdminOptionController;
 use App\Http\Controllers\Admin\PhotoGalleryController as AdminPhotoGalleryController;
+use App\Http\Controllers\Admin\DataTransferController as AdminDataTransferController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -51,6 +52,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     Route::get('layout', [AdminOptionController::class, 'layout'])->name('layout.index');
     Route::post('layout', [AdminOptionController::class, 'updateLayout'])->name('layout.update');
+
+    Route::get('transfer', [AdminDataTransferController::class, 'index'])->name('transfer.index');
+    Route::post('transfer/speeches', [AdminDataTransferController::class, 'transferSpeeches'])->name('transfer.speeches');
 });
 
 Route::get('/about-us', [PageController::class, 'about'])->name('about');

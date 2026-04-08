@@ -141,9 +141,24 @@
 
                                 <div class="relative flex-1 z-10">
                                     <span class="text-7xl font-serif text-indigo-100 absolute -top-8 -left-2 select-none group-hover:text-indigo-200 transition-colors">“</span>
-                                    <p class="text-slate-600 italic text-center px-4 leading-relaxed line-clamp-6 group-hover:line-clamp-none transition-all duration-500">
-                                        {{ $speech['speech'] ?? $speech->speech }}
+                                    @php
+                                        $speechText = $speech['speech'] ?? $speech->speech;
+                                        $speechPreview = \Illuminate\Support\Str::limit(strip_tags((string) $speechText), 220);
+                                        $hasMoreSpeech = mb_strlen(strip_tags((string) $speechText)) > 220;
+                                    @endphp
+                                    <p class="text-slate-600 italic text-center px-4 leading-relaxed">
+                                        {{ $speechPreview }}
                                     </p>
+                                    @if($hasMoreSpeech)
+                                        <details class="mt-3 text-center">
+                                            <summary class="inline-block cursor-pointer text-xs font-bold uppercase tracking-widest text-indigo-600 hover:text-indigo-700">
+                                                Read more
+                                            </summary>
+                                            <p class="mt-3 text-slate-600 italic text-center px-4 leading-relaxed">
+                                                {{ $speechText }}
+                                            </p>
+                                        </details>
+                                    @endif
                                 </div>
 
                                 <div class="mt-8 text-right pt-6 border-t border-indigo-50 relative z-10">
