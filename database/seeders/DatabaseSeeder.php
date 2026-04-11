@@ -14,10 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            OptionsSeeder::class,
-        ]);
-
         \App\Models\User::updateOrCreate(
             ['email' => env('CLIENT_ADMIN_EMAIL', 'admin@barnomala.com')],
             [

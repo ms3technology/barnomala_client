@@ -1,6 +1,6 @@
 @php
     $heroType = $options['institute.hero.type'] ?? 'slider_with_notice';
-    $sliderDesign = $options['institute.hero.type'] === 'overlay' ? 'overlay' : ($options['institute.hero.slider_design'] ?? 'slider_1');
+    $sliderDesign = $heroType === 'overlay' ? 'overlay' : ($options['institute.hero.slider_design'] ?? 'slider_1');
     $isSliderOnly = $heroType === 'slider_only' || $heroType === 'overlay';
 
     function formatDateBN($dateString, $type = 'day') {
