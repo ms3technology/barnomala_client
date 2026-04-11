@@ -85,6 +85,14 @@ class PageController extends Controller
         return view('pages.teachers', array_merge($this->getPublicPageData(), compact('teachers')));
     }
 
+    public function formerTeachers(): View
+    {
+        $teachers = Teacher::where('status', false)
+            ->orderBy('priority_index', 'asc')
+            ->get();
+        return view('pages.former-teachers', array_merge($this->getPublicPageData(), compact('teachers')));
+    }
+
     public function teacherDetail(Teacher $teacher): View
     {
         $teacher->load(['qualifications', 'trainings']);

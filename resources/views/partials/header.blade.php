@@ -69,7 +69,7 @@
 
         <!-- 3. Banner Left and Info Right -->
         @elseif ($bannerType === 'banner_split')
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6 py-4 bg-white">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6 bg-white">
                 <div class="overflow-hidden shadow-lg group w-full md:w-auto">
                     <a href="{{ route('home') }}">
                         <img src="{{ $bannerUrl }}" 
