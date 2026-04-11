@@ -63,6 +63,17 @@ Route::get('/speeches', [PageController::class, 'speeches'])->name('speeches.ind
 Route::get('/history', [PageController::class, 'history'])->name('history.index');
 Route::get('/achievements', [PageController::class, 'achievements'])->name('achievements.index');
 Route::get('/academic', [PageController::class, 'academic'])->name('academic.index');
+Route::get('/academic-calendar', [PageController::class, 'academicCalendar'])->name('academic.calendar');
+Route::get('/academic-rules', [PageController::class, 'academicRules'])->name('academic.rules');
+Route::get('/class-schedule', [PageController::class, 'classSchedule'])->name('academic.schedule');
+Route::get('/exam-schedule', [PageController::class, 'examSchedule'])->name('academic.exam-schedule');
+
+Route::get('/tuition-fees', [PageController::class, 'tuitionFees'])->name('student.tuition-fees');
+Route::get('/our-students', [PageController::class, 'students'])->name('student.students');
+Route::get('/student-uniform', [PageController::class, 'uniform'])->name('student.uniform');
+Route::get('/daily-activities', [PageController::class, 'activities'])->name('student.activities');
+Route::get('/mobile-banking', [PageController::class, 'mobileBanking'])->name('student.mobile-banking');
+
 Route::get('/results', [PageController::class, 'results'])->name('results.index');
 Route::get('/teachers', [PageController::class, 'teachers'])->name('teachers.index');
 Route::get('/former-teachers', [PageController::class, 'formerTeachers'])->name('teachers.former');

@@ -72,6 +72,51 @@ class PageController extends Controller
         return view('pages.academic', $this->getPublicPageData());
     }
 
+    public function academicCalendar(): View
+    {
+        return view('academic.academic-calendar', $this->getPublicPageData());
+    }
+
+    public function academicRules(): View
+    {
+        return view('academic.academic-rules', $this->getPublicPageData());
+    }
+
+    public function classSchedule(): View
+    {
+        return view('academic.class-schedule', $this->getPublicPageData());
+    }
+
+    public function examSchedule(): View
+    {
+        return view('academic.exam-schedule', $this->getPublicPageData());
+    }
+
+    public function tuitionFees(): View
+    {
+        return view('student.tuition-fees', $this->getPublicPageData());
+    }
+
+    public function students(): View
+    {
+        return view('student.students', $this->getPublicPageData());
+    }
+
+    public function uniform(): View
+    {
+        return view('student.uniform', $this->getPublicPageData());
+    }
+
+    public function activities(): View
+    {
+        return view('student.activities', $this->getPublicPageData());
+    }
+
+    public function mobileBanking(): View
+    {
+        return view('student.mobile-banking', $this->getPublicPageData());
+    }
+
     public function results(): View
     {
         return view('pages.results', $this->getPublicPageData());
@@ -82,7 +127,7 @@ class PageController extends Controller
         $teachers = Teacher::where('status', true)
             ->orderBy('priority_index', 'asc')
             ->get();
-        return view('pages.teachers', array_merge($this->getPublicPageData(), compact('teachers')));
+        return view('academic.teachers', array_merge($this->getPublicPageData(), compact('teachers')));
     }
 
     public function formerTeachers(): View
@@ -90,13 +135,13 @@ class PageController extends Controller
         $teachers = Teacher::where('status', false)
             ->orderBy('priority_index', 'asc')
             ->get();
-        return view('pages.former-teachers', array_merge($this->getPublicPageData(), compact('teachers')));
+        return view('academic.former-teachers', array_merge($this->getPublicPageData(), compact('teachers')));
     }
 
     public function teacherDetail(Teacher $teacher): View
     {
         $teacher->load(['qualifications', 'trainings']);
-        return view('pages.teacher-detail', array_merge($this->getPublicPageData(), compact('teacher')));
+        return view('academic.teacher-detail', array_merge($this->getPublicPageData(), compact('teacher')));
     }
 
     public function apply(): View
