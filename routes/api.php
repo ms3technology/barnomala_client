@@ -2,11 +2,15 @@
 
 use App\Http\Controllers\Api\SyncController;
 use App\Http\Controllers\Api\TeacherSyncController;
+use App\Http\Controllers\Api\StaffSyncController;
+use App\Http\Controllers\Api\CommitteeSyncController;
 use App\Http\Controllers\Api\TransferExportController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/sync', [SyncController::class, 'syncOptions']);
 Route::post('/teachers/sync', [TeacherSyncController::class, 'sync']);
+Route::post('/staff/sync', [StaffSyncController::class, 'sync']);
+Route::post('/committees/sync', [CommitteeSyncController::class, 'sync']);
 
 Route::prefix('barnomala/v1')->group(function () {
     Route::get('students', [TransferExportController::class, 'students']);
