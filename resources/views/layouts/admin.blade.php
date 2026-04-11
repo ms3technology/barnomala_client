@@ -74,10 +74,10 @@
                         News
                     </a>
 
-                    <a href="{{ route('admin.photo-gallery.index') }}" 
+                    <a href="{{ route('admin.gallery.index') }}" 
                        class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.photo-gallery.*') ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                         <i class="fas fa-image w-5 mr-3"></i>
-                        Photo Gallery
+                        Gallery
                     </a>
 
                     <a href="{{ route('admin.speeches.index') }}" 

@@ -7,7 +7,7 @@ use App\Models\Notice;
 use App\Models\News;
 use App\Models\Speech;
 use App\Models\Teacher;
-use App\Models\PhotoGallery;
+use App\Models\Gallery;
 
 class HomeController extends Controller
 {
@@ -37,7 +37,7 @@ class HomeController extends Controller
             ->take(6)
             ->get();
 
-        $galleryPhotos = PhotoGallery::orderBy('date', 'desc')
+        $galleryItems = Gallery::orderBy('date', 'desc')
             ->take(8)
             ->get();
 
@@ -79,7 +79,7 @@ class HomeController extends Controller
             'notices' => $notices,
             'speeches' => $speeches,
             'featuredNews' => $featuredNews,
-            'galleryPhotos' => $galleryPhotos,
+            'galleryItems' => $galleryItems,
             'sliderImages' => $sliderImages,
             'teachers' => $teachers,
             'stats' => $stats,

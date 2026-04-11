@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Concerns\BuildsPublicPageData;
 use App\Models\Speech;
-use App\Models\PhotoGallery;
+use App\Models\Gallery;
 use App\Models\Teacher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,26 +35,26 @@ class PageController extends Controller
 
     public function gallery(Request $request): View
     {
-        $query = PhotoGallery::query();
+        $query = Gallery::query();
 
         if ($request->has('category') && $request->category !== 'All') {
             $query->where('category', $request->category);
         }
 
-        $photos = $query->orderBy('date', 'desc')->paginate(12);
+        $items = $query->orderBy('date', 'desc')->paginate(12);
         
-        $categories = PhotoGallery::whereNotNull('category')
+        $categories = Gallery::whereNotNull('category')
             ->distinct()
             ->pluck('category')
             ->sort()
             ->values();
 
-        return view('pages.gallery', array_merge($this->getPublicPageData(), compact('photos', 'categories')));
+        return view('pages.gallery', array_merge($this->getPublicPageData(), compact('items', 'categories')));
     }
 
-    public function galleryDetail(PhotoGallery $photoGallery): View
+    public function galleryDetail(Gallery $gallery): View
     {
-        return view('pages.gallery-detail', array_merge($this->getPublicPageData(), ['photo' => $photoGallery]));
+        return view('pages.gallery-detail', array_merge($this->getPublicPageData(), ['item' => $gallery]));
     }
 
     public function achievements(): View
