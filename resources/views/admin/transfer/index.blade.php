@@ -94,6 +94,42 @@
 
     <div class="bg-white shadow-sm rounded-lg border border-slate-200">
         <div class="p-6 border-b border-slate-200">
+            <h3 class="text-lg font-semibold text-slate-800">Transfer Notices</h3>
+            <p class="text-sm text-slate-500 mt-1">Import posts from <code class="bg-slate-100 px-1 rounded">latest-notice</code>, download linked files/images as notice artifacts, and save cleaned text content.</p>
+        </div>
+
+        <div class="p-6">
+            <form method="POST" action="{{ route('admin.transfer.notices') }}">
+                @csrf
+                <button type="submit"
+                        class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-white bg-orange-600 hover:bg-orange-700">
+                    <i class="fas fa-bullhorn mr-2"></i>
+                    Transfer Notices
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="bg-white shadow-sm rounded-lg border border-slate-200">
+        <div class="p-6 border-b border-slate-200">
+            <h3 class="text-lg font-semibold text-slate-800">Transfer News</h3>
+            <p class="text-sm text-slate-500 mt-1">Import posts from <code class="bg-slate-100 px-1 rounded">latest-news</code>, download linked files/images as news artifacts, and save cleaned text content.</p>
+        </div>
+
+        <div class="p-6">
+            <form method="POST" action="{{ route('admin.transfer.news') }}">
+                @csrf
+                <button type="submit"
+                        class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-white bg-cyan-600 hover:bg-cyan-700">
+                    <i class="fas fa-newspaper mr-2"></i>
+                    Transfer News
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="bg-white shadow-sm rounded-lg border border-slate-200">
+        <div class="p-6 border-b border-slate-200">
             <h3 class="text-lg font-semibold text-slate-800">Laravel Export APIs (For Cloud Import)</h3>
             <p class="text-sm text-slate-500 mt-1">This app now exposes export endpoints matching wp-json resource names.</p>
         </div>

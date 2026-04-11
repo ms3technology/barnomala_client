@@ -99,4 +99,48 @@ class DataTransferController extends Controller
                 ->withErrors(['transfer' => $e->getMessage()]);
         }
     }
+
+    public function transferNotices(): RedirectResponse
+    {
+        try {
+            $result = $this->transferService->transferNoticesFromWordPress();
+
+            return redirect()
+                ->route('admin.transfer.index')
+                ->with('success', sprintf(
+                    'Notice transfer completed. Created: %d, Updated: %d, Artifacts downloaded: %d, Artifact failed: %d, Source rows: %d',
+                    $result['created'],
+                    $result['updated'],
+                    $result['artifact_downloaded'],
+                    $result['artifact_failed'],
+                    $result['total_source']
+                ));
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('admin.transfer.index')
+                ->withErrors(['transfer' => $e->getMessage()]);
+        }
+    }
+
+    public function transferNews(): RedirectResponse
+    {
+        try {
+            $result = $this->transferService->transferNewsFromWordPress();
+
+            return redirect()
+                ->route('admin.transfer.index')
+                ->with('success', sprintf(
+                    'News transfer completed. Created: %d, Updated: %d, Artifacts downloaded: %d, Artifact failed: %d, Source rows: %d',
+                    $result['created'],
+                    $result['updated'],
+                    $result['artifact_downloaded'],
+                    $result['artifact_failed'],
+                    $result['total_source']
+                ));
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('admin.transfer.index')
+                ->withErrors(['transfer' => $e->getMessage()]);
+        }
+    }
 }

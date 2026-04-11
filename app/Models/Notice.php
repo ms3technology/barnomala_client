@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Notice extends Model
 {
-    protected $fillable = ['title', 'content', 'published_at', 'is_active', 'is_urgent'];
+    protected $fillable = ['legacy_id', 'title', 'content', 'published_at', 'is_active', 'is_urgent'];
 
     protected $casts = [
         'published_at' => 'date',

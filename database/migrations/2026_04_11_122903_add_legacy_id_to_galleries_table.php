@@ -14,6 +14,14 @@ return new class extends Migration
         Schema::table('galleries', function (Blueprint $table) {
             $table->unsignedBigInteger('legacy_id')->nullable()->unique()->after('id');
         });
+        
+        Schema::table('notices', function (Blueprint $table) {
+            $table->unsignedBigInteger('legacy_id')->nullable()->unique()->after('id');
+        });
+
+        Schema::table('news', function (Blueprint $table) {
+            $table->unsignedBigInteger('legacy_id')->nullable()->unique()->after('id');
+        });
     }
 
     /**
@@ -22,6 +30,14 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('galleries', function (Blueprint $table) {
+            $table->dropColumn('legacy_id');
+        });
+        
+        Schema::table('notices', function (Blueprint $table) {
+            $table->dropColumn('legacy_id');
+        });
+
+        Schema::table('news', function (Blueprint $table) {
             $table->dropColumn('legacy_id');
         });
     }

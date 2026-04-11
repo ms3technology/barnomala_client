@@ -57,6 +57,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::post('transfer/speeches', [AdminDataTransferController::class, 'transferSpeeches'])->name('transfer.speeches');
     Route::post('transfer/sliders', [AdminDataTransferController::class, 'transferSliders'])->name('transfer.sliders');
     Route::post('transfer/galleries', [AdminDataTransferController::class, 'transferGalleries'])->name('transfer.galleries');
+    Route::post('transfer/notices', [AdminDataTransferController::class, 'transferNotices'])->name('transfer.notices');
+    Route::post('transfer/news', [AdminDataTransferController::class, 'transferNews'])->name('transfer.news');
 });
 
 Route::get('/about-us', [PageController::class, 'about'])->name('about');

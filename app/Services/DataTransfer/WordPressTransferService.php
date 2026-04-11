@@ -3,8 +3,13 @@
 namespace App\Services\DataTransfer;
 
 use App\Models\Gallery;
+use App\Models\News;
+use App\Models\NewsArtifact;
+use App\Models\Notice;
+use App\Models\NoticeArtifact;
 use App\Models\Option;
 use App\Models\Speech;
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -247,6 +252,173 @@ class WordPressTransferService
         ];
     }
 
+    public function transferNoticesFromWordPress(): array
+    {
+        $sourceRows = DB::connection('wordpress')->select(
+            <<<'SQL'
+            SELECT p.ID, p.post_date, p.post_content, p.post_title
+            FROM sm_posts p
+            JOIN sm_term_relationships tr ON p.ID = tr.object_id
+            JOIN sm_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+            JOIN sm_terms t ON tt.term_id = t.term_id
+            WHERE p.post_status = 'publish'
+              AND tt.taxonomy = 'category'
+              AND t.slug = 'latest-notice'
+            ORDER BY p.ID ASC
+            SQL
+        );
+
+        $created = 0;
+        $updated = 0;
+        $artifactDownloaded = 0;
+        $artifactFailed = 0;
+
+        DB::transaction(function () use ($sourceRows, &$created, &$updated, &$artifactDownloaded, &$artifactFailed): void {
+            foreach ($sourceRows as $row) {
+                $legacyId = (int) ($row->ID ?? 0);
+                if ($legacyId <= 0) {
+                    continue;
+                }
+
+                $parsed = $this->extractContentAndMediaUrls((string) ($row->post_content ?? ''));
+
+                $notice = Notice::query()->updateOrCreate(
+                    ['legacy_id' => $legacyId],
+                    [
+                        'title' => trim((string) ($row->post_title ?? '')),
+                        'content' => $parsed['text'] !== '' ? $parsed['text'] : null,
+                        'published_at' => $row->post_date,
+                        'is_active' => true,
+                    ]
+                );
+
+                if ($notice->wasRecentlyCreated) {
+                    $created++;
+                } else {
+                    $updated++;
+                }
+
+                $this->deleteNoticeArtifacts($notice);
+                foreach ($parsed['urls'] as $url) {
+                    $artifactData = $this->downloadAndStoreArtifact($url, 'notice-artifacts');
+                    if ($artifactData === null) {
+                        $artifactFailed++;
+                        continue;
+                    }
+
+                    NoticeArtifact::query()->create([
+                        'notice_id' => $notice->id,
+                        'file_path' => $artifactData['file_path'],
+                        'file_name' => $artifactData['file_name'],
+                        'file_type' => $artifactData['file_type'],
+                        'file_size' => $artifactData['file_size'],
+                    ]);
+                    $artifactDownloaded++;
+                }
+            }
+        });
+
+        return [
+            'created' => $created,
+            'updated' => $updated,
+            'total_source' => count($sourceRows),
+            'artifact_downloaded' => $artifactDownloaded,
+            'artifact_failed' => $artifactFailed,
+        ];
+    }
+
+    public function transferNewsFromWordPress(): array
+    {
+        $sourceRows = DB::connection('wordpress')->select(
+            <<<'SQL'
+            SELECT p.ID, p.post_date, p.post_content, p.post_title
+            FROM sm_posts p
+            JOIN sm_term_relationships tr ON p.ID = tr.object_id
+            JOIN sm_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+            JOIN sm_terms t ON tt.term_id = t.term_id
+            WHERE p.post_status = 'publish'
+              AND tt.taxonomy = 'category'
+              AND t.slug = 'latest-news'
+            ORDER BY p.ID ASC
+            SQL
+        );
+
+        $created = 0;
+        $updated = 0;
+        $artifactDownloaded = 0;
+        $artifactFailed = 0;
+
+        DB::transaction(function () use ($sourceRows, &$created, &$updated, &$artifactDownloaded, &$artifactFailed): void {
+            foreach ($sourceRows as $row) {
+                $legacyId = (int) ($row->ID ?? 0);
+                if ($legacyId <= 0) {
+                    continue;
+                }
+
+                $parsed = $this->extractContentAndMediaUrls((string) ($row->post_content ?? ''));
+
+                $news = News::query()->updateOrCreate(
+                    ['legacy_id' => $legacyId],
+                    [
+                        'title' => trim((string) ($row->post_title ?? '')),
+                        'summary' => Str::limit($parsed['text'], 220, ''),
+                        'content' => $parsed['text'] !== '' ? $parsed['text'] : null,
+                        'published_at' => $row->post_date,
+                        'is_active' => true,
+                    ]
+                );
+
+                if ($news->wasRecentlyCreated) {
+                    $created++;
+                } else {
+                    $updated++;
+                }
+
+                $this->deleteNewsArtifacts($news);
+                $firstImage = null;
+
+                foreach ($parsed['urls'] as $url) {
+                    $artifactData = $this->downloadAndStoreArtifact($url, 'news-artifacts');
+                    if ($artifactData === null) {
+                        $artifactFailed++;
+                        continue;
+                    }
+
+                    NewsArtifact::query()->create([
+                        'news_id' => $news->id,
+                        'file_path' => $artifactData['file_path'],
+                        'file_name' => $artifactData['file_name'],
+                        'file_type' => $artifactData['file_type'],
+                        'file_size' => $artifactData['file_size'],
+                    ]);
+
+                    if ($firstImage === null && $this->isImageMimeType($artifactData['file_type'])) {
+                        $firstImage = [
+                            'path' => $artifactData['file_path'],
+                            'url' => asset('storage/' . ltrim($artifactData['file_path'], '/')),
+                            'provider' => 'local',
+                        ];
+                    }
+
+                    $artifactDownloaded++;
+                }
+
+                if ($firstImage !== null) {
+                    $news->image_json = $firstImage;
+                    $news->save();
+                }
+            }
+        });
+
+        return [
+            'created' => $created,
+            'updated' => $updated,
+            'total_source' => count($sourceRows),
+            'artifact_downloaded' => $artifactDownloaded,
+            'artifact_failed' => $artifactFailed,
+        ];
+    }
+
     private function getSpeechSourceMapping(): array
     {
         return [
@@ -333,6 +505,133 @@ class WordPressTransferService
         $url = trim((string) ($matches[1] ?? ''));
 
         return $url !== '' ? $url : null;
+    }
+
+    private function extractContentAndMediaUrls(string $html): array
+    {
+        $html = trim(html_entity_decode($html));
+        if ($html === '') {
+            return [
+                'text' => '',
+                'urls' => [],
+            ];
+        }
+
+        $urls = [];
+
+        if (preg_match_all('/<a[^>]+href=["\']([^"\']+)["\']/i', $html, $anchorMatches) > 0) {
+            foreach ($anchorMatches[1] ?? [] as $url) {
+                $normalized = $this->normalizeMediaUrl((string) $url);
+                if ($normalized !== null) {
+                    $urls[] = $normalized;
+                }
+            }
+        }
+
+        if (preg_match_all('/<img[^>]+src=["\']([^"\']+)["\']/i', $html, $imageMatches) > 0) {
+            foreach ($imageMatches[1] ?? [] as $url) {
+                $normalized = $this->normalizeMediaUrl((string) $url);
+                if ($normalized !== null) {
+                    $urls[] = $normalized;
+                }
+            }
+        }
+
+        $contentWithoutImages = preg_replace('/<img[^>]*>/i', ' ', $html) ?? $html;
+        $contentWithoutLinks = preg_replace('/<a\b[^>]*>(.*?)<\/a>/is', '$1', $contentWithoutImages) ?? $contentWithoutImages;
+        $plainText = trim(preg_replace('/\s+/u', ' ', strip_tags($contentWithoutLinks)) ?? '');
+
+        return [
+            'text' => $plainText,
+            'urls' => array_values(array_unique($urls)),
+        ];
+    }
+
+    private function normalizeMediaUrl(string $url): ?string
+    {
+        $url = trim(html_entity_decode($url));
+        if ($url === '' || ! filter_var($url, FILTER_VALIDATE_URL)) {
+            return null;
+        }
+
+        return $url;
+    }
+
+    private function downloadAndStoreArtifact(string $url, string $directory): ?array
+    {
+        try {
+            $response = Http::timeout(30)
+                ->retry(2, 300)
+                ->get($url);
+
+            if (! $response->successful()) {
+                Log::warning('Failed to download artifact.', ['url' => $url]);
+                return null;
+            }
+
+            $body = $response->body();
+            if ($body === '') {
+                Log::warning('Downloaded artifact is empty.', ['url' => $url]);
+                return null;
+            }
+
+            $originalName = basename(parse_url($url, PHP_URL_PATH) ?: 'file');
+            $originalName = trim($originalName) !== '' ? trim($originalName) : 'file';
+            $safeName = preg_replace('/[^A-Za-z0-9._-]/', '-', $originalName) ?: 'file';
+            $storedName = pathinfo($safeName, PATHINFO_FILENAME) . '-' . substr(md5($url . microtime()), 0, 8);
+            $extension = pathinfo($safeName, PATHINFO_EXTENSION);
+            if ($extension !== '') {
+                $storedName .= '.' . $extension;
+            }
+
+            $path = $directory . '/' . $storedName;
+            Storage::disk('public')->put($path, $body);
+
+            $contentType = (string) $response->header('Content-Type', '');
+            $contentType = trim(strtolower(explode(';', $contentType)[0]));
+            $mimeType = $contentType !== '' ? $contentType : null;
+
+            return [
+                'file_path' => $path,
+                'file_name' => $safeName,
+                'file_type' => $mimeType,
+                'file_size' => strlen($body),
+            ];
+        } catch (\Throwable $e) {
+            Log::warning('Failed to download/store artifact.', [
+                'url' => $url,
+                'error' => $e->getMessage(),
+            ]);
+
+            return null;
+        }
+    }
+
+    private function deleteNoticeArtifacts(Notice $notice): void
+    {
+        $artifacts = $notice->artifacts()->get();
+        foreach ($artifacts as $artifact) {
+            if (! empty($artifact->file_path)) {
+                Storage::disk('public')->delete($artifact->file_path);
+            }
+        }
+        $notice->artifacts()->delete();
+    }
+
+    private function deleteNewsArtifacts(News $news): void
+    {
+        $artifacts = $news->artifacts()->get();
+        foreach ($artifacts as $artifact) {
+            if (! empty($artifact->file_path)) {
+                Storage::disk('public')->delete($artifact->file_path);
+            }
+        }
+        $news->artifacts()->delete();
+    }
+
+    private function isImageMimeType(?string $mimeType): bool
+    {
+        return is_string($mimeType) && str_starts_with($mimeType, 'image/');
     }
 
     private function downloadAndProcessImage(string $url, string $directory): ?array
