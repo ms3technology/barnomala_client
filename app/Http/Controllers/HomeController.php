@@ -7,6 +7,7 @@ use App\Models\Notice;
 use App\Models\News;
 use App\Models\Speech;
 use App\Models\Teacher;
+use App\Models\CommitteeMember;
 use App\Models\Gallery;
 
 class HomeController extends Controller
@@ -51,6 +52,13 @@ class HomeController extends Controller
             ->take(12)
             ->get();
 
+        $generalCommitteeMembers = CommitteeMember::whereHas('committee', function ($query) {
+                $query->where('type', 'general')->where('status', 'active');
+            })
+            ->where('is_active', true)
+            ->orderBy('created_at', 'asc')
+            ->get();
+
         $stats = [
             ['label' => 'Classes', 'count' => $options['institute.stats.classes_count'] ?? $options['totalClasses'] ?? null, 'img' => asset('images/slider-1.png')],
             ['label' => 'Students', 'count' => $options['institute.stats.students_count'] ?? $options['totalStudents'] ?? null, 'img' => asset('images/slider-2.png')],
@@ -82,6 +90,7 @@ class HomeController extends Controller
             'galleryItems' => $galleryItems,
             'sliderImages' => $sliderImages,
             'teachers' => $teachers,
+            'generalCommitteeMembers' => $generalCommitteeMembers,
             'stats' => $stats,
             'quickLinks' => $quickLinks,
         ]));

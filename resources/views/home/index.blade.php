@@ -58,6 +58,10 @@
             @include('home.partials.teachers', ['teachers' => $teachers])
         @endif
 
+        @if(($layout['general_committee'] ?? true) && isset($generalCommitteeMembers))
+            @include('home.partials.general-committee', ['generalCommitteeMembers' => $generalCommitteeMembers])
+        @endif
+
         @if($layout['featured_news'] ?? true)
             @include('home.partials.news-section', ['featuredNews' => $featuredNews ?? []])
         @endif

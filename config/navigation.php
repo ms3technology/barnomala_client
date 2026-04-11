@@ -18,7 +18,7 @@ return [
             ['label' => 'Lecturers', 'route' => 'lecturers.index'],
             ['label' => 'Staff', 'route' => 'staff.index'],
             ['label' => 'Former Staff', 'route' => 'staff.former'],
-            ['label' => 'Committees', 'route' => 'home'],
+            ['label' => 'Committees', 'route' => 'committees.index'],
         ]],
         ['label' => 'Student', 'route' => 'teachers.index', 'children' => [
             ['label' => 'Tution Fees', 'route' => 'student.tuition-fees'],

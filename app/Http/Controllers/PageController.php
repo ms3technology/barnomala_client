@@ -7,6 +7,7 @@ use App\Models\Speech;
 use App\Models\Gallery;
 use App\Models\Teacher;
 use App\Models\Staff;
+use App\Models\Committee;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -175,6 +176,22 @@ class PageController extends Controller
     public function staffDetail(Staff $staff): View
     {
         return view('academic.staff-detail', array_merge($this->getPublicPageData(), ['staff' => $staff]));
+    }
+
+    public function committees(): View
+    {
+        $committees = Committee::where('status', 'active')
+            ->orderBy('order_index')
+            ->get();
+        return view('pages.committees', array_merge($this->getPublicPageData(), compact('committees')));
+    }
+
+    public function committeeDetail(Committee $committee): View
+    {
+        $committee->load(['members' => function ($query) {
+            $query->where('is_active', true);
+        }]);
+        return view('pages.committee-detail', array_merge($this->getPublicPageData(), compact('committee')));
     }
 
     public function apply(): View

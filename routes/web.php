@@ -84,6 +84,9 @@ Route::get('/staff', [PageController::class, 'staff'])->name('staff.index');
 Route::get('/former-staff', [PageController::class, 'formerStaff'])->name('staff.former');
 Route::get('/staff/{staff}', [PageController::class, 'staffDetail'])->name('staff.show');
 
+Route::get('/committees', [PageController::class, 'committees'])->name('committees.index');
+Route::get('/committees/{committee}', [PageController::class, 'committeeDetail'])->name('committees.show');
+
 Route::get('/contact-us', [PageController::class, 'contact'])->name('contact.index');
 Route::get('/apply', [PageController::class, 'apply'])->name('apply.index');
 Route::post('/contact-us', [PageController::class, 'contactSubmit'])->name('contact.submit');
