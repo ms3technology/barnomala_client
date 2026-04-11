@@ -3,77 +3,67 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Services\DataTransfer\WordPressTransferService;
+use App\Services\DataTransfer\WordPressExportService;
 use Illuminate\Http\JsonResponse;
 
 class TransferExportController extends Controller
 {
-    public function __construct(private readonly WordPressTransferService $transferService)
+    public function __construct(private readonly WordPressExportService $exportService)
     {
     }
 
     public function students(): JsonResponse
     {
-        return response()->json($this->transferService->exportStudents());
+        return response()->json($this->exportService->exportStudents());
     }
 
     public function studentEnrollments(): JsonResponse
     {
-        return response()->json($this->transferService->exportStudentEnrollments());
+        return response()->json($this->exportService->exportStudentEnrollments());
     }
 
     public function subjects(): JsonResponse
     {
-        return response()->json($this->transferService->exportSubjects());
-    }
-
-    public function users(): JsonResponse
-    {
-        return response()->json($this->transferService->exportUsers());
+        return response()->json($this->exportService->exportSubjects());
     }
 
     public function teachers(): JsonResponse
     {
-        return response()->json($this->transferService->exportTeachers());
+        return response()->json($this->exportService->exportTeachers());
     }
 
     public function exams(): JsonResponse
     {
-        return response()->json($this->transferService->exportExams());
+        return response()->json($this->exportService->exportExams());
     }
 
     public function examSchedules(): JsonResponse
     {
-        return response()->json($this->transferService->exportExamSchedules());
+        return response()->json($this->exportService->exportExamSchedules());
     }
 
     public function examResults(): JsonResponse
     {
-        return response()->json($this->transferService->exportExamResults());
+        return response()->json($this->exportService->exportExamResults());
     }
 
     public function sliderImages(): JsonResponse
     {
-        return response()->json($this->transferService->exportSliderImages());
+        return response()->json($this->exportService->exportSliderImages());
     }
 
     public function committees(): JsonResponse
     {
-        return response()->json($this->transferService->exportCommittees());
+        return response()->json($this->exportService->exportCommittees());
     }
 
     public function governingBody(): JsonResponse
     {
-        return response()->json($this->transferService->exportGoverningBody());
+        return response()->json($this->exportService->exportGoverningBody());
     }
 
     public function options(): JsonResponse
     {
-        return response()->json($this->transferService->exportOptions());
-    }
-
-    public function speeches(): JsonResponse
-    {
-        return response()->json($this->transferService->exportSpeeches());
+        return response()->json($this->exportService->exportOptions());
     }
 }

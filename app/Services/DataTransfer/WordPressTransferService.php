@@ -4,8 +4,6 @@ namespace App\Services\DataTransfer;
 
 use App\Models\Option;
 use App\Models\Speech;
-use App\Models\Teacher;
-use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -13,45 +11,6 @@ use RuntimeException;
 
 class WordPressTransferService
 {
-    public function getExportResources(): array
-    {
-        return [
-            'students',
-            'student/enrollments',
-            'subjects',
-            'users',
-            'teachers',
-            'exams',
-            'exams/schedules',
-            'exams/results',
-            'slider-images',
-            'committees',
-            'governing-body',
-            'options',
-            'speeches',
-        ];
-    }
-
-    public function getExportPayload(string $resource): array
-    {
-        return match ($resource) {
-            'students' => $this->exportStudents(),
-            'student/enrollments' => $this->exportStudentEnrollments(),
-            'subjects' => $this->exportSubjects(),
-            'users' => $this->exportUsers(),
-            'teachers' => $this->exportTeachers(),
-            'exams' => $this->exportExams(),
-            'exams/schedules' => $this->exportExamSchedules(),
-            'exams/results' => $this->exportExamResults(),
-            'slider-images' => $this->exportSliderImages(),
-            'committees' => $this->exportCommittees(),
-            'governing-body' => $this->exportGoverningBody(),
-            'options' => $this->exportOptions(),
-            'speeches' => $this->exportSpeeches(),
-            default => throw new RuntimeException('Unsupported export resource: '.$resource),
-        };
-    }
-
     public function previewLegacyOrders(int $limit = 20): Collection
     {
         return DB::connection('wordpress')
@@ -154,127 +113,6 @@ class WordPressTransferService
             'updated' => $updated,
             'skipped' => $skipped,
             'options_updated' => $optionsUpdated,
-        ];
-    }
-
-    public function exportStudents(): array
-    {
-        return ['success' => true, 'count' => 0, 'data' => []];
-    }
-
-    public function exportStudentEnrollments(): array
-    {
-        return ['success' => true, 'count' => 0, 'data' => []];
-    }
-
-    public function exportSubjects(): array
-    {
-        return ['success' => true, 'count' => 0, 'data' => []];
-    }
-
-    public function exportUsers(): array
-    {
-        $users = User::query()->get();
-
-        $data = $users->map(function (User $user): array {
-            return [
-                'ID' => $user->id,
-                'user_login' => $user->email,
-                'user_nicename' => $user->name,
-                'user_email' => $user->email,
-                'user_url' => null,
-                'user_registered' => $user->created_at,
-                'display_name' => $user->name,
-                'roles' => [],
-                'first_name' => null,
-                'last_name' => null,
-                'nickname' => $user->name,
-                'description' => null,
-            ];
-        })->all();
-
-        return ['success' => true, 'count' => count($data), 'data' => $data];
-    }
-
-    public function exportTeachers(): array
-    {
-        $rows = Teacher::query()
-            ->orderBy('priority_index')
-            ->orderBy('teacher_name')
-            ->get();
-
-        return [
-            'success' => true,
-            'count' => $rows->count(),
-            'data' => $rows->toArray(),
-        ];
-    }
-
-    public function exportExams(): array
-    {
-        return ['success' => true, 'count' => 0, 'data' => []];
-    }
-
-    public function exportExamSchedules(): array
-    {
-        return ['success' => true, 'count' => 0, 'data' => []];
-    }
-
-    public function exportExamResults(): array
-    {
-        return ['success' => true, 'count' => 0, 'data' => []];
-    }
-
-    public function exportSliderImages(): array
-    {
-        $sliderJson = Option::get('institute.branding.slider_json', []);
-        $items = is_array($sliderJson) ? $sliderJson : [];
-
-        $data = collect($items)->values()->map(function ($item, int $index): array {
-            return [
-                'id' => $index + 1,
-                'image_url' => is_array($item) ? ($item['url'] ?? null) : null,
-                'created_at' => null,
-            ];
-        })->filter(fn ($item) => ! blank($item['image_url']))->values()->all();
-
-        return ['success' => true, 'count' => count($data), 'data' => $data];
-    }
-
-    public function exportCommittees(): array
-    {
-        return ['success' => true, 'count' => 0, 'data' => []];
-    }
-
-    public function exportGoverningBody(): array
-    {
-        return ['success' => true, 'count' => 0, 'data' => []];
-    }
-
-    public function exportOptions(): array
-    {
-        $all = Option::query()->get();
-
-        $data = [];
-        foreach ($all as $option) {
-            $data[$option->option_key] = $option->value;
-        }
-
-        return ['success' => true, 'data' => $data];
-    }
-
-    public function exportSpeeches(): array
-    {
-        $rows = Speech::query()
-            ->orderBy('row_index')
-            ->orderBy('column_index')
-            ->orderBy('id')
-            ->get();
-
-        return [
-            'success' => true,
-            'count' => $rows->count(),
-            'data' => $rows->toArray(),
         ];
     }
 

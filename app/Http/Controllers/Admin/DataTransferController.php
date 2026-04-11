@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\DataTransfer\WordPressExportService;
 use App\Services\DataTransfer\WordPressTransferService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -10,13 +11,16 @@ use Illuminate\View\View;
 
 class DataTransferController extends Controller
 {
-    public function __construct(private readonly WordPressTransferService $transferService)
+    public function __construct(
+        private readonly WordPressTransferService $transferService,
+        private readonly WordPressExportService $exportService
+    )
     {
     }
 
     public function index(Request $request): View
     {
-        $exportResources = $this->transferService->getExportResources();
+        $exportResources = $this->exportService->getExportResources();
 
         $speechTransferPreview = null;
         $speechTransferError = null;
