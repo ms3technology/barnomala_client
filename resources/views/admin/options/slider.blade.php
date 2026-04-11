@@ -92,15 +92,12 @@
                                     </div>
                                 </div>
                                 
-                                <div class="p-6 space-y-5">
+                                <div class="p-2 space-y-5">
                                     <input type="hidden" name="existing_sliders[{{ $index }}][url]" value="{{ $item['url'] }}">
                                     <input type="hidden" name="existing_sliders[{{ $index }}][path]" value="{{ $item['path'] }}">
 
                                     <div class="space-y-1">
-                                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] flex items-center">
-                                            <i class="fas fa-quote-left mr-2 text-indigo-400"></i> Caption Overlay
-                                        </label>
-                                        <input type="text" name="existing_sliders[{{ $index }}][title]" value="{{ $item['title'] ?? '' }}" 
+                                        <input type="text" name="existing_sliders[{{ $index }}][title]" value="{{ $item['title'] ?? '' }}"  placeholder="Caption text..."
                                                class="w-full bg-slate-50 border-slate-100 rounded-2xl text-sm font-bold focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 placeholder:text-slate-300 p-4 transition-all">
                                     </div>
 

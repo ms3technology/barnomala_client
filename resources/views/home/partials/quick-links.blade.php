@@ -30,7 +30,7 @@
             </div>
 
             <!-- Important Links Sidebar -->
-            <div class="lg:col-span-1">
+            <div class="lg:col-span-1 bg-amber-200 rounded-2xl p-6 border border-gray-200">
                 <h2 class="text-2xl font-black text-gray-900 mb-8 font-bn">গুরুত্বপূর্ণ লিঙ্ক</h2>
 
                 <div class="space-y-3">

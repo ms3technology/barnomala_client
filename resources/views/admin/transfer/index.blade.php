@@ -6,8 +6,7 @@
 <div class="space-y-6">
     <div class="bg-white shadow-sm rounded-lg border border-slate-200">
         <div class="p-6 border-b border-slate-200">
-            <h3 class="text-lg font-semibold text-slate-800">Transfer Speeches</h3>
-            <p class="text-sm text-slate-500 mt-1">Review mapped source values from secondary DB, then transfer into options + speeches table.</p>
+            <h3 class="text-lg font-semibold text-slate-800">Transfer About & Speeches</h3>
         </div>
 
         <div class="p-6 space-y-4">
@@ -16,21 +15,6 @@
                     {{ $speechTransferError }}
                 </div>
             @elseif($speechTransferPreview)
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                    <div class="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
-                        <p class="text-slate-500">Primary speeches</p>
-                        <p class="text-xl font-bold text-slate-800">{{ $speechTransferPreview['primary_speeches_count'] }}</p>
-                    </div>
-                    <div class="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
-                        <p class="text-slate-500">Source keys ready</p>
-                        <p class="text-xl font-bold text-slate-800">{{ $speechTransferPreview['source_ready_count'] }} / {{ count($speechTransferPreview['required_source_keys']) }}</p>
-                    </div>
-                    <div class="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
-                        <p class="text-slate-500">Transfer candidates</p>
-                        <p class="text-xl font-bold text-slate-800">{{ count($speechTransferPreview['candidates']) }}</p>
-                    </div>
-                </div>
-
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
                         <thead class="bg-slate-100 text-slate-700">
@@ -74,15 +58,31 @@
 
     <div class="bg-white shadow-sm rounded-lg border border-slate-200">
         <div class="p-6 border-b border-slate-200">
+            <h3 class="text-lg font-semibold text-slate-800">Transfer Slider Images</h3>
+            <p class="text-sm text-slate-500 mt-1">Transfer images from <code class="bg-slate-100 px-1 rounded">sm_slider_images</code> into <code class="bg-slate-100 px-1 rounded">institute.branding.slider_json</code></p>
+        </div>
+
+        <div class="p-6">
+            <form method="POST" action="{{ route('admin.transfer.sliders') }}">
+                @csrf
+                <button type="submit"
+                        class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700">
+                    <i class="fas fa-images mr-2"></i>
+                    Transfer Sliders
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="bg-white shadow-sm rounded-lg border border-slate-200">
+        <div class="p-6 border-b border-slate-200">
             <h3 class="text-lg font-semibold text-slate-800">Laravel Export APIs (For Cloud Import)</h3>
             <p class="text-sm text-slate-500 mt-1">This app now exposes export endpoints matching wp-json resource names.</p>
         </div>
 
         <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
             @foreach($exportResources as $resource)
-                <div class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
-                    <span class="font-mono text-slate-700">GET /api/export/barnomala/v1/{{ $resource }}</span>
-                </div>
+                <span class="font-mono text-slate-700">GET /api/barnomala/v1/{{ $resource }}</span>
             @endforeach
         </div>
     </div>

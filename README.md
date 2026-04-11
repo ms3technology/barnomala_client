@@ -67,7 +67,6 @@ WP_DB_PORT=3306
 WP_DB_DATABASE=old_wordpress
 WP_DB_USERNAME=root
 WP_DB_PASSWORD=
-WP_UPLOAD_PATH=/path/to/old/wp-content/uploads
 
 CLIENT_API_KEY=your_sso_shared_secret
 CLIENT_ADMIN_EMAIL=admin@barnomala.com

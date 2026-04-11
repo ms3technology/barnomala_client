@@ -87,6 +87,11 @@ class OptionRegistry
                         'label' => 'About Button Text',
                         'type' => 'text',
                     ],
+                    'institute.footer.text' => [
+                        'label' => 'Footer Text',
+                        'type' => 'textarea',
+                        'placeholder' => 'Enter text for the footer section',
+                    ],
                 ]
             ],
             'social' => [

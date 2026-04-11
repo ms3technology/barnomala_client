@@ -8,12 +8,12 @@
                     <div class="mt-1 w-20 h-1 bg-indigo-600"></div>
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-                    @php
-                        $classes = collect($options['institute.demographics.classes'] ?? [])
-                            ->filter(fn($count) => $count > 10)
-                            ->all();
-                    @endphp
+                @php
+                    $classes = collect($options['institute.demographics.classes'] ?? [])
+                        ->filter(fn($count) => $count > 10)
+                        ->all();
+                @endphp
+                <div class="grid grid-cols-2 sm:grid-cols-3 {{ count($classes) > 8 ? 'md:grid-cols-5' : 'md:grid-cols-4' }} gap-6">
                     @forelse($classes as $class => $count)
                         <div class="flex flex-col items-center">
                             <div class="w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center bg-indigo-50 mb-3 transition-transform hover:scale-105">
@@ -28,7 +28,7 @@
             </div>
 
             {{-- Right Side: Summary List (w-1/3) --}}
-            <div class="w-full lg:w-1/3 bg-gray-50 p-8 rounded-2xl border border-gray-100">
+            <div class="w-full lg:w-1/3 bg-gray-100 p-8 rounded-2xl border border-gray-100">
                 <h3 class="text-xl font-bold text-gray-800 mb-6 uppercase border-b pb-4">Summary</h3>
                 
                 @php

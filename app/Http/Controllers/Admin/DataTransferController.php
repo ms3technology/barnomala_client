@@ -57,4 +57,24 @@ class DataTransferController extends Controller
                 ->withErrors(['transfer' => $e->getMessage()]);
         }
     }
+
+    public function transferSliders(): RedirectResponse
+    {
+        try {
+            $result = $this->transferService->transferSliderImagesFromWordPress();
+
+            return redirect()
+                ->route('admin.transfer.index')
+                ->with('success', sprintf(
+                    'Slider image transfer completed. Transferred: %d/%d, Options updated: %s',
+                    $result['transferred'],
+                    $result['total_source'],
+                    $result['option_updated'] ? 'Yes' : 'No'
+                ));
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('admin.transfer.index')
+                ->withErrors(['transfer' => $e->getMessage()]);
+        }
+    }
 }

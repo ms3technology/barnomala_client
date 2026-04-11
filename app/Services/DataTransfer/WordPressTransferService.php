@@ -6,7 +6,12 @@ use App\Models\Option;
 use App\Models\Speech;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 use RuntimeException;
 
 class WordPressTransferService
@@ -86,6 +91,20 @@ class WordPressTransferService
                     continue;
                 }
 
+                $existingSpeech = Speech::query()
+                    ->where('row_index', $payload['row_index'])
+                    ->where('column_index', $payload['column_index'])
+                    ->first();
+
+                $imageData = null;
+                if (!empty($payload['image_url'])) {
+                    $imageData = $this->downloadAndProcessImage($payload['image_url'], 'speeches');
+                }
+
+                if ($imageData === null && $existingSpeech) {
+                    $imageData = $existingSpeech->image_json;
+                }
+
                 $speech = Speech::updateOrCreate(
                     [
                         'row_index' => $payload['row_index'],
@@ -95,6 +114,7 @@ class WordPressTransferService
                         'name' => $payload['name'],
                         'title' => $payload['title'],
                         'speech' => $payload['speech'],
+                        'image_json' => $imageData,
                         'colspan' => 1,
                         'is_active' => true,
                     ]
@@ -116,18 +136,53 @@ class WordPressTransferService
         ];
     }
 
+    public function transferSliderImagesFromWordPress(): array
+    {
+        if (! Schema::connection('wordpress')->hasTable('sm_slider_images')) {
+            throw new RuntimeException('sm_slider_images table not found in wordpress connection.');
+        }
+
+        $sourceImages = DB::connection('wordpress')
+            ->table('sm_slider_images')
+            ->get();
+
+        $sliderJson = [];
+        $transferred = 0;
+
+        foreach ($sourceImages as $img) {
+            $imageData = $this->downloadAndProcessImage($img->image_url, 'sliders');
+            if ($imageData) {
+                $sliderJson[] = $imageData;
+                $transferred++;
+            }
+        }
+
+        if (! empty($sliderJson)) {
+            Option::set('institute.branding.slider_json', $sliderJson);
+        }
+
+        return [
+            'transferred' => $transferred,
+            'total_source' => $sourceImages->count(),
+            'option_updated' => ! empty($sliderJson),
+        ];
+    }
+
     private function getSpeechSourceMapping(): array
     {
         return [
             'aboutTitelText',
             'aboutUsText',
             'aboutUsMoreBtn',
+            'footerAddress',
             'headmasterSpeechTitle',
             'homeHeadmasterTitle',
             'homeHeadmaster',
+            'homeHeadmasterImg',
             'chairmanSpeechTitle',
             'homeChairmanTitle',
             'homeChairman',
+            'homeChairmanImg',
         ];
     }
 
@@ -137,6 +192,7 @@ class WordPressTransferService
             'aboutTitelText' => 'institute.about.title',
             'aboutUsText' => 'institute.about.text',
             'aboutUsMoreBtn' => 'institute.about.button_text',
+            'footerAddress' => 'institute.footer.text',
         ];
     }
 
@@ -166,6 +222,7 @@ class WordPressTransferService
                 'name' => ($source['homeHeadmasterTitle'] ?? '') ?: 'Headmaster',
                 'title' => ($source['headmasterSpeechTitle'] ?? '') ?: 'Headmaster Speech',
                 'speech' => ($source['homeHeadmaster'] ?? '') ?: '',
+                'image_url' => $source['homeHeadmasterImg'] ?? null,
                 'row_index' => 1,
                 'column_index' => 1,
                 'has_source' => $headmasterHasSource,
@@ -175,10 +232,52 @@ class WordPressTransferService
                 'name' => ($source['homeChairmanTitle'] ?? '') ?: 'Chairman',
                 'title' => ($source['chairmanSpeechTitle'] ?? '') ?: 'Chairman Speech',
                 'speech' => ($source['homeChairman'] ?? '') ?: '',
+                'image_url' => $source['homeChairmanImg'] ?? null,
                 'row_index' => 1,
                 'column_index' => 2,
                 'has_source' => $chairmanHasSource,
             ],
         ];
+    }
+
+    private function downloadAndProcessImage(string $url, string $directory): ?array
+    {
+        try {
+            $url = trim(html_entity_decode($url));
+            if ($url === '') {
+                return null;
+            }
+
+            $response = Http::timeout(30)
+                ->retry(2, 300)
+                ->get($url);
+
+            if (!$response->successful()) {
+                Log::error("Failed to download image from URL: {$url}");
+                return null;
+            }
+
+            $extension = 'jpg';
+            $filename = md5($url . time()) . '.' . $extension;
+            $path = "{$directory}/{$filename}";
+
+            $manager = new ImageManager(new Driver());
+            $image = $manager->read($response->body());
+            $encoded = $image->toJpeg(85);
+
+            Storage::disk('public')->put($path, (string) $encoded);
+
+            return [
+                'path' => $path,
+                'url' => asset('storage/' . ltrim($path, '/')),
+                'provider' => 'local',
+            ];
+        } catch (\Exception $e) {
+            Log::error("Failed to process speech image from URL: {$url}", [
+                'exception' => $e->getMessage(),
+            ]);
+
+            return null;
+        }
     }
 }
