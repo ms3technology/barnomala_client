@@ -18,6 +18,16 @@
     $aboutImageUrl = $aboutImageOption ? (json_decode($aboutImageOption->option_value, true)['url'] ?? asset('images/about-us-1.png')) : asset('images/about-us-1.png');
 @endphp
 
+<style>
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
+
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 font-bn">
     <!-- About Us Redesign -->
     <div class="relative overflow-hidden bg-white rounded-[3rem] shadow-[0_32px_120px_-20px_rgba(30,41,59,0.08)] mb-20 group border border-slate-100">
@@ -37,9 +47,12 @@
                     </div>
 
                     <div class="space-y-6">
-                        <p class="text-slate-600 text-lg leading-relaxed font-medium">
-                            {{ $options['institute.about.text'] ?? 'আমাদের শিক্ষা প্রতিষ্ঠান একটি ঐতিহ্যবাহী বিদ্যাপীঠ। দীর্ঘ পথচলায় আমরা অসংখ্য মেধাবী শিক্ষার্থী উপহার দিয়েছি যারা দেশ ও দশের কল্যাণে নিয়োজিত।' }}
-                        </p>
+                        <div class="relative group/text">
+                            <div class="max-h-36 overflow-y-auto scrollbar-hide text-slate-600 text-lg leading-relaxed font-medium">
+                                {{ $options['institute.about.text'] ?? 'আমাদের শিক্ষা প্রতিষ্ঠান একটি ঐতিহ্যবাহী বিদ্যাপীঠ। দীর্ঘ পথচলায় আমরা অসংখ্য মেধাবী শিক্ষার্থী উপহার দিয়েছি যারা দেশ ও দশের কল্যাণে নিয়োজিত।' }}
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 h-4 bg-linear-to-t from-white to-transparent pointer-events-none opacity-0 group-hover/text:opacity-100 transition-opacity"></div>
+                        </div>
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
                             <div class="flex items-center gap-3 text-slate-700">
@@ -67,15 +80,6 @@
                                 <span class="text-sm font-bold">ICT Lab</span>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="pt-8">
-                        <a href="/about-us" class="group/btn relative inline-flex items-center gap-4 text-white pl-4 pr-4 py-2 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-2xl shadow-slate-900/20 bg-indigo-600 transition-all duration-300">
-                            {{ $options['institute.about.button_text'] ?? 'Learn More' }}
-                            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center group-hover/btn:bg-white group-hover/btn:text-indigo-600 transition-colors">
-                                <i class="fas fa-arrow-right"></i>
-                            </div>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -139,26 +143,15 @@
                                     <div class="w-12 h-1 bg-indigo-100 rounded-full mt-3 group-hover:w-20 group-hover:bg-indigo-600 transition-all duration-500"></div>
                                 </div>
 
-                                <div class="relative flex-1 z-10">
+                                <div class="relative flex-1 z-10 group/speech overflow-hidden">
                                     <span class="text-7xl font-serif text-indigo-100 absolute -top-8 -left-2 select-none group-hover:text-indigo-200 transition-colors">“</span>
                                     @php
                                         $speechText = $speech['speech'] ?? $speech->speech;
-                                        $speechPreview = \Illuminate\Support\Str::limit(strip_tags((string) $speechText), 220);
-                                        $hasMoreSpeech = mb_strlen(strip_tags((string) $speechText)) > 220;
                                     @endphp
-                                    <p class="text-slate-600 italic text-center px-4 leading-relaxed">
-                                        {{ $speechPreview }}
-                                    </p>
-                                    @if($hasMoreSpeech)
-                                        <details class="mt-3 text-center">
-                                            <summary class="inline-block cursor-pointer text-xs font-bold uppercase tracking-widest text-indigo-600 hover:text-indigo-700">
-                                                Read more
-                                            </summary>
-                                            <p class="mt-3 text-slate-600 italic text-center px-4 leading-relaxed">
-                                                {{ $speechText }}
-                                            </p>
-                                        </details>
-                                    @endif
+                                    <div class="max-h-52 overflow-y-auto scrollbar-hide text-slate-600 italic text-center px-4 leading-relaxed bg-white">
+                                        {{ $speechText }}
+                                    </div>
+                                    <div class="absolute bottom-0 left-0 right-0 h-8 bg-linear-to-t from-white to-transparent pointer-events-none opacity-0 group-hover/speech:opacity-100 transition-opacity"></div>
                                 </div>
 
                                 <div class="mt-8 text-right pt-6 border-t border-indigo-50 relative z-10">

@@ -22,6 +22,10 @@ class OptionRegistry
                         'type' => 'text',
                         'placeholder' => 'Enter institution name',
                     ],
+                    'institute.branding.logo_json' => [
+                        'label' => 'Logo',
+                        'type' => 'image',
+                    ],
                     'institute.identity.established_year' => [
                         'label' => 'Established Year',
                         'type' => 'number',

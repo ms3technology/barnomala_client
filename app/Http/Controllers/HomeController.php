@@ -35,7 +35,7 @@ class HomeController extends Controller
 
         $featuredNews = News::where('is_active', true)
             ->orderBy('published_at', 'desc')
-            ->take(6)
+            ->take(3)
             ->get();
 
         $galleryItems = Gallery::orderBy('date', 'desc')

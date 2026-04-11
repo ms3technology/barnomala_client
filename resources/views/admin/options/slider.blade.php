@@ -23,37 +23,6 @@
                 }
             }">
                 @csrf
-
-                <!-- Slider Layout Option -->
-                <div class="mb-10 p-6 bg-indigo-50 border border-indigo-100 rounded-2xl">
-                    <h2 class="text-sm font-black text-indigo-900 uppercase tracking-widest mb-4 flex items-center">
-                        <i class="fas fa-th-large mr-2"></i> Hero Section Layout
-                    </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <label class="relative flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-colors group">
-                            <input type="radio" name="settings[institute.hero.type]" value="slider_only" {{ ($options['institute.hero.type'] ?? '') == 'slider_only' ? 'checked' : '' }} class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                            <div class="ml-4">
-                                <span class="block text-sm font-bold text-slate-900">Standard Slider</span>
-                                <span class="block text-xs text-slate-500">Standard full width slider layout.</span>
-                            </div>
-                        </label>
-                        <label class="relative flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-colors group">
-                            <input type="radio" name="settings[institute.hero.type]" value="slider_with_notice" {{ ($options['institute.hero.type'] ?? 'slider_with_notice') == 'slider_with_notice' ? 'checked' : '' }} class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                            <div class="ml-4">
-                                <span class="block text-sm font-bold text-slate-900">With Notice Panel</span>
-                                <span class="block text-xs text-slate-500">Slider alongside a notice list.</span>
-                            </div>
-                        </label>
-                        <label class="relative flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-colors group">
-                            <input type="radio" name="settings[institute.hero.type]" value="overlay" {{ ($options['institute.hero.type'] ?? '') == 'overlay' ? 'checked' : '' }} class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                            <div class="ml-4">
-                                <span class="block text-sm font-bold text-slate-900">Overlay / Netflix</span>
-                                <span class="block text-xs text-slate-500">Modern cinematic full-screen look.</span>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-
                 <!-- Existing (Active) Sliders Section -->
                 <div class="space-y-6">
                     <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">

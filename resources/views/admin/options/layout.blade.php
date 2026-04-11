@@ -44,6 +44,7 @@
                             'student_demographics' => 'Student Demographics (Charts)',
                             'featured_news' => 'Featured News Section',
                             'gallery' => 'Photo Gallery Section',
+                            'general_committee' => 'Committee Section',
                         ];
                     @endphp
 

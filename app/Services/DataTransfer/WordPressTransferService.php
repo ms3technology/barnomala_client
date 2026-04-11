@@ -167,10 +167,43 @@ class WordPressTransferService
             Option::set('institute.branding.slider_json', $sliderJson);
         }
 
+        $this->transferBannerFromWordPress();
+
         return [
             'transferred' => $transferred,
             'total_source' => $sourceImages->count(),
             'option_updated' => ! empty($sliderJson),
+        ];
+    }
+
+    public function transferBannerFromWordPress(): array
+    {
+        $bannerUrl = DB::connection('wordpress')
+            ->table('sm_options')
+            ->where('option_name', 'logo_upload')
+            ->value('option_value');
+
+        if (blank($bannerUrl)) {
+            return [
+                'transferred' => 0,
+                'status' => 'no_source_found',
+            ];
+        }
+
+        $imageData = $this->downloadAndProcessImage($bannerUrl, 'branding');
+
+        if ($imageData) {
+            Option::set('institute.branding.banner_json', $imageData);
+            return [
+                'transferred' => 1,
+                'status' => 'success',
+                'path' => $imageData['path'],
+            ];
+        }
+
+        return [
+            'transferred' => 0,
+            'status' => 'download_failed',
         ];
     }
 
