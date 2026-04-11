@@ -2,6 +2,7 @@
 
 namespace App\Services\DataTransfer;
 
+use App\Models\Gallery;
 use App\Models\Option;
 use App\Models\Speech;
 use Illuminate\Support\Collection;
@@ -168,6 +169,84 @@ class WordPressTransferService
         ];
     }
 
+    public function transferGalleriesFromWordPress(): array
+    {
+        $sourceRows = DB::connection('wordpress')->select(
+            <<<'SQL'
+            SELECT p.ID, p.post_date, p.post_content, p.post_name
+            FROM sm_posts p
+            JOIN sm_term_relationships tr ON p.ID = tr.object_id
+            JOIN sm_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+            JOIN sm_terms t ON tt.term_id = t.term_id
+            WHERE p.post_status = 'publish'
+              AND tt.taxonomy = 'category'
+              AND t.slug = 'gallery'
+            ORDER BY p.ID ASC
+            SQL
+        );
+
+        $created = 0;
+        $updated = 0;
+        $skippedNoImage = 0;
+        $failedImageDownload = 0;
+
+        DB::transaction(function () use (
+            $sourceRows,
+            &$created,
+            &$updated,
+            &$skippedNoImage,
+            &$failedImageDownload
+        ): void {
+            foreach ($sourceRows as $row) {
+                $legacyId = (int) ($row->ID ?? 0);
+                if ($legacyId <= 0) {
+                    continue;
+                }
+
+                $existing = Gallery::query()->where('legacy_id', $legacyId)->first();
+                $imagePath = $existing?->image_path;
+
+                $imageUrl = $this->extractImageUrlFromHtml((string) ($row->post_content ?? ''));
+                if ($imageUrl !== null) {
+                    $imageData = $this->downloadAndProcessImage($imageUrl, 'gallery/photos');
+                    if ($imageData !== null) {
+                        $imagePath = $imageData['path'] ?? $imagePath;
+                    } else {
+                        $failedImageDownload++;
+                    }
+                } elseif (! $existing) {
+                    $skippedNoImage++;
+                    continue;
+                }
+
+                $gallery = Gallery::updateOrCreate(
+                    ['legacy_id' => $legacyId],
+                    [
+                        'type' => Gallery::TYPE_PHOTO,
+                        'title' => trim((string) ($row->post_name ?? '')),
+                        'category' => 'imported',
+                        'date' => $row->post_date,
+                        'image_path' => $imagePath,
+                    ]
+                );
+
+                if ($gallery->wasRecentlyCreated) {
+                    $created++;
+                } else {
+                    $updated++;
+                }
+            }
+        });
+
+        return [
+            'created' => $created,
+            'updated' => $updated,
+            'total_source' => count($sourceRows),
+            'skipped_no_image' => $skippedNoImage,
+            'failed_image_download' => $failedImageDownload,
+        ];
+    }
+
     private function getSpeechSourceMapping(): array
     {
         return [
@@ -238,6 +317,22 @@ class WordPressTransferService
                 'has_source' => $chairmanHasSource,
             ],
         ];
+    }
+
+    private function extractImageUrlFromHtml(string $html): ?string
+    {
+        $html = trim(html_entity_decode($html));
+        if ($html === '') {
+            return null;
+        }
+
+        if (preg_match('/<img[^>]+src=["\']([^"\']+)["\']/i', $html, $matches) !== 1) {
+            return null;
+        }
+
+        $url = trim((string) ($matches[1] ?? ''));
+
+        return $url !== '' ? $url : null;
     }
 
     private function downloadAndProcessImage(string $url, string $directory): ?array

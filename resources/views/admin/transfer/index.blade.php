@@ -76,6 +76,24 @@
 
     <div class="bg-white shadow-sm rounded-lg border border-slate-200">
         <div class="p-6 border-b border-slate-200">
+            <h3 class="text-lg font-semibold text-slate-800">Transfer Gallery Photos</h3>
+            <p class="text-sm text-slate-500 mt-1">Import WordPress posts from category <code class="bg-slate-100 px-1 rounded">gallery</code>, set category as <code class="bg-slate-100 px-1 rounded">imported</code>, and upload post images to local storage.</p>
+        </div>
+
+        <div class="p-6">
+            <form method="POST" action="{{ route('admin.transfer.galleries') }}">
+                @csrf
+                <button type="submit"
+                        class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700">
+                    <i class="fas fa-camera mr-2"></i>
+                    Transfer Galleries
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="bg-white shadow-sm rounded-lg border border-slate-200">
+        <div class="p-6 border-b border-slate-200">
             <h3 class="text-lg font-semibold text-slate-800">Laravel Export APIs (For Cloud Import)</h3>
             <p class="text-sm text-slate-500 mt-1">This app now exposes export endpoints matching wp-json resource names.</p>
         </div>

@@ -77,4 +77,26 @@ class DataTransferController extends Controller
                 ->withErrors(['transfer' => $e->getMessage()]);
         }
     }
+
+    public function transferGalleries(): RedirectResponse
+    {
+        try {
+            $result = $this->transferService->transferGalleriesFromWordPress();
+
+            return redirect()
+                ->route('admin.transfer.index')
+                ->with('success', sprintf(
+                    'Gallery transfer completed. Created: %d, Updated: %d, Skipped (no image): %d, Image download failed: %d, Source rows: %d',
+                    $result['created'],
+                    $result['updated'],
+                    $result['skipped_no_image'],
+                    $result['failed_image_download'],
+                    $result['total_source']
+                ));
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('admin.transfer.index')
+                ->withErrors(['transfer' => $e->getMessage()]);
+        }
+    }
 }

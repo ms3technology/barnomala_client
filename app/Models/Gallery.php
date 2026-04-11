@@ -12,6 +12,7 @@ class Gallery extends Model
     public const TYPE_VIDEO = 'video';
 
     protected $fillable = [
+        'legacy_id',
         'type',
         'title',
         'category',
