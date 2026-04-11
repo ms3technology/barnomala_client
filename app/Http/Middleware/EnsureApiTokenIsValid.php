@@ -10,7 +10,7 @@ class EnsureApiTokenIsValid
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $configuredToken = (string) env('CLIENT_SSO_KEY');  // Use the same key for API token validation
+        $configuredToken = (string) env('CLIENT_API_KEY');
         $providedToken = $request->bearerToken() ?: (string) $request->header('X-API-TOKEN', '');
 
         if ($configuredToken === '' || $providedToken === '' || ! hash_equals($configuredToken, $providedToken)) {

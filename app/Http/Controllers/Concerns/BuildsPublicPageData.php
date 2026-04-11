@@ -58,7 +58,8 @@ trait BuildsPublicPageData
                     'value_type' => 'integer',
                 ]);
             } else {
-                $option->increment('option_value');
+                $option->option_value = (int) $option->option_value + 1;
+                $option->save();
             }
 
             session()->put($sessionKey, true);

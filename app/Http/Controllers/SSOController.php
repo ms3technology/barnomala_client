@@ -11,7 +11,7 @@ class SSOController extends Controller
 {
     /**
      * Handle the tenant SSO login request from the Cloud Platform.
-     * Validates HMAC signature using CLIENT_SSO_KEY and logs in a single admin.
+     * Validates HMAC signature using CLIENT_API_KEY and logs in a single admin.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
@@ -29,13 +29,13 @@ class SSOController extends Controller
         }
 
         // 1. Verify Signature
-        $secret = env('CLIENT_SSO_KEY');
+        $secret = env('CLIENT_API_KEY');
         
         if (!$secret) {
-            Log::error('SSO Error: CLIENT_SSO_KEY is not configured.');
+            Log::error('SSO Error: CLIENT_API_KEY is not configured.');
             return response()->view('errors.sso-missing', [
                 'title' => 'SSO Configuration Missing',
-                'message' => 'SSO is temporarily unavailable because the server key is not configured. Please contact support.',
+                'message' => 'The CLIENT_API_KEY is not configured. Please contact support.',
             ], 500);
         }
 
@@ -63,8 +63,12 @@ class SSOController extends Controller
         $user = User::where('email', $adminEmail)->first();
 
         if (!$user) {
-            Log::error("SSO Error: Admin user with email {$adminEmail} not found in database.");
-            abort(404, 'Admin user not found');
+            $user = User::create([
+                'name' => 'Admin',
+                'email' => $adminEmail,
+                'password' => bcrypt(str()->random(16)), // Random password since login is via SSO
+                'is_admin' => true,
+            ]);
         }
 
         // 5. Establish Session

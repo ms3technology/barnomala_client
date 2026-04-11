@@ -69,13 +69,13 @@ WP_DB_USERNAME=root
 WP_DB_PASSWORD=
 WP_UPLOAD_PATH=/path/to/old/wp-content/uploads
 
-CLIENT_SSO_KEY=your_sso_shared_secret
+CLIENT_API_KEY=your_sso_shared_secret
 CLIENT_ADMIN_EMAIL=admin@barnomala.com
 ```
 
 Notes:
 
-- `CLIENT_SSO_KEY` is required for validating SSO signature.
+- `CLIENT_API_KEY` is required for validating SSO signature.
 - `CLIENT_ADMIN_EMAIL` is used by SSO and seeder logic. If not set, default is `admin@barnomala.com`.
 
 ### 3) Run migrations and seeders
@@ -139,7 +139,7 @@ php artisan test
 The SSO endpoint expects query params:
 
 - `payload` (base64-encoded JSON containing `expires_at`)
-- `signature` (HMAC SHA-256 of payload, signed with `CLIENT_SSO_KEY`)
+- `signature` (HMAC SHA-256 of payload, signed with `CLIENT_API_KEY`)
 
 On success, the app signs in the admin user identified by `CLIENT_ADMIN_EMAIL` and redirects to `/admin`.
 
