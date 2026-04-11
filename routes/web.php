@@ -76,8 +76,14 @@ Route::get('/mobile-banking', [PageController::class, 'mobileBanking'])->name('s
 
 Route::get('/results', [PageController::class, 'results'])->name('results.index');
 Route::get('/teachers', [PageController::class, 'teachers'])->name('teachers.index');
+Route::get('/lecturers', [PageController::class, 'lecturers'])->name('lecturers.index');
 Route::get('/former-teachers', [PageController::class, 'formerTeachers'])->name('teachers.former');
 Route::get('/teachers/{teacher}', [PageController::class, 'teacherDetail'])->name('teachers.show');
+
+Route::get('/staff', [PageController::class, 'staff'])->name('staff.index');
+Route::get('/former-staff', [PageController::class, 'formerStaff'])->name('staff.former');
+Route::get('/staff/{staff}', [PageController::class, 'staffDetail'])->name('staff.show');
+
 Route::get('/contact-us', [PageController::class, 'contact'])->name('contact.index');
 Route::get('/apply', [PageController::class, 'apply'])->name('apply.index');
 Route::post('/contact-us', [PageController::class, 'contactSubmit'])->name('contact.submit');

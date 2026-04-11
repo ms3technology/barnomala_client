@@ -6,6 +6,7 @@ use App\Http\Controllers\Concerns\BuildsPublicPageData;
 use App\Models\Speech;
 use App\Models\Gallery;
 use App\Models\Teacher;
+use App\Models\Staff;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -125,9 +126,20 @@ class PageController extends Controller
     public function teachers(): View
     {
         $teachers = Teacher::where('status', true)
+            ->whereRaw("LOWER(COALESCE(designation, '')) NOT LIKE ?", ['%lecturer%'])
             ->orderBy('priority_index', 'asc')
             ->get();
         return view('academic.teachers', array_merge($this->getPublicPageData(), compact('teachers')));
+    }
+
+    public function lecturers(): View
+    {
+        $teachers = Teacher::where('status', true)
+            ->whereRaw('LOWER(designation) LIKE ?', ['%lecturer%'])
+            ->orderBy('priority_index', 'asc')
+            ->get();
+
+        return view('academic.lecturers', array_merge($this->getPublicPageData(), compact('teachers')));
     }
 
     public function formerTeachers(): View
@@ -142,6 +154,27 @@ class PageController extends Controller
     {
         $teacher->load(['qualifications', 'trainings']);
         return view('academic.teacher-detail', array_merge($this->getPublicPageData(), compact('teacher')));
+    }
+
+    public function staff(): View
+    {
+        $staffMembers = Staff::where('status', 'active')
+            ->orderBy('name', 'asc')
+            ->get();
+        return view('academic.staff', array_merge($this->getPublicPageData(), ['staffMembers' => $staffMembers]));
+    }
+
+    public function formerStaff(): View
+    {
+        $staffMembers = Staff::whereIn('status', ['inactive', 'resigned'])
+            ->orderBy('name', 'asc')
+            ->get();
+        return view('academic.former-staff', array_merge($this->getPublicPageData(), ['staffMembers' => $staffMembers]));
+    }
+
+    public function staffDetail(Staff $staff): View
+    {
+        return view('academic.staff-detail', array_merge($this->getPublicPageData(), ['staff' => $staff]));
     }
 
     public function apply(): View

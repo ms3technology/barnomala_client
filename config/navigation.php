@@ -15,9 +15,9 @@ return [
             ['label' => 'Exam Schedule', 'route' => 'academic.exam-schedule'],
             ['label' => 'Teachers', 'route' => 'teachers.index'],
             ['label' => 'Former Teachers', 'route' => 'teachers.former'],
-            ['label' => 'Lecturers', 'route' => 'home'],
-            ['label' => 'Staff', 'route' => 'home'],
-            ['label' => 'Former Staff', 'route' => 'home'],
+            ['label' => 'Lecturers', 'route' => 'lecturers.index'],
+            ['label' => 'Staff', 'route' => 'staff.index'],
+            ['label' => 'Former Staff', 'route' => 'staff.former'],
             ['label' => 'Committees', 'route' => 'home'],
         ]],
         ['label' => 'Student', 'route' => 'teachers.index', 'children' => [
