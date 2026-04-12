@@ -59,4 +59,23 @@ class DataTransferController extends Controller
             'results' => $results,
         ], $allSucceeded ? 200 : 207);
     }
+
+    public function setupDefaultWebsite(): JsonResponse
+    {
+        try {
+            $result = $this->transferService->seedWebsiteDefaults();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Default website options and sample data have been set successfully.',
+                'result' => $result,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Failed to set default website data.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

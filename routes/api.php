@@ -27,5 +27,6 @@ Route::middleware('api.token')->group(function () {
         Route::get('governing-body', [TransferExportController::class, 'governingBody']);
         Route::get('options', [TransferExportController::class, 'options']);
         Route::post('transfer/all', [DataTransferController::class, 'transferAll'])->name('api.transfer.all');
+        Route::post('setup/default-website', [DataTransferController::class, 'setupDefaultWebsite'])->name('api.setup.default-website');
     });
 });
