@@ -1,4 +1,4 @@
-<section class="py-16 bg-slate-50 relative overflow-hidden">
+<section class="py-16 bg-slate-50 relative overflow-hidden reveal">
     <!-- Decors -->
     <div class="absolute top-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-[100px] -mr-48 -mt-48"></div>
     <div class="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500/5 rounded-full blur-[100px] -ml-48 -mb-48"></div>

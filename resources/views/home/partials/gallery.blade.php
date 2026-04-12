@@ -1,4 +1,4 @@
-<section class="py-12 bg-slate-900 overflow-hidden">
+<section class="py-12 bg-slate-900 overflow-hidden reveal">
     <style>
         @keyframes scroll {
             0% { transform: translateX(0); }

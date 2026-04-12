@@ -28,7 +28,7 @@
     }
 </style>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 font-bn">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 font-bn reveal">
     <!-- About Us Redesign -->
     <div class="relative overflow-hidden bg-white rounded-[3rem] shadow-[0_32px_120px_-20px_rgba(30,41,59,0.08)] mb-20 group border border-slate-100">
         <!-- Decorative Background Elements -->

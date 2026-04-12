@@ -5,8 +5,17 @@
 @section('content')
 <div class="space-y-6">
     <div class="bg-white shadow-sm rounded-lg border border-slate-200">
-        <div class="p-6 border-b border-slate-200">
+        <div class="p-6 border-b border-slate-200 flex justify-between items-center">
             <h3 class="text-lg font-semibold text-slate-800">Transfer About & Speeches</h3>
+            <form method="POST" action="{{ route('admin.transfer.lock') }}">
+                @csrf
+                <input type="hidden" name="section" value="speeches">
+                <input type="hidden" name="lock" value="{{ $locks['speeches'] ? '0' : '1' }}">
+                <button type="submit" class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-lg {{ $locks['speeches'] ? 'text-rose-700 bg-rose-100' : 'text-slate-600 bg-slate-100' }}">
+                    <i class="fas {{ $locks['speeches'] ? 'fa-lock' : 'fa-lock-open' }} mr-1"></i>
+                    {{ $locks['speeches'] ? 'Locked' : 'Unlocked' }}
+                </button>
+            </form>
         </div>
 
         <div class="p-6 space-y-4">
@@ -46,7 +55,7 @@
                 <form method="POST" action="{{ route('admin.transfer.speeches') }}">
                     @csrf
                     <button type="submit"
-                            @disabled(! $speechTransferPreview['can_transfer'])
+                            @disabled(! $speechTransferPreview['can_transfer'] || $locks['speeches'])
                             class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-400 disabled:cursor-not-allowed">
                         <i class="fas fa-right-left mr-2"></i>
                         Transfer Speeches
@@ -57,16 +66,28 @@
     </div>
 
     <div class="bg-white shadow-sm rounded-lg border border-slate-200">
-        <div class="p-6 border-b border-slate-200">
-            <h3 class="text-lg font-semibold text-slate-800">Transfer Slider Images</h3>
-            <p class="text-sm text-slate-500 mt-1">Transfer images from <code class="bg-slate-100 px-1 rounded">sm_slider_images</code> into <code class="bg-slate-100 px-1 rounded">institute.branding.slider_json</code></p>
+        <div class="p-6 border-b border-slate-200 flex justify-between items-center">
+            <div>
+                <h3 class="text-lg font-semibold text-slate-800">Transfer Slider Images</h3>
+                <p class="text-sm text-slate-500 mt-1">Transfer images from <code class="bg-slate-100 px-1 rounded">sm_slider_images</code> into <code class="bg-slate-100 px-1 rounded">institute.branding.slider_json</code></p>
+            </div>
+            <form method="POST" action="{{ route('admin.transfer.lock') }}">
+                @csrf
+                <input type="hidden" name="section" value="sliders">
+                <input type="hidden" name="lock" value="{{ $locks['sliders'] ? '0' : '1' }}">
+                <button type="submit" class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-lg {{ $locks['sliders'] ? 'text-rose-700 bg-rose-100' : 'text-slate-600 bg-slate-100' }}">
+                    <i class="fas {{ $locks['sliders'] ? 'fa-lock' : 'fa-lock-open' }} mr-1"></i>
+                    {{ $locks['sliders'] ? 'Locked' : 'Unlocked' }}
+                </button>
+            </form>
         </div>
 
         <div class="p-6">
             <form method="POST" action="{{ route('admin.transfer.sliders') }}">
                 @csrf
                 <button type="submit"
-                        class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700">
+                        @disabled($locks['sliders'])
+                        class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-400 disabled:cursor-not-allowed">
                     <i class="fas fa-images mr-2"></i>
                     Transfer Sliders
                 </button>
@@ -75,16 +96,28 @@
     </div>
 
     <div class="bg-white shadow-sm rounded-lg border border-slate-200">
-        <div class="p-6 border-b border-slate-200">
-            <h3 class="text-lg font-semibold text-slate-800">Transfer Gallery Photos</h3>
-            <p class="text-sm text-slate-500 mt-1">Import WordPress posts from category <code class="bg-slate-100 px-1 rounded">gallery</code>, set category as <code class="bg-slate-100 px-1 rounded">imported</code>, and upload post images to local storage.</p>
+        <div class="p-6 border-b border-slate-200 flex justify-between items-center">
+            <div>
+                <h3 class="text-lg font-semibold text-slate-800">Transfer Gallery Photos</h3>
+                <p class="text-sm text-slate-500 mt-1">Import WordPress posts from category <code class="bg-slate-100 px-1 rounded">gallery</code>, set category as <code class="bg-slate-100 px-1 rounded">imported</code>, and upload post images to local storage.</p>
+            </div>
+            <form method="POST" action="{{ route('admin.transfer.lock') }}">
+                @csrf
+                <input type="hidden" name="section" value="galleries">
+                <input type="hidden" name="lock" value="{{ $locks['galleries'] ? '0' : '1' }}">
+                <button type="submit" class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-lg {{ $locks['galleries'] ? 'text-rose-700 bg-rose-100' : 'text-slate-600 bg-slate-100' }}">
+                    <i class="fas {{ $locks['galleries'] ? 'fa-lock' : 'fa-lock-open' }} mr-1"></i>
+                    {{ $locks['galleries'] ? 'Locked' : 'Unlocked' }}
+                </button>
+            </form>
         </div>
 
         <div class="p-6">
             <form method="POST" action="{{ route('admin.transfer.galleries') }}">
                 @csrf
                 <button type="submit"
-                        class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700">
+                        @disabled($locks['galleries'])
+                        class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 disabled:bg-slate-400 disabled:cursor-not-allowed">
                     <i class="fas fa-camera mr-2"></i>
                     Transfer Galleries
                 </button>
@@ -93,16 +126,28 @@
     </div>
 
     <div class="bg-white shadow-sm rounded-lg border border-slate-200">
-        <div class="p-6 border-b border-slate-200">
-            <h3 class="text-lg font-semibold text-slate-800">Transfer Notices</h3>
-            <p class="text-sm text-slate-500 mt-1">Import posts from <code class="bg-slate-100 px-1 rounded">latest-notice</code>, download linked files/images as notice artifacts, and save cleaned text content.</p>
+        <div class="p-6 border-b border-slate-200 flex justify-between items-center">
+            <div>
+                <h3 class="text-lg font-semibold text-slate-800">Transfer Notices</h3>
+                <p class="text-sm text-slate-500 mt-1">Import posts from <code class="bg-slate-100 px-1 rounded">latest-notice</code>, download linked files/images as notice artifacts, and save cleaned text content.</p>
+            </div>
+            <form method="POST" action="{{ route('admin.transfer.lock') }}">
+                @csrf
+                <input type="hidden" name="section" value="notices">
+                <input type="hidden" name="lock" value="{{ $locks['notices'] ? '0' : '1' }}">
+                <button type="submit" class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-lg {{ $locks['notices'] ? 'text-rose-700 bg-rose-100' : 'text-slate-600 bg-slate-100' }}">
+                    <i class="fas {{ $locks['notices'] ? 'fa-lock' : 'fa-lock-open' }} mr-1"></i>
+                    {{ $locks['notices'] ? 'Locked' : 'Unlocked' }}
+                </button>
+            </form>
         </div>
 
         <div class="p-6">
             <form method="POST" action="{{ route('admin.transfer.notices') }}">
                 @csrf
                 <button type="submit"
-                        class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-white bg-orange-600 hover:bg-orange-700">
+                        @disabled($locks['notices'])
+                        class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-white bg-orange-600 hover:bg-orange-700 disabled:bg-slate-400 disabled:cursor-not-allowed">
                     <i class="fas fa-bullhorn mr-2"></i>
                     Transfer Notices
                 </button>
@@ -111,16 +156,28 @@
     </div>
 
     <div class="bg-white shadow-sm rounded-lg border border-slate-200">
-        <div class="p-6 border-b border-slate-200">
-            <h3 class="text-lg font-semibold text-slate-800">Transfer News</h3>
-            <p class="text-sm text-slate-500 mt-1">Import posts from <code class="bg-slate-100 px-1 rounded">latest-news</code>, download linked files/images as news artifacts, and save cleaned text content.</p>
+        <div class="p-6 border-b border-slate-200 flex justify-between items-center">
+            <div>
+                <h3 class="text-lg font-semibold text-slate-800">Transfer News</h3>
+                <p class="text-sm text-slate-500 mt-1">Import posts from <code class="bg-slate-100 px-1 rounded">latest-news</code>, download linked files/images as news artifacts, and save cleaned text content.</p>
+            </div>
+            <form method="POST" action="{{ route('admin.transfer.lock') }}">
+                @csrf
+                <input type="hidden" name="section" value="news">
+                <input type="hidden" name="lock" value="{{ $locks['news'] ? '0' : '1' }}">
+                <button type="submit" class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-lg {{ $locks['news'] ? 'text-rose-700 bg-rose-100' : 'text-slate-600 bg-slate-100' }}">
+                    <i class="fas {{ $locks['news'] ? 'fa-lock' : 'fa-lock-open' }} mr-1"></i>
+                    {{ $locks['news'] ? 'Locked' : 'Unlocked' }}
+                </button>
+            </form>
         </div>
 
         <div class="p-6">
             <form method="POST" action="{{ route('admin.transfer.news') }}">
                 @csrf
                 <button type="submit"
-                        class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-white bg-cyan-600 hover:bg-cyan-700">
+                        @disabled($locks['news'])
+                        class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-white bg-cyan-600 hover:bg-cyan-700 disabled:bg-slate-400 disabled:cursor-not-allowed">
                     <i class="fas fa-newspaper mr-2"></i>
                     Transfer News
                 </button>

@@ -7,7 +7,7 @@
     ];
 @endphp
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-12 reveal">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         @foreach($instituteInfo as $info)
             <div class="relative overflow-hidden group bg-linear-to-br p-6 rounded-md text-white shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 {{ $info['colors'] }}">

@@ -98,6 +98,17 @@ class OptionRegistry
                     ],
                 ]
             ],
+            'transfer' => [
+                'label' => 'Data Transfer',
+                'description' => 'Control and lock data transfer operations.',
+                'icon' => 'fas fa-exchange-alt',
+                'options' => [
+                    'transfer.locks.json' => [
+                        'label' => 'Transfer Locks',
+                        'type' => 'json',
+                    ],
+                ]
+            ],
             'social' => [
                 'label' => 'Social Links',
                 'description' => 'Social media profiles and links.',

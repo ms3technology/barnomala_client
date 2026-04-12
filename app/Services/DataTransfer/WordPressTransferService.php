@@ -22,6 +22,26 @@ use RuntimeException;
 
 class WordPressTransferService
 {
+    public function isLocked(string $section): bool
+    {
+        $locks = Option::get('transfer.locks.json', []);
+        return (bool) ($locks[$section] ?? false);
+    }
+
+    public function lock(string $section): void
+    {
+        $locks = Option::get('transfer.locks.json', []);
+        $locks[$section] = true;
+        Option::set('transfer.locks.json', $locks);
+    }
+
+    public function unlock(string $section): void
+    {
+        $locks = Option::get('transfer.locks.json', []);
+        $locks[$section] = false;
+        Option::set('transfer.locks.json', $locks);
+    }
+
     public function previewLegacyOrders(int $limit = 20): Collection
     {
         return DB::connection('wordpress')
@@ -72,6 +92,10 @@ class WordPressTransferService
 
     public function transferSpeechesFromWordPress(): array
     {
+        if ($this->isLocked('speeches')) {
+            throw new RuntimeException('Speech transfer is locked.');
+        }
+
         $source = $this->getWordPressSpeechSource();
         $payloads = $this->buildSpeechPayloads($source);
 
@@ -134,6 +158,8 @@ class WordPressTransferService
             }
         });
 
+        $this->lock('speeches');
+
         return [
             'created' => $created,
             'updated' => $updated,
@@ -144,6 +170,10 @@ class WordPressTransferService
 
     public function transferSliderImagesFromWordPress(): array
     {
+        if ($this->isLocked('sliders')) {
+            throw new RuntimeException('Slider images transfer is locked.');
+        }
+
         if (! Schema::connection('wordpress')->hasTable('sm_slider_images')) {
             throw new RuntimeException('sm_slider_images table not found in wordpress connection.');
         }
@@ -168,6 +198,8 @@ class WordPressTransferService
         }
 
         $this->transferBannerFromWordPress();
+
+        $this->lock('sliders');
 
         return [
             'transferred' => $transferred,
@@ -209,6 +241,10 @@ class WordPressTransferService
 
     public function transferGalleriesFromWordPress(): array
     {
+        if ($this->isLocked('galleries')) {
+            throw new RuntimeException('Gallery transfer is locked.');
+        }
+
         $sourceRows = DB::connection('wordpress')->select(
             <<<'SQL'
             SELECT p.ID, p.post_date, p.post_content, p.post_name
@@ -287,6 +323,10 @@ class WordPressTransferService
 
     public function transferNoticesFromWordPress(): array
     {
+        if ($this->isLocked('notices')) {
+            throw new RuntimeException('Notice transfer is locked.');
+        }
+
         $sourceRows = DB::connection('wordpress')->select(
             <<<'SQL'
             SELECT p.ID, p.post_date, p.post_content, p.post_title
@@ -351,6 +391,8 @@ class WordPressTransferService
             }
         });
 
+        $this->lock('notices');
+
         return [
             'created' => $created,
             'updated' => $updated,
@@ -362,6 +404,10 @@ class WordPressTransferService
 
     public function transferNewsFromWordPress(): array
     {
+        if ($this->isLocked('news')) {
+            throw new RuntimeException('News transfer is locked.');
+        }
+
         $sourceRows = DB::connection('wordpress')->select(
             <<<'SQL'
             SELECT p.ID, p.post_date, p.post_content, p.post_title
@@ -442,6 +488,8 @@ class WordPressTransferService
                 }
             }
         });
+
+        $this->lock('news');
 
         return [
             'created' => $created,

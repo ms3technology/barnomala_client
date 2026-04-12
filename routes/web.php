@@ -54,6 +54,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::post('layout', [AdminOptionController::class, 'updateLayout'])->name('layout.update');
 
     Route::get('transfer', [AdminDataTransferController::class, 'index'])->name('transfer.index');
+    Route::post('transfer/lock', [AdminDataTransferController::class, 'toggleLock'])->name('transfer.lock');
     Route::post('transfer/speeches', [AdminDataTransferController::class, 'transferSpeeches'])->name('transfer.speeches');
     Route::post('transfer/sliders', [AdminDataTransferController::class, 'transferSliders'])->name('transfer.sliders');
     Route::post('transfer/galleries', [AdminDataTransferController::class, 'transferGalleries'])->name('transfer.galleries');

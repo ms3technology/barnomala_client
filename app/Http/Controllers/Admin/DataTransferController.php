@@ -34,7 +34,28 @@ class DataTransferController extends Controller
             'exportResources' => $exportResources,
             'speechTransferPreview' => $speechTransferPreview,
             'speechTransferError' => $speechTransferError,
+            'locks' => [
+                'speeches' => $this->transferService->isLocked('speeches'),
+                'sliders' => $this->transferService->isLocked('sliders'),
+                'galleries' => $this->transferService->isLocked('galleries'),
+                'notices' => $this->transferService->isLocked('notices'),
+                'news' => $this->transferService->isLocked('news'),
+            ]
         ]);
+    }
+
+    public function toggleLock(Request $request): RedirectResponse
+    {
+        $section = $request->input('section');
+        $lock = $request->boolean('lock');
+
+        if ($lock) {
+            $this->transferService->lock($section);
+        } else {
+            $this->transferService->unlock($section);
+        }
+
+        return redirect()->back()->with('success', ucfirst($section) . ' transfer ' . ($lock ? 'locked' : 'unlocked') . '.');
     }
 
     public function transferSpeeches(): RedirectResponse
