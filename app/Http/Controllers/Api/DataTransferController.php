@@ -69,7 +69,7 @@ class DataTransferController extends Controller
                 'status' => 'success',
                 'message' => 'Default website options and sample data have been set successfully.',
                 'result' => $result,
-            ]);
+            ], 200);
         } catch (\Throwable $e) {
             return response()->json([
                 'status' => 'failed',

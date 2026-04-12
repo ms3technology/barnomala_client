@@ -60,14 +60,14 @@ class WordPressTransferService
             $sliderOptionExists = Option::query()->where('option_key', 'institute.branding.slider_json')->exists();
             Option::set('institute.branding.slider_json', [
                 [
-                    'url' => asset('images/slider-1.png'),
-                    'path' => 'images/slider-1.png',
+                    'url' => asset('images/slider-1.jpg'),
+                    'path' => 'images/slider-1.jpg',
                     'title' => 'Welcome to Barnomala',
                     'order' => 1,
                 ],
                 [
-                    'url' => asset('images/slider-2.png'),
-                    'path' => 'images/slider-2.png',
+                    'url' => asset('images/slider-2.jpg'),
+                    'path' => 'images/slider-2.jpg',
                     'title' => 'A Better Future Through Education',
                     'order' => 2,
                 ],
@@ -112,7 +112,7 @@ class WordPressTransferService
                     'title' => 'Sample Gallery 1',
                     'category' => 'sample',
                     'date' => now()->subDays(7)->toDateString(),
-                    'image_path' => 'images/slider-1.png',
+                    'image_path' => 'images/slider-1.jpg',
                     'description' => 'Sample gallery photo 1 for initial setup.',
                 ],
                 [
@@ -121,7 +121,7 @@ class WordPressTransferService
                     'title' => 'Sample Gallery 2',
                     'category' => 'sample',
                     'date' => now()->subDays(6)->toDateString(),
-                    'image_path' => 'images/slider-2.png',
+                    'image_path' => 'images/slider-2.jpg',
                     'description' => 'Sample gallery photo 2 for initial setup.',
                 ],
             ];
@@ -730,11 +730,17 @@ class WordPressTransferService
             'institute.contact.website' => 'https://example.com',
             'institute.contact.map_link' => 'https://maps.google.com/?q=23.8103,90.4125',
             'institute.about.title' => 'আমাদের প্রতিষ্ঠান সম্পর্কে',
+            'institute.about.button_text' => 'Read More',
             'institute.about.text' => 'আমাদের শিক্ষা প্রতিষ্ঠান একটি ঐতিহ্যবাহী বিদ্যাপীঠ। দীর্ঘ পথচলায় আমরা অসংখ্য মেধাবী শিক্ষার্থী উপহার দিয়েছি যারা দেশ ও দশের কল্যাণে নিয়োজিত। আমাদের লক্ষ্য হলো শিক্ষার্থীদের সুপ্ত প্রতিভা বিকাশে সহায়তা করা এবং তাদের সুনাগরিক হিসেবে গড়ে তোলা।',
             'institute.footer.text' => 'পরিপূর্ণ ডিজিটালাইজেশনে ডায়নামিক ওয়েব সাইট উন্নয়ন চলছে। শীঘ্রই পরিপূর্ণ ওয়েবসাইট দেখতে পাবেন। আশা করি এর মাধ্যমে বিদ্যালয়ের সামগ্রিক ব্যবস্থাপনা পরিপূর্ণ ডিজিটালাইজেশন হবে। এবং সকলেই উপকৃত হবেন।',
             'institute.social.facebook' => '#',
             'institute.social.youtube' => '#',
             'institute.branding.logo_json' => $staticLogo,
+            'institute.about.image_json' => [
+                'url' => asset('images/about-image.webp'),
+                'path' => 'images/about-image.webp',
+                'provider' => 'static',
+            ],
             'institute.homepage.layout' => [
                 'hero' => true,
                 'latest_news' => true,

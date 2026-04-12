@@ -15,7 +15,7 @@
     }
 
     $aboutImageOption = \App\Models\Option::where('option_key', 'institute.about.image_json')->first();
-    $aboutImageUrl = $aboutImageOption ? (json_decode($aboutImageOption->option_value, true)['url'] ?? asset('images/about-us-1.png')) : asset('images/about-us-1.png');
+    $aboutImageUrl = $aboutImageOption ? (json_decode($aboutImageOption->option_value, true)['url'] ?? asset('images/about-image.webp')) : asset('images/about-image.webp');
 @endphp
 
 <style>

@@ -60,8 +60,8 @@ class HomeController extends Controller
             ->get();
 
         $stats = [
-            ['label' => 'Classes', 'count' => $options['institute.stats.classes_count'] ?? $options['totalClasses'] ?? null, 'img' => asset('images/slider-1.png')],
-            ['label' => 'Students', 'count' => $options['institute.stats.students_count'] ?? $options['totalStudents'] ?? null, 'img' => asset('images/slider-2.png')],
+            ['label' => 'Classes', 'count' => $options['institute.stats.classes_count'] ?? $options['totalClasses'] ?? null, 'img' => asset('images/slider-1.jpg')],
+            ['label' => 'Students', 'count' => $options['institute.stats.students_count'] ?? $options['totalStudents'] ?? null, 'img' => asset('images/slider-2.jpg')],
             ['label' => 'Teachers', 'count' => $options['institute.stats.teachers_count'] ?? $options['totalTeachers'] ?? null, 'img' => asset('images/teacher.png')],
             ['label' => 'Staffs', 'count' => $options['institute.stats.staffs_count'] ?? $options['totalStaffs'] ?? null, 'img' => asset('images/teacher.png')],
         ];
