@@ -12,10 +12,18 @@ class GalleryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $items = Gallery::orderBy('date', 'desc')->paginate(15);
-        return view('admin.gallery.index', compact('items'));
+        $query = Gallery::orderBy('date', 'desc');
+
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
+        $items = $query->paginate(24)->withQueryString();
+        $categories = Gallery::whereNotNull('category')->distinct()->pluck('category');
+
+        return view('admin.gallery.index', compact('items', 'categories'));
     }
 
     /**
@@ -31,6 +39,35 @@ class GalleryController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->type === 'photo' && $request->has('titles')) {
+            $validated = $request->validate([
+                'type' => 'required|in:photo,video',
+                'category' => 'nullable|string|max:255',
+                'date' => 'nullable|date',
+                'description' => 'nullable|string',
+                'titles.*' => 'required|string|max:255',
+                'images.*' => 'required|image|max:2048',
+            ]);
+
+            $titles = $request->input('titles');
+            $images = $request->file('images');
+
+            foreach ($images as $index => $image) {
+                $path = $image->store('gallery/photos', 'public');
+                Gallery::create([
+                    'type' => 'photo',
+                    'title' => $titles[$index] ?? 'Untitled',
+                    'category' => $request->category,
+                    'date' => $request->date,
+                    'description' => $request->description,
+                    'image_path' => $path,
+                ]);
+            }
+
+            return redirect()->route('admin.gallery.index')
+                ->with('success', count($images) . ' gallery items added successfully.');
+        }
+
         $validated = $request->validate([
             'type' => 'required|in:photo,video',
             'title' => 'required|string|max:255',
