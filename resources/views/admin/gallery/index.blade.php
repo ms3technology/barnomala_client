@@ -10,18 +10,36 @@
 
 @section('content')
 <div class="p-6">
-    <div class="overflow-x-auto scrollbar-hide mb-8">
-        <div class="flex gap-2 min-w-max">
-            <a href="{{ route('admin.gallery.index') }}" 
-            class="px-4 py-1.5 rounded-full text-xs font-bold transition-all {{ !request('category') ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-slate-600 border border-slate-200 hover:border-indigo-300' }}">
-                All
-            </a>
-            @foreach($categories as $category)
-                <a href="{{ route('admin.gallery.index', ['category' => $category]) }}" 
-                class="px-4 py-1.5 rounded-full text-xs font-bold transition-all {{ request('category') === $category ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-slate-600 border border-slate-200 hover:border-indigo-300' }}">
-                    {{ $category }}
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div class="overflow-x-auto scrollbar-hide">
+            <div class="flex gap-2 min-w-max">
+                <a href="{{ route('admin.gallery.index', array_merge(request()->query(), ['category' => null])) }}" 
+                class="px-4 py-1.5 rounded-full text-xs font-bold transition-all {{ !request('category') ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-slate-600 border border-slate-200 hover:border-indigo-300' }}">
+                    All
                 </a>
-            @endforeach
+                @foreach($categories as $category)
+                    <a href="{{ route('admin.gallery.index', array_merge(request()->query(), ['category' => $category])) }}" 
+                    class="px-4 py-1.5 rounded-full text-xs font-bold transition-all {{ request('category') === $category ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-slate-600 border border-slate-200 hover:border-indigo-300' }}">
+                        {{ $category }}
+                    </a>
+                @endforeach
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Filter Year:</span>
+            <div class="flex gap-1.5">
+                <a href="{{ route('admin.gallery.index', array_merge(request()->query(), ['year' => null])) }}" 
+                   class="px-3 py-1 rounded-lg text-[10px] font-black transition-all {{ !request('year') ? 'bg-slate-800 text-white shadow-sm' : 'bg-white text-slate-500 border border-slate-200 hover:border-indigo-300' }}">
+                    ALL
+                </a>
+                @foreach($years as $year)
+                    <a href="{{ route('admin.gallery.index', array_merge(request()->query(), ['year' => $year])) }}" 
+                       class="px-3 py-1 rounded-lg text-[10px] font-black transition-all {{ (string)request('year') === (string)$year ? 'bg-slate-800 text-white shadow-sm' : 'bg-white text-slate-500 border border-slate-200 hover:border-indigo-300' }}">
+                        {{ $year }}
+                    </a>
+                @endforeach
+            </div>
         </div>
     </div>
 

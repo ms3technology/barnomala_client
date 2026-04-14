@@ -186,6 +186,24 @@
     </div>
 
     <div class="bg-white shadow-sm rounded-lg border border-slate-200">
+        <div class="p-6 border-b border-slate-200 flex justify-between items-center">
+            <div>
+                <h3 class="text-lg font-semibold text-slate-800">Demographics Sync Lock</h3>
+                <p class="text-sm text-slate-500 mt-1">If locked, any external sync via <code>syncOptions</code> will be ignored for demographics and stats fields.</p>
+            </div>
+            <form method="POST" action="{{ route('admin.transfer.lock') }}">
+                @csrf
+                <input type="hidden" name="section" value="demographics">
+                <input type="hidden" name="lock" value="{{ ($locks['demographics'] ?? false) ? '0' : '1' }}">
+                <button type="submit" class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-lg {{ ($locks['demographics'] ?? false) ? 'text-rose-700 bg-rose-100' : 'text-slate-600 bg-slate-100' }}">
+                    <i class="fas {{ ($locks['demographics'] ?? false) ? 'fa-lock' : 'fa-lock-open' }} mr-1"></i>
+                    {{ ($locks['demographics'] ?? false) ? 'Locked' : 'Unlocked' }}
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="bg-white shadow-sm rounded-lg border border-slate-200">
         <div class="p-6 border-b border-slate-200">
             <h3 class="text-lg font-semibold text-slate-800">Laravel Export APIs (For Cloud Import)</h3>
             <p class="text-sm text-slate-500 mt-1">This app now exposes export endpoints matching wp-json resource names.</p>

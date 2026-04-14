@@ -18,7 +18,18 @@ class SyncController extends Controller
 
         ]);
 
+        $locksOption = Option::where('option_key', 'transfer.locks.json')->first();
+        $locks = $locksOption ? json_decode($locksOption->option_value, true) : [];
+
         $optionsPayload = $this->normalizeOptions($validated['options'] ?? []);
+
+        // Filter out locked demographics options if locked
+        if (!empty($locks['demographics'])) {
+            $optionsPayload = array_filter($optionsPayload, function ($item) {
+                return !str_starts_with($item['option_key'], 'institute.demographics.') && 
+                       !str_starts_with($item['option_key'], 'institute.stats.');
+            });
+        }
 
         DB::transaction(function () use ($optionsPayload): void {
             $this->upsertOptions($optionsPayload);

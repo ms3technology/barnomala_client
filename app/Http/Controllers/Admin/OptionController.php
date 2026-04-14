@@ -114,6 +114,84 @@ class OptionController extends Controller
     }
 
     /**
+     * Display demographics management.
+     */
+    public function demographics()
+    {
+        $keys = [
+            'institute.demographics.classes',
+            'institute.demographics.gender',
+            'institute.demographics.religion',
+            'institute.stats.classes_count',
+            'institute.stats.students_count',
+            'institute.stats.teachers_count',
+            'institute.stats.staffs_count',
+        ];
+
+        $options = Option::whereIn('option_key', $keys)->get()->pluck('value', 'option_key');
+        
+        // Ensure keys exist in array even if not in DB
+        foreach ($keys as $key) {
+            if (!$options->has($key)) {
+                $options[$key] = str_contains($key, '.stats.') ? 0 : [];
+            }
+        }
+
+        $locksOption = Option::where('option_key', 'transfer.locks.json')->first();
+        $locks = $locksOption ? json_decode($locksOption->option_value, true) : [];
+        $isLocked = $locks['demographics'] ?? false;
+
+        return view('admin.options.demographics', compact('options', 'isLocked'));
+    }
+
+    /**
+     * Update demographics.
+     */
+    public function updateDemographics(Request $request)
+    {
+        // Handle stats
+        $statsMap = [
+            'stats_classes' => 'institute.stats.classes_count',
+            'stats_students' => 'institute.stats.students_count',
+            'stats_teachers' => 'institute.stats.teachers_count',
+            'stats_staffs' => 'institute.stats.staffs_count',
+        ];
+
+        foreach ($statsMap as $inputKey => $optionKey) {
+            Option::updateOrCreate(
+                ['option_key' => $optionKey],
+                ['option_value' => (string) $request->input($inputKey, 0), 'value_type' => 'integer']
+            );
+        }
+
+        $mapToStore = [
+            'classes' => 'institute.demographics.classes',
+            'gender' => 'institute.demographics.gender',
+            'religion' => 'institute.demographics.religion',
+        ];
+
+        foreach ($mapToStore as $inputKey => $optionKey) {
+            $items = $request->input($inputKey, []);
+            $jsonValue = [];
+            
+            if (is_array($items)) {
+                foreach ($items as $item) {
+                    if (!empty($item['label'])) {
+                        $jsonValue[$item['label']] = (int) ($item['value'] ?? 0);
+                    }
+                }
+            }
+
+            Option::updateOrCreate(
+                ['option_key' => $optionKey],
+                ['option_value' => json_encode($jsonValue), 'value_type' => 'json']
+            );
+        }
+
+        return redirect()->route('admin.demographics.index')->with('success', 'Demographics updated successfully.');
+    }
+
+    /**
      * Display layout management.
      */
     public function layout()

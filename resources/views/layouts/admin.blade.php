@@ -99,7 +99,11 @@
                         <i class="fas fa-th-large w-5 mr-3"></i>
                         Homepage Layout
                     </a>
-
+                    <a href="{{ route('admin.demographics.index') }}" 
+                       class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.demographics.*') ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fas fa-users w-5 mr-3"></i>
+                        Demographics
+                    </a>
                     <a href="{{ route('admin.branding.index') }}" 
                        class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.branding.*') ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                         <i class="fas fa-palette w-5 mr-3"></i>

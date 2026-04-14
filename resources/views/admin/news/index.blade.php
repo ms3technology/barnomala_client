@@ -22,7 +22,7 @@
             </thead>
             <tbody class="divide-y divide-slate-100">
                 @forelse($news as $item)
-                <tr onclick="window.location='{{ route('admin.news.edit', $item) }}'" class="hover:bg-rose-100 transition-colors group cursor-pointer">
+                <tr onclick="window.location='{{ route('admin.news.edit', $item) }}'" class="hover:bg-slate-100 transition-colors group cursor-pointer">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
                             <img src="{{ $item->image_url }}" alt="{{ $item->title }}" class="w-10 h-10 rounded-md object-cover border border-slate-200 shrink-0">

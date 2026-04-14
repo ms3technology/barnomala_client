@@ -20,10 +20,19 @@ class GalleryController extends Controller
             $query->where('category', $request->category);
         }
 
+        if ($request->filled('year')) {
+            $query->whereYear('date', $request->year);
+        }
+
         $items = $query->paginate(24)->withQueryString();
         $categories = Gallery::whereNotNull('category')->distinct()->pluck('category');
+        $years = Gallery::whereNotNull('date')
+            ->selectRaw('YEAR(date) as year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
 
-        return view('admin.gallery.index', compact('items', 'categories'));
+        return view('admin.gallery.index', compact('items', 'categories', 'years'));
     }
 
     /**

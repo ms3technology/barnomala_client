@@ -53,6 +53,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('layout', [AdminOptionController::class, 'layout'])->name('layout.index');
     Route::post('layout', [AdminOptionController::class, 'updateLayout'])->name('layout.update');
 
+    Route::get('demographics', [AdminOptionController::class, 'demographics'])->name('demographics.index');
+    Route::post('demographics', [AdminOptionController::class, 'updateDemographics'])->name('demographics.update');
+
     Route::get('transfer', [AdminDataTransferController::class, 'index'])->name('transfer.index');
     Route::post('transfer/lock', [AdminDataTransferController::class, 'toggleLock'])->name('transfer.lock');
     Route::post('transfer/speeches', [AdminDataTransferController::class, 'transferSpeeches'])->name('transfer.speeches');
