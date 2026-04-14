@@ -79,6 +79,15 @@ class OptionRegistry
                         'label' => 'About Text',
                         'type' => 'textarea',
                     ],
+                    'institute.about.side_panel_type' => [
+                        'label' => 'About Side Panel Type',
+                        'type' => 'select',
+                        'options' => [
+                            'image' => 'Image',
+                            'notice' => 'Notice Side Panel',
+                        ],
+                        'default' => 'image',
+                    ],
                     'institute.about.button_text' => [
                         'label' => 'About Button Text',
                         'type' => 'text',

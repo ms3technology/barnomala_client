@@ -16,6 +16,8 @@
 
     $aboutImageOption = \App\Models\Option::where('option_key', 'institute.about.image_json')->first();
     $aboutImageUrl = $aboutImageOption ? (json_decode($aboutImageOption->option_value, true)['url'] ?? asset('images/about-image.webp')) : asset('images/about-image.webp');
+
+    $aboutSidePanelType = $options['institute.about.side_panel_type'] ?? 'image';
 @endphp
 
 <style>
@@ -37,7 +39,7 @@
 
         <div class="relative flex flex-col lg:flex-row items-stretch min-h-125">
             <!-- Content Side -->
-            <div class="lg:w-3/5 p-8 lg:p-16 flex flex-col justify-center">
+            <div class="{{ $aboutSidePanelType === 'notice' ? 'lg:w-2/3' : 'lg:w-3/5' }} p-8 lg:p-16 flex flex-col justify-center">
                 <div class="space-y-8">
                     <div>
                         <h2 class="text-4xl lg:text-5xl font-black text-slate-900 leading-[1.1] tracking-tight">
@@ -84,25 +86,65 @@
                 </div>
             </div>
 
-            <!-- Image Side -->
-            <div class="lg:w-2/5 relative overflow-hidden group/image">
-                <div class="absolute inset-0 bg-indigo-600/10 z-20 group-hover/image:bg-transparent transition-colors duration-700"></div>
-                <img src="{{ $aboutImageUrl }}" alt="About Us Image" 
-                     class="w-full h-full object-cover relative z-10 transition-all duration-1000 group-hover:scale-110"
-                     style="clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);">
-                
-                <!-- Floating Decorative Card -->
-                <div class="absolute bottom-10 -left-10 z-30 bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-2xl border border-white/50 transform -rotate-3 group-hover:rotate-0 transition-transform duration-500 hidden lg:block">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-200">
-                            <i class="fas fa-graduation-cap text-xl"></i>
+            <!-- Right Side Panel -->
+            <div class="{{ $aboutSidePanelType === 'notice' ? 'lg:w-1/3' : 'lg:w-2/5' }} relative overflow-hidden group/image">
+                @if($aboutSidePanelType === 'notice')
+                    <!-- Latest News Side Panel (Copied from hero-slider) -->
+                    <div class="flex flex-col h-full bg-gray-50/50">
+                        <div class="bg-indigo-600 text-white p-5 font-bold flex justify-between items-center shadow-lg relative overflow-hidden">
+                            <div class="absolute right-0 top-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -mr-10 -mt-10"></div>
+                            <span class="text-xl flex items-center gap-3 relative z-10 tracking-wide">
+                                <span class="w-1.5 h-6 bg-yellow-400 rounded-full inline-block shadow-[0_0_10px_rgba(250,204,21,0.5)]"></span>
+                                সর্বশেষ নোটিশ
+                            </span>
                         </div>
-                        <div>
-                            <div class="text-xs font-black text-indigo-600 uppercase tracking-widest leading-none">Quality</div>
-                            <div class="text-lg font-black text-slate-900 mt-1">Education</div>
+                        <div class="flex-1 overflow-hidden">
+                            <div class="p-4 space-y-3 overflow-y-auto h-full scrollbar-thin scrollbar-thumb-indigo-100 scrollbar-track-transparent">
+                                @foreach($notices as $notice)
+                                    <div class="group/item border border-gray-100 bg-white rounded-xl p-4 hover:bg-indigo-50/80 hover:border-indigo-100 transition-all duration-300">
+                                        <a href="{{ route('notices.show', $notice->id) }}" class="flex gap-4 items-start">
+                                            <div class="bg-white text-indigo-700 w-13 h-13 rounded-xl shrink-0 flex flex-col items-center justify-center font-bold shadow-sm border border-indigo-50 transition-all duration-300 transform group-hover/item:-translate-y-1">
+                                                <span class="text-base leading-none">{{ formatDateBN($notice->published_at, 'day') }}</span>
+                                                <span class="text-[10px] uppercase font-bold tracking-wider mt-1 opacity-80">{{ formatDateBN($notice->published_at, 'month') }}</span>
+                                            </div>
+                                            <div class="flex-1">
+                                                @if($notice->is_urgent)
+                                                    <div class="text-[10px] font-black text-rose-600 mb-1 flex items-center gap-1">
+                                                        <span class="relative flex h-2 w-2">
+                                                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                                                            <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                                                        </span>
+                                                        জরুরি
+                                                    </div>
+                                                @endif
+                                                <h4 class="text-gray-800 font-bold text-sm leading-snug line-clamp-2 group-hover/item:text-indigo-700 transition-colors">{{ $notice->title }}</h4>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
-                </div>
+                @else
+                    <!-- Image Side -->
+                    <div class="absolute inset-0 bg-indigo-600/10 z-20 group-hover/image:bg-transparent transition-colors duration-700"></div>
+                    <img src="{{ $aboutImageUrl }}" alt="About Us Image" 
+                         class="w-full h-full object-cover relative z-10 transition-all duration-1000 group-hover:scale-110"
+                         style="clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);">
+                    
+                    <!-- Floating Decorative Card -->
+                    <div class="absolute bottom-10 -left-10 z-30 bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-2xl border border-white/50 transform -rotate-3 group-hover:rotate-0 transition-transform duration-500 hidden lg:block">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+                                <i class="fas fa-graduation-cap text-xl"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-black text-indigo-600 uppercase tracking-widest leading-none">Quality</div>
+                                <div class="text-lg font-black text-slate-900 mt-1">Education</div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
