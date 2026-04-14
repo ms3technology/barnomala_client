@@ -9,7 +9,7 @@
     $visitorCount = \App\Models\Option::get('site.visitor_count', 0);
 @endphp
 
-<footer class="bg-slate-950 border-t-4 border-emerald-500 text-slate-300 font-sans tracking-wide relative overflow-hidden mt-20">
+<footer class="bg-slate-800 border-t-4 border-emerald-500 text-slate-300 font-sans tracking-wide relative overflow-hidden mt-20">
     <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div class="absolute -top-[30%] -left-[10%] w-[50%] h-[50%] bg-emerald-900/20 rounded-full blur-[120px]"></div>
         <div class="absolute bottom-[10%] -right-[10%] w-[60%] h-[60%] bg-cyan-900/10 rounded-full blur-[150px]"></div>
@@ -19,9 +19,9 @@
         <div class="space-y-8">
             <div class="flex flex-col gap-6">
                 <div class="flex items-center gap-4">
-                    <div class="p-2.5 bg-emerald-500/10 rounded-2xl backdrop-blur-md border border-emerald-500/20 shadow-xl">
+                    {{-- <div class="p-2.5 bg-emerald-500/10 rounded-2xl backdrop-blur-md border border-emerald-500/20 shadow-xl">
                         <img src="{{ $logoUrl }}" alt="Logo" class="w-14 h-14 object-contain filter brightness-0 invert opacity-90">
-                    </div>
+                    </div> --}}
                     <h3 class="text-2xl font-black uppercase tracking-[0.15em] text-white">{{ $schoolName }}</h3>
                 </div>
                 <p class="text-slate-400 text-sm leading-relaxed max-w-sm font-medium font-bn">

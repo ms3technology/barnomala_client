@@ -32,7 +32,7 @@
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 font-bn reveal">
     <!-- About Us Redesign -->
-    <div class="relative overflow-hidden bg-white rounded-[3rem] shadow-[0_32px_120px_-20px_rgba(30,41,59,0.08)] mb-20 group border border-slate-100">
+    <div class="relative overflow-hidden bg-white rounded-lg shadow-[0_32px_120px_-20px_rgba(30,41,59,0.08)] mb-20 group border border-slate-100">
         <!-- Decorative Background Elements -->
         <div class="absolute -top-24 -left-24 w-96 h-96 bg-indigo-50 rounded-full mix-blend-multiply filter blur-3xl opacity-30 group-hover:opacity-50 transition duration-1000"></div>
         <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-50 rounded-full mix-blend-multiply filter blur-3xl opacity-30 group-hover:opacity-50 transition duration-1000"></div>
@@ -42,7 +42,7 @@
             <div class="{{ $aboutSidePanelType === 'notice' ? 'lg:w-2/3' : 'lg:w-3/5' }} p-8 lg:p-16 flex flex-col justify-center">
                 <div class="space-y-8">
                     <div>
-                        <h2 class="text-4xl lg:text-5xl font-black text-slate-900 leading-[1.1] tracking-tight">
+                        <h2 class="text-3xl lg:text-4xl font-black text-slate-900 leading-[1.1] tracking-tight">
                             {{ $options['institute.about.title'] ?? 'আমাদের প্রতিষ্ঠান সম্পর্কে' }}
                         </h2>
                         <div class="w-20 h-2 bg-indigo-600 rounded-full mt-6 group-hover:w-32 transition-all duration-500"></div>

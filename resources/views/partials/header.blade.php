@@ -8,6 +8,8 @@
     $instituteName = $options['institute.branding.name'] ?? '????? ???????????? ???';
     $eiin = $options['institute.identity.eiin'] ?? ($options['institute.eiin'] ?? '123456');
     $estd = $options['institute.identity.established_year'] ?? ($options['institute.estd_year'] ?? '1995');
+    $instituteCode = $options['institute.identity.code'] ?? null;
+    $centerCode = $options['institute.identity.center_code'] ?? null;
     $logoUrl = $options['institute.branding.logo_json']['url'] ?? ($options['logo_url'] ?? asset('images/school-logo.png'));
     $headerBg = $options['institute.branding.header_bg'] ?? '#ffffff';
     $schoolTenantId = trim($options['institute.tenant.id'] ?? request()->getHost());
@@ -77,23 +79,23 @@
                              class="w-full h-auto object-contain transform transition-transform duration-700 group-hover:scale-105">
                     </a>
                 </div>
-                <div class="flex flex-col gap-4">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-indigo-600 flex items-center justify-center text-white shadow-md">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                <div class="flex md:flex-col gap-4 pb-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 md:w-12 md:h-12 rounded-full bg-indigo-600 flex items-center justify-center text-white shadow-md">
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
                         </div>
                         <div>
-                            <h4 class="text-xs font-bold text-indigo-900/50 uppercase tracking-widest">Call Us</h4>
-                            <p class="text-lg font-black text-indigo-900">{{ $phone }}</p>
+                            <h4 class="text-[8px] md:text-xs font-bold text-indigo-900/50 uppercase tracking-widest">Call Us</h4>
+                            <p class="text-[8px] md:text-lg font-black text-indigo-900">{{ $phone }}</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-yellow-500 flex items-center justify-center text-indigo-950 shadow-md">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <div class="w-7 h-7 md:w-12 md:h-12 rounded-full bg-yellow-500 flex items-center justify-center text-indigo-950 shadow-md">
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                         </div>
                         <div>
-                            <h4 class="text-xs font-bold text-yellow-700/50 uppercase tracking-widest">Email Us</h4>
-                            <p class="text-lg font-black text-indigo-900">{{ $email }}</p>
+                            <h4 class="text-[8px] md:text-xs font-bold text-yellow-700/50 uppercase tracking-widest">Email Us</h4>
+                            <p class="text-[8px] md:text-lg font-black text-indigo-900">{{ $email }}</p>
                         </div>
                     </div>
                 </div>
@@ -120,22 +122,28 @@
                             <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 md:mt-2">
                                 <span class="bg-indigo-900 text-white text-[8px] md:text-xs font-bold px-2 md:px-3 py-0.5 md:py-1 rounded-full shadow-sm">EIIN: {{ $eiin }}</span>
                                 <span class="bg-yellow-500 text-indigo-950 text-[8px] md:text-xs font-bold px-2 md:px-3 py-0.5 md:py-1 rounded-full shadow-sm">ESTD: {{ $estd }}</span>
+                                @if($instituteCode)
+                                    <span class="bg-emerald-600 text-white text-[8px] md:text-xs font-bold px-2 md:px-3 py-0.5 md:py-1 rounded-full shadow-sm">CODE: {{ $instituteCode }}</span>
+                                @endif
+                                @if($centerCode)
+                                    <span class="bg-rose-600 text-white text-[8px] md:text-xs font-bold px-2 md:px-3 py-0.5 md:py-1 rounded-full shadow-sm">CENTER: {{ $centerCode }}</span>
+                                @endif
                             </div>
                         </div>
                     </div>
 
                     <!-- Right: Quick Contact -->
-                    <div class="hidden lg:flex flex-col gap-2 shrink-0">
+                    <div class="flex lg:flex-col items-center lg:items-start gap-4 lg:gap-2 shrink-0">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 shadow-sm border border-indigo-100">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
                             </div>
                             <div class="flex flex-col">
                                 <span class="text-[9px] font-bold text-indigo-900/40 uppercase tracking-widest leading-none mb-0.5">Contact</span>
-                                <p class="text-sm font-black text-indigo-950 leading-none">{{ $phone }}, {{ $phone2 }}</p>
+                                <p class="text-[10px] md:text-sm font-black text-indigo-950 leading-none">{{ $phone }}</p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-3">
+                        <div class="hidden lg:flex items-center gap-3">
                             <div class="w-8 h-8 rounded-lg bg-yellow-50 flex items-center justify-center text-yellow-600 shadow-sm border border-yellow-100">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                             </div>
@@ -145,7 +153,7 @@
                             </div>
                         </div>
                         @if($facebookUrl = $options['social.facebook'] ?? null)
-                        <div class="flex items-center gap-3">
+                        <div class="hidden lg:flex items-center gap-3">
                             <div class="w-8 h-8 rounded-lg bg-yellow-50 flex items-center justify-center text-yellow-600 shadow-sm border border-yellow-100">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
                             </div>

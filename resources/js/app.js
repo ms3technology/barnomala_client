@@ -2,7 +2,7 @@ import './bootstrap';
 
 // Scroll Reveal Observer
 const observerOptions = {
-    threshold: 0.15,
+    threshold: 0.05,
 };
 
 const revealObserver = new IntersectionObserver((entries) => {
