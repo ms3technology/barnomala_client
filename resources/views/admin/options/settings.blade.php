@@ -37,16 +37,6 @@
                          x-transition:enter-end="opacity-100 transform translate-y-0"
                          class="animate-fade-in"
                          x-cloak>
-                        
-                        <div class="mb-6">
-                            <div class="flex items-center space-x-4">
-                                <h2 class="text-xl font-bold text-slate-800 uppercase tracking-wide">{{ $category['label'] }}</h2>
-                                <div class="flex-1 h-px bg-slate-200"></div>
-                            </div>
-                            @if(isset($category['description']))
-                                <p class="mt-1 text-sm text-slate-500">{{ $category['description'] }}</p>
-                            @endif
-                        </div>
 
                         <div class="w-full md:w-2/3 space-y-3">
                             @foreach($category['options'] as $key => $meta)

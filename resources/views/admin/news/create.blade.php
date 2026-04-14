@@ -3,20 +3,20 @@
 @section('title', 'Add News')
 
 @push('header_actions')
-<button type="submit" form="news-form" class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-bold rounded-lg shadow-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
-    <i class="fas fa-plus mr-2"></i>
-    Save News
-</button>
+<div class="flex items-center gap-5">
+    <button>
+        <a href="{{ route('admin.news.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium">
+            <i class="fas fa-arrow-left mr-2"></i> Back
+        </a>
+    </button>
+    <button type="submit" form="news-form" class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-bold rounded-lg shadow-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
+        <i class="fas fa-plus mr-2"></i>
+        Save News
+    </button>
+</div>
 @endpush
 
 @section('content')
-<div class="mb-6 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-gray-800">Add New News</h1>
-    <a href="{{ route('admin.news.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:opacity-90 transition-opacity text-sm font-bold">
-        <i class="fas fa-arrow-left mr-2"></i> Back
-    </a>
-</div>
-
 <form id="news-form" action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">

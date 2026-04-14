@@ -3,20 +3,20 @@
 @section('title', 'Edit Gallery Item')
 
 @push('header_actions')
-<button type="submit" form="gallery-form" class="inline-flex items-center px-6 py-2 border border-transparent text-sm rounded-lg shadow-md text-white bg-indigo-600 hover:bg-indigo-700 transition-all font-bold">
-    <i class="fas fa-save mr-2"></i>
-    Update Item
-</button>
+<div class="flex items-center gap-5">
+    <button>
+        <a href="{{ route('admin.gallery.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium">
+            <i class="fas fa-arrow-left mr-2"></i> Back
+        </a>
+    </button>
+    <button type="submit" form="gallery-form" class="inline-flex items-center px-6 py-2 border border-transparent text-sm rounded-lg shadow-md text-white bg-indigo-600 hover:bg-indigo-700 transition-all font-bold">
+        <i class="fas fa-save mr-2"></i>
+        Update Item
+    </button>
+</div>
 @endpush
 
 @section('content')
-<div class="mb-6 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-gray-800">Edit Gallery Item</h1>
-    <a href="{{ route('admin.gallery.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:opacity-90 transition-opacity text-sm font-bold">
-        <i class="fas fa-arrow-left mr-2"></i> Back
-    </a>
-</div>
-
 <form id="gallery-form" action="{{ route('admin.gallery.update', $item->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')

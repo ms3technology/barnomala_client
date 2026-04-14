@@ -2,16 +2,13 @@
 
 @section('title', 'Notice Management')
 
-@section('content')
-<div class="mb-6 flex justify-between items-center">
-    <div>
-        <p class="text-sm text-slate-500 mt-1">Manage all public and internal institution notices.</p>
-    </div>
+@push('header_actions')
     <a href="{{ route('admin.notices.create') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-bold shadow-sm">
         <i class="fas fa-plus mr-2"></i> New Notice
     </a>
-</div>
+@endpush
 
+@section('content')
 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-left text-sm text-slate-600">

@@ -3,22 +3,20 @@
 @section('title', 'Create Notice')
 
 @push('header_actions')
-<button type="submit" form="notice-form" class="inline-flex items-center px-6 py-2.5 text-sm font-bold rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
-    <i class="fas fa-save mr-2"></i>
-    Save Notice
-</button>
+<div class="flex items-center gap-5">
+    <button>
+        <a href="{{ route('admin.notices.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium">
+            <i class="fas fa-arrow-left mr-2"></i> Back
+        </a>
+    </button>
+    <button type="submit" form="notice-form" class="inline-flex items-center px-6 py-2.5 text-sm font-bold rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
+        <i class="fas fa-save mr-2"></i>
+        Save Notice
+    </button>
+</div>
 @endpush
 
 @section('content')
-<div class="mb-6 flex items-center justify-between">
-    <div>
-        <a href="{{ route('admin.notices.index') }}" class="text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors flex items-center mb-2">
-            <i class="fas fa-arrow-left mr-2"></i> Back to Notices
-        </a>
-        <h1 class="text-2xl font-bold text-slate-800">Create New Notice</h1>
-    </div>
-</div>
-
 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-8 max-w-5xl">
     <form id="notice-form" action="{{ route('admin.notices.store') }}" method="POST" enctype="multipart/form-data">
         @csrf

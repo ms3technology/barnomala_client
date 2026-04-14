@@ -22,10 +22,6 @@ class OptionRegistry
                         'type' => 'text',
                         'placeholder' => 'Enter institution name',
                     ],
-                    'institute.branding.logo_json' => [
-                        'label' => 'Logo',
-                        'type' => 'image',
-                    ],
                     'institute.identity.established_year' => [
                         'label' => 'Established Year',
                         'type' => 'number',
@@ -60,10 +56,6 @@ class OptionRegistry
                         'label' => 'Email Address',
                         'type' => 'email',
                     ],
-                    'institute.contact.website' => [
-                        'label' => 'Website URL',
-                        'type' => 'url',
-                    ],
                     'institute.contact.map_link' => [
                         'label' => 'Google Map Link',
                         'type' => 'textarea',
@@ -95,17 +87,6 @@ class OptionRegistry
                         'label' => 'Footer Text',
                         'type' => 'textarea',
                         'placeholder' => 'Enter text for the footer section',
-                    ],
-                ]
-            ],
-            'transfer' => [
-                'label' => 'Data Transfer',
-                'description' => 'Control and lock data transfer operations.',
-                'icon' => 'fas fa-exchange-alt',
-                'options' => [
-                    'transfer.locks.json' => [
-                        'label' => 'Transfer Locks',
-                        'type' => 'json',
                     ],
                 ]
             ],

@@ -160,7 +160,7 @@
             <!-- Page Content -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
                 @include('partials.flash')
-                <div class="p-6">
+                <div>
                     @yield('content')
                 </div>
             </main>
