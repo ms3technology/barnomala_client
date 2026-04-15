@@ -74,9 +74,25 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5" for="category">Category</label>
-                        <input type="text" name="category" id="category" value="{{ old('category', $item->category) }}" 
-                               class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 transition-all text-sm" 
-                               placeholder="e.g. Campus, Sports, Annual Day">
+                        <div class="relative" id="category-autocomplete">
+                            <input type="text" name="category" id="category" value="{{ old('category', $item->category) }}" 
+                                   class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 transition-all text-sm" 
+                                   placeholder="e.g. Campus, Sports, Annual Day"
+                                   autocomplete="off">
+                            
+                            <!-- Dropdown -->
+                            <div id="category-dropdown" 
+                                 class="hidden absolute z-10 mt-1 w-full max-h-60 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                <ul id="category-list" class="divide-y divide-gray-100">
+                                    @foreach($categories as $category)
+                                        <li class="category-option text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 hover:bg-indigo-600 hover:text-white"
+                                            data-value="{{ $category }}">
+                                            <span class="font-normal block truncate">{{ $category }}</span>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
                         @error('category') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
 
@@ -132,6 +148,56 @@
 </form>
 
 <script>
+    const categoryInput = document.getElementById('category');
+    const categoryDropdown = document.getElementById('category-dropdown');
+    const categoryList = document.getElementById('category-list');
+    const categoryOptions = Array.from(document.querySelectorAll('.category-option'));
+
+    // Category Autocomplete Logic
+    categoryInput.addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        let visibleCount = 0;
+
+        categoryOptions.forEach(option => {
+            const value = option.dataset.value.toLowerCase();
+            if (value.includes(query)) {
+                option.style.display = 'block';
+                visibleCount++;
+            } else {
+                option.style.display = 'none';
+            }
+        });
+
+        if (visibleCount > 0 && query !== '') {
+            categoryDropdown.classList.remove('hidden');
+        } else {
+            categoryDropdown.classList.add('hidden');
+        }
+    });
+
+    categoryInput.addEventListener('focus', function() {
+        if (this.value !== '') {
+            categoryDropdown.classList.remove('hidden');
+        } else if (categoryOptions.length > 0) {
+            categoryOptions.forEach(option => option.style.display = 'block');
+            categoryDropdown.classList.remove('hidden');
+        }
+    });
+
+    categoryOptions.forEach(option => {
+        option.addEventListener('mousedown', function(e) {
+            categoryInput.value = this.dataset.value;
+            categoryDropdown.classList.add('hidden');
+        });
+    });
+
+    document.addEventListener('mousedown', function(e) {
+        const container = document.getElementById('category-autocomplete');
+        if (container && !container.contains(e.target)) {
+            categoryDropdown.classList.add('hidden');
+        }
+    });
+
     function toggleTypeFields() {
         const type = document.getElementById('type').value;
         const photoField = document.getElementById('photo-field');

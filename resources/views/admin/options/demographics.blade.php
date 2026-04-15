@@ -83,24 +83,20 @@
             <div class="bg-white shadow rounded-lg overflow-hidden">
                 <div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                     <h3 class="text-base font-bold text-gray-800">Gender</h3>
-                    <button type="button" onclick="addRow('gender-rows', 'gender')" class="text-indigo-600 hover:text-indigo-800 text-xs font-bold">
-                        <i class="fas fa-plus mr-1"></i> Add
-                    </button>
                 </div>
                 <div class="p-4">
                     <div id="gender-rows" class="space-y-2">
-                        @php $genders = $options['institute.demographics.gender'] ?? []; @endphp
-                        @forelse($genders as $label => $value)
+                        @php 
+                            $genders = $options['institute.demographics.gender'] ?? []; 
+                            $defaultGenders = ['Male', 'Female', 'Other'];
+                        @endphp
+                        @foreach($defaultGenders as $label)
                             <div class="flex gap-2 items-center demographic-row">
-                                <input type="text" name="gender[{{ $loop->index }}][label]" value="{{ $label }}" placeholder="Gender" class="flex-1 px-3 py-2 text-sm rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                <input type="number" name="gender[{{ $loop->index }}][value]" value="{{ $value }}" placeholder="Count" class="w-20 px-3 py-2 text-sm rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                <button type="button" onclick="this.closest('.demographic-row').remove()" class="text-red-500 hover:text-red-700 text-sm p-1">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                                <span class="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 rounded-md border border-gray-200">{{ $label }}</span>
+                                <input type="hidden" name="gender[{{ $loop->index }}][label]" value="{{ $label }}">
+                                <input type="number" name="gender[{{ $loop->index }}][value]" value="{{ $genders[$label] ?? 0 }}" placeholder="Count" class="w-24 px-3 py-2 text-sm rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                             </div>
-                        @empty
-                            <p class="text-gray-400 text-xs italic empty-msg">No data yet</p>
-                        @endforelse
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -109,24 +105,20 @@
             <div class="bg-white shadow rounded-lg overflow-hidden">
                 <div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                     <h3 class="text-base font-bold text-gray-800">Religion</h3>
-                    <button type="button" onclick="addRow('religion-rows', 'religion')" class="text-indigo-600 hover:text-indigo-800 text-xs font-bold">
-                        <i class="fas fa-plus mr-1"></i> Add
-                    </button>
                 </div>
                 <div class="p-4">
                     <div id="religion-rows" class="space-y-2">
-                        @php $religions = $options['institute.demographics.religion'] ?? []; @endphp
-                        @forelse($religions as $label => $value)
+                        @php 
+                            $religions = $options['institute.demographics.religion'] ?? []; 
+                            $defaultReligions = ['Islam', 'Hindu', 'Christian', 'Buddhism'];
+                        @endphp
+                        @foreach($defaultReligions as $label)
                             <div class="flex gap-2 items-center demographic-row">
-                                <input type="text" name="religion[{{ $loop->index }}][label]" value="{{ $label }}" placeholder="Religion" class="flex-1 px-3 py-2 text-sm rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                <input type="number" name="religion[{{ $loop->index }}][value]" value="{{ $value }}" placeholder="Count" class="w-20 px-3 py-2 text-sm rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                <button type="button" onclick="this.closest('.demographic-row').remove()" class="text-red-500 hover:text-red-700 text-sm p-1">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                                <span class="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 rounded-md border border-gray-200">{{ $label }}</span>
+                                <input type="hidden" name="religion[{{ $loop->index }}][label]" value="{{ $label }}">
+                                <input type="number" name="religion[{{ $loop->index }}][value]" value="{{ $religions[$label] ?? 0 }}" placeholder="Count" class="w-24 px-3 py-2 text-sm rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                             </div>
-                        @empty
-                            <p class="text-gray-400 text-xs italic empty-msg">No data yet</p>
-                        @endforelse
+                        @endforeach
                     </div>
                 </div>
             </div>

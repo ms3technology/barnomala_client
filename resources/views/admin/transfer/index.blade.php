@@ -99,7 +99,7 @@
         <div class="p-6 border-b border-slate-200 flex justify-between items-center">
             <div>
                 <h3 class="text-lg font-semibold text-slate-800">Transfer Gallery Photos</h3>
-                <p class="text-sm text-slate-500 mt-1">Import WordPress posts from category <code class="bg-slate-100 px-1 rounded">gallery</code>, set category as <code class="bg-slate-100 px-1 rounded">imported</code>, and upload post images to local storage.</p>
+                <p class="text-sm text-slate-500 mt-1">Import WordPress posts from category <code class="bg-slate-100 px-1 rounded">gallery</code>, set category as <code class="bg-slate-100 px-1 rounded">Imported</code>, and upload post images to local storage.</p>
             </div>
             <form method="POST" action="{{ route('admin.transfer.lock') }}">
                 @csrf

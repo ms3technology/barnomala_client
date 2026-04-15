@@ -12,6 +12,43 @@ class OptionRegistry
     public static function getRegistration(): array
     {
         return [
+            'about' => [
+                'label' => 'About Us',
+                'description' => 'Institution summary and about section image.',
+                'icon' => 'fas fa-info-circle',
+                'options' => [
+                    'institute.about.side_panel_type' => [
+                        'label' => 'About Side Panel Type',
+                        'type' => 'select',
+                        'options' => [
+                            'image' => 'Image',
+                            'notice' => 'Notice Side Panel',
+                        ],
+                        'default' => 'image',
+                    ],
+                    'institute.about.image_json' => [
+                        'label' => 'About Image',
+                        'type' => 'image',
+                    ],
+                    'institute.about.title' => [
+                        'label' => 'About Title',
+                        'type' => 'text',
+                    ],
+                    'institute.about.text' => [
+                        'label' => 'About Text',
+                        'type' => 'textarea',
+                    ],
+                    'institute.about.button_text' => [
+                        'label' => 'About Button Text',
+                        'type' => 'text',
+                    ],
+                    'institute.footer.text' => [
+                        'label' => 'Footer Text',
+                        'type' => 'textarea',
+                        'placeholder' => 'Enter text for the footer section',
+                    ],
+                ]
+            ],
             'identity' => [
                 'label' => 'Identity',
                 'description' => 'Institution basic information and identification.',
@@ -37,6 +74,11 @@ class OptionRegistry
                         'type' => 'text',
                         'placeholder' => 'Enter institute code',
                     ],
+                    'site.visitor_count' => [
+                        'label' => 'Visitor Counter (Auto)',
+                        'type' => 'number',
+                        'placeholder' => 'Enter visitor count',
+                    ],
                 ]
             ],
             'contact' => [
@@ -59,43 +101,6 @@ class OptionRegistry
                     'institute.contact.map_link' => [
                         'label' => 'Google Map Link',
                         'type' => 'textarea',
-                    ],
-                ]
-            ],
-            'about' => [
-                'label' => 'About Us',
-                'description' => 'Institution summary and about section image.',
-                'icon' => 'fas fa-info-circle',
-                'options' => [
-                    'institute.about.image_json' => [
-                        'label' => 'About Image',
-                        'type' => 'image',
-                    ],
-                    'institute.about.title' => [
-                        'label' => 'About Title',
-                        'type' => 'text',
-                    ],
-                    'institute.about.text' => [
-                        'label' => 'About Text',
-                        'type' => 'textarea',
-                    ],
-                    'institute.about.side_panel_type' => [
-                        'label' => 'About Side Panel Type',
-                        'type' => 'select',
-                        'options' => [
-                            'image' => 'Image',
-                            'notice' => 'Notice Side Panel',
-                        ],
-                        'default' => 'image',
-                    ],
-                    'institute.about.button_text' => [
-                        'label' => 'About Button Text',
-                        'type' => 'text',
-                    ],
-                    'institute.footer.text' => [
-                        'label' => 'Footer Text',
-                        'type' => 'textarea',
-                        'placeholder' => 'Enter text for the footer section',
                     ],
                 ]
             ],

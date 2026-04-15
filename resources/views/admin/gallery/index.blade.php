@@ -35,7 +35,7 @@
                 </a>
                 @foreach($years as $year)
                     <a href="{{ route('admin.gallery.index', array_merge(request()->query(), ['year' => $year])) }}" 
-                       class="px-3 py-1 rounded-lg text-[10px] font-black transition-all {{ (string)request('year') === (string)$year ? 'bg-slate-800 text-white shadow-sm' : 'bg-white text-slate-500 border border-slate-200 hover:border-indigo-300' }}">
+                       class="px-3 py-1 rounded-lg text-xs font-black transition-all {{ (string)request('year') === (string)$year ? 'bg-slate-800 text-white shadow-sm' : 'bg-white text-slate-500 border border-slate-200 hover:border-indigo-300' }}">
                         {{ $year }}
                     </a>
                 @endforeach

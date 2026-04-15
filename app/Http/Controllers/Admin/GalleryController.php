@@ -40,7 +40,12 @@ class GalleryController extends Controller
      */
     public function create()
     {
-        return view('admin.gallery.create');
+        $categories = Gallery::whereNotNull('category')
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category');
+
+        return view('admin.gallery.create', compact('categories'));
     }
 
     /**
@@ -120,7 +125,12 @@ class GalleryController extends Controller
     public function edit(string $id)
     {
         $item = Gallery::findOrFail($id);
-        return view('admin.gallery.edit', compact('item'));
+        $categories = Gallery::whereNotNull('category')
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category');
+
+        return view('admin.gallery.edit', compact('item', 'categories'));
     }
 
     /**

@@ -75,6 +75,6 @@ class SSOController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return view('/admin');
+        return view('admin/dashboard');
     }
 }

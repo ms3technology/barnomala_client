@@ -540,7 +540,7 @@ class WordPressTransferService
                         [
                             'type' => Gallery::TYPE_PHOTO,
                             'title' => trim((string) ($row->post_name ?? '')),
-                            'category' => 'imported',
+                            'category' => 'Imported',
                             'date' => $row->post_date,
                             'image_path' => $imagePath,
                         ]
