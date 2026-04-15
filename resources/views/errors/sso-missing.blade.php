@@ -58,7 +58,7 @@
             const timer = setInterval(() => {
                 if (popup.closed) {
                     clearInterval(timer);
-                    window.location.reload();
+                    // Do not reload automatically, since sso-success.blade.php handles the redirection
                 }
             }, 1000);
         };
