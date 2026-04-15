@@ -27,27 +27,18 @@
                                 <span class="text-[8px] font-black text-yellow-900 uppercase tracking-widest">Featured</span>
                             </div>
                         @endif
+                        <a href="{{ route('news.show', $news) }}" class="absolute inset-0 z-10"></a>
                     </div>
                     <div class="p-6 flex-1 flex flex-col">
-                        <div class="flex items-center gap-2 text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3">
+                        <div class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">
                             <span class="w-1.5 h-1.5 rounded-full bg-accent"></span>
                             {{ $news->published_at ? $news->published_at->format('M d, Y') : '' }}
                         </div>
-                        <h3 class="text-lg font-black text-slate-900 leading-tight mb-3 group-hover:text-accent transition-colors line-clamp-2">
+                        <h3 class="text-lg font-black text-slate-900 leading-tight group-hover:text-accent transition-colors line-clamp-2">
                             <a href="{{ route('news.show', $news) }}">
-                                {{ Str::limit($news->title, 60) }}
+                                {{ $news->title }}
                             </a>
                         </h3>
-                        @if ($news->summary)
-                            <p class="text-slate-500 text-xs leading-relaxed line-clamp-2 mb-6">
-                                {{ $news->summary }}
-                            </p>
-                        @endif
-                        <div class="mt-auto">
-                            <a href="{{ route('news.show', $news) }}" class="inline-flex items-center gap-1 text-[9px] font-black text-accent uppercase tracking-widest transform group-hover:translate-x-1 transition-all duration-500">
-                                Read More <i class="fas fa-arrow-right text-xs"></i>
-                            </a>
-                        </div>
                     </div>
                 </article>
             @empty
