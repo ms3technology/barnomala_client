@@ -29,12 +29,9 @@
                                 <i class="far fa-calendar-alt"></i>
                                 {{ $item->published_at ? $item->published_at->format('d M, Y') : 'N/A' }}
                             </div>
-                            <h2 class="text-xl font-black text-slate-950 leading-tight mb-4 group-hover:text-accent transition-colors">
+                            <h2 class="font-black text-slate-950 leading-tight mb-4 group-hover:text-accent transition-colors">
                                 {{ Str::limit($item->title, 60) }}
                             </h2>
-                            <p class="text-slate-600 text-sm leading-relaxed line-clamp-3 mb-6">
-                                {{ $item->summary ?? Str::limit(strip_tags($item->content), 120) }}
-                            </p>
                         </a>
                     </article>
                 @empty

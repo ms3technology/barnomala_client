@@ -56,7 +56,7 @@
                             <div class="absolute bottom-0 left-0 right-0 h-4 bg-linear-to-t from-white to-transparent pointer-events-none opacity-0 group-hover/text:opacity-100 transition-opacity"></div>
                         </div>
                         
-                        <a href="" 
+                        <a href="{{ route('about') }}" 
                             class="inline-flex items-center text-xs font-black text-indigo-600 hover:text-indigo-800 transition-colors uppercase tracking-widest">
                             {{ $options['institute.about.button_text'] ?? 'Read More' }} <i class="fas fa-arrow-right ml-2 text-[10px]"></i>
                         </a>
