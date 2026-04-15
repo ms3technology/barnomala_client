@@ -75,6 +75,6 @@ class SSOController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect('/admin');
+        return view('/admin');
     }
 }
