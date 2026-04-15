@@ -56,6 +56,11 @@
                             <div class="absolute bottom-0 left-0 right-0 h-4 bg-linear-to-t from-white to-transparent pointer-events-none opacity-0 group-hover/text:opacity-100 transition-opacity"></div>
                         </div>
                         
+                        <a href="" 
+                            class="inline-flex items-center text-xs font-black text-indigo-600 hover:text-indigo-800 transition-colors uppercase tracking-widest">
+                            {{ $options['institute.about.button_text'] ?? 'Read More' }} <i class="fas fa-arrow-right ml-2 text-[10px]"></i>
+                        </a>
+                        
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
                             <div class="flex items-center gap-3 text-slate-700">
                                 <div class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
@@ -194,6 +199,13 @@
                                         {{ $speechText }}
                                     </div>
                                     <div class="absolute bottom-0 left-0 right-0 h-8 bg-linear-to-t from-white to-transparent pointer-events-none opacity-0 group-hover/speech:opacity-100 transition-opacity"></div>
+                                </div>
+
+                                <div class="text-center mt-4">
+                                    <a href="{{ route('speeches.index', ['id' => $speech['id'] ?? $speech->id]) }}" 
+                                        class="inline-flex items-center text-xs font-black text-indigo-600 hover:text-indigo-800 transition-colors uppercase tracking-widest">
+                                        {{ $options['institute.about.button_text'] ?? 'Read Full Message' }} <i class="fas fa-arrow-right ml-2 text-[10px]"></i>
+                                    </a>
                                 </div>
 
                                 <div class="mt-8 text-right pt-6 border-t border-indigo-50 relative z-10">

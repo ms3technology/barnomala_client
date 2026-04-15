@@ -6,8 +6,15 @@
 <section class="py-16">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="rounded-4xl bg-white p-8 shadow-sm ring-1 ring-slate-200">
-            <p class="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">Messages</p>
-            <h1 class="mt-4 text-4xl font-black text-slate-950">Speeches & Messages</h1>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-4">
+                <h1 class="text-4xl font-black text-slate-950">Speeches & Messages</h1>
+                
+                @if(request()->has('id'))
+                    <a href="{{ route('speeches.index') }}" class="inline-flex items-center text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors">
+                        <i class="fas fa-arrow-left mr-2"></i> View All Speeches
+                    </a>
+                @endif
+            </div>
 
             <div class="mt-12 space-y-16">
                 @forelse ($speeches as $speech)

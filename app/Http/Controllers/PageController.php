@@ -21,12 +21,18 @@ class PageController extends Controller
         return view('pages.about', $this->getPublicPageData());
     }
 
-    public function speeches(): View
+    public function speeches(Request $request): View
     {
-        $speeches = Speech::where('is_active', true)
-            ->orderBy('row_index', 'asc')
+        $query = Speech::where('is_active', true);
+
+        if ($request->filled('id')) {
+            $query->where('id', $request->id);
+        }
+
+        $speeches = $query->orderBy('row_index', 'asc')
             ->orderBy('column_index', 'asc')
             ->get();
+            
         return view('pages.speeches', array_merge($this->getPublicPageData(), compact('speeches')));
     }
 

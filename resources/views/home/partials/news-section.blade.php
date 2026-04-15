@@ -7,7 +7,7 @@
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
                 <p class="text-accent font-black uppercase tracking-[0.3em] text-xs mb-4">Inside Campus</p>
-                <h2 class="text-4xl md:text-5xl font-black text-slate-900">Latest <span class="text-accent">News</span> & Updates</h2>
+                <h2 class="text-2xl md:text-4xl font-black text-slate-900">Latest <span class="text-accent">News</span> & Updates</h2>
                 <div class="mt-4 w-24 h-1.5 bg-accent rounded-full"></div>
             </div>
             <a href="{{ route('news.index') }}" class="group flex items-center gap-4 bg-white px-8 py-4 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 hover:bg-slate-950 hover:text-white transition-all duration-500 font-black uppercase tracking-widest text-xs">
