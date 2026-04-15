@@ -468,37 +468,89 @@ class WordPressTransferService
                     continue;
                 }
 
-                $existing = Gallery::query()->where('legacy_id', $legacyId)->first();
-                $imagePath = $existing?->image_path;
+                $contentImageUrl = $this->extractImageUrlFromHtml((string) ($row->post_content ?? ''));
+                $attachmentCandidates = $this->getGalleryAttachmentImageCandidates(
+                    $legacyId,
+                    $contentImageUrl
+                );
 
-                $imageUrl = $this->extractImageUrlFromHtml((string) ($row->post_content ?? ''));
-                if ($imageUrl !== null) {
-                    $imageData = $this->downloadAndProcessImage($imageUrl, 'gallery/photos');
-                    if ($imageData !== null) {
-                        $imagePath = $imageData['path'] ?? $imagePath;
-                    } else {
-                        $failedImageDownload++;
+                $candidates = [];
+                if ($contentImageUrl !== null) {
+                    $candidates[] = [
+                        'legacy_id' => $legacyId,
+                        'url' => $contentImageUrl,
+                    ];
+                }
+
+                foreach ($attachmentCandidates as $candidate) {
+                    $candidates[] = [
+                        'legacy_id' => (int) ($candidate['legacy_id'] ?? 0),
+                        'url' => (string) ($candidate['url'] ?? ''),
+                    ];
+                }
+
+                $deduplicatedCandidates = [];
+                $seenLegacyIds = [];
+                $seenUrls = [];
+                foreach ($candidates as $candidate) {
+                    $candidateLegacyId = (int) ($candidate['legacy_id'] ?? 0);
+                    $candidateUrl = trim((string) ($candidate['url'] ?? ''));
+
+                    if ($candidateLegacyId <= 0 || $candidateUrl === '') {
+                        continue;
                     }
-                } elseif (! $existing) {
-                    $skippedNoImage++;
+
+                    if (isset($seenLegacyIds[$candidateLegacyId]) || isset($seenUrls[$candidateUrl])) {
+                        continue;
+                    }
+
+                    $seenLegacyIds[$candidateLegacyId] = true;
+                    $seenUrls[$candidateUrl] = true;
+                    $deduplicatedCandidates[] = [
+                        'legacy_id' => $candidateLegacyId,
+                        'url' => $candidateUrl,
+                    ];
+                }
+
+                if ($deduplicatedCandidates === []) {
+                    $existing = Gallery::query()->where('legacy_id', $legacyId)->first();
+                    if (! $existing) {
+                        $skippedNoImage++;
+                    }
                     continue;
                 }
 
-                $gallery = Gallery::updateOrCreate(
-                    ['legacy_id' => $legacyId],
-                    [
-                        'type' => Gallery::TYPE_PHOTO,
-                        'title' => trim((string) ($row->post_name ?? '')),
-                        'category' => 'imported',
-                        'date' => $row->post_date,
-                        'image_path' => $imagePath,
-                    ]
-                );
+                foreach ($deduplicatedCandidates as $candidate) {
+                    $candidateLegacyId = (int) $candidate['legacy_id'];
+                    $candidateUrl = (string) $candidate['url'];
 
-                if ($gallery->wasRecentlyCreated) {
-                    $created++;
-                } else {
-                    $updated++;
+                    $existing = Gallery::query()->where('legacy_id', $candidateLegacyId)->first();
+                    $imagePath = $existing?->image_path;
+
+                    $imageData = $this->downloadAndProcessImage($candidateUrl, 'gallery/photos');
+                    if ($imageData !== null) {
+                        $imagePath = $imageData['path'] ?? $imagePath;
+                    } elseif ($existing === null) {
+                        $failedImageDownload++;
+                        continue;
+                    }
+
+                    $gallery = Gallery::updateOrCreate(
+                        ['legacy_id' => $candidateLegacyId],
+                        [
+                            'type' => Gallery::TYPE_PHOTO,
+                            'title' => trim((string) ($row->post_name ?? '')),
+                            'category' => 'imported',
+                            'date' => $row->post_date,
+                            'image_path' => $imagePath,
+                        ]
+                    );
+
+                    if ($gallery->wasRecentlyCreated) {
+                        $created++;
+                    } else {
+                        $updated++;
+                    }
                 }
             }
         });
@@ -832,6 +884,107 @@ class WordPressTransferService
         $url = trim((string) ($matches[1] ?? ''));
 
         return $url !== '' ? $url : null;
+    }
+
+    private function getGalleryAttachmentImageCandidates(int $postId, ?string $fallbackMediaUrl = null): array
+    {
+        if ($postId <= 0) {
+            return [];
+        }
+
+        if (! Schema::connection('wordpress')->hasTable('sm_postmeta')) {
+            return [];
+        }
+
+        $metaValues = DB::connection('wordpress')
+            ->table('sm_postmeta')
+            ->where('post_id', $postId)
+            ->pluck('meta_value')
+            ->all();
+
+        $attachmentIds = [];
+        foreach ($metaValues as $metaValue) {
+            $value = trim((string) $metaValue);
+            if ($value !== '' && ctype_digit($value)) {
+                $attachmentIds[(int) $value] = true;
+            }
+        }
+
+        $attachmentIds = array_values(array_filter(array_keys($attachmentIds), fn (int $id) => $id > 0));
+        if ($attachmentIds === []) {
+            return [];
+        }
+
+        $attachedRows = DB::connection('wordpress')
+            ->table('sm_postmeta')
+            ->select('post_id', 'meta_value')
+            ->whereIn('post_id', $attachmentIds)
+            ->where('meta_key', '_wp_attached_file')
+            ->get();
+
+        $candidates = [];
+        foreach ($attachedRows as $attachedRow) {
+            $attachmentId = (int) ($attachedRow->post_id ?? 0);
+            $attachedFile = trim((string) ($attachedRow->meta_value ?? ''));
+            if ($attachmentId <= 0 || $attachedFile === '') {
+                continue;
+            }
+
+            $url = $this->buildWordPressAttachmentUrl($attachedFile, $fallbackMediaUrl);
+            if ($url === null) {
+                continue;
+            }
+
+            $candidates[$attachmentId] = [
+                'legacy_id' => $attachmentId,
+                'url' => $url,
+            ];
+        }
+
+        return array_values($candidates);
+    }
+
+    private function buildWordPressAttachmentUrl(string $attachedFile, ?string $fallbackMediaUrl = null): ?string
+    {
+        $attachedFile = trim(html_entity_decode($attachedFile));
+        if ($attachedFile === '') {
+            return null;
+        }
+
+        if (filter_var($attachedFile, FILTER_VALIDATE_URL)) {
+            return $attachedFile;
+        }
+
+        $baseUrl = null;
+        $fallbackMediaUrl = trim((string) ($fallbackMediaUrl ?? ''));
+        if ($fallbackMediaUrl !== '' && filter_var($fallbackMediaUrl, FILTER_VALIDATE_URL)) {
+            $parts = parse_url($fallbackMediaUrl);
+            if (! empty($parts['scheme']) && ! empty($parts['host'])) {
+                $baseUrl = $parts['scheme'] . '://' . $parts['host'];
+                if (! empty($parts['port'])) {
+                    $baseUrl .= ':' . $parts['port'];
+                }
+            }
+        }
+
+        if ($baseUrl === null) {
+            $appUrl = trim((string) config('app.url', ''));
+            if ($appUrl !== '' && filter_var($appUrl, FILTER_VALIDATE_URL)) {
+                $parts = parse_url($appUrl);
+                if (! empty($parts['scheme']) && ! empty($parts['host'])) {
+                    $baseUrl = $parts['scheme'] . '://' . $parts['host'];
+                    if (! empty($parts['port'])) {
+                        $baseUrl .= ':' . $parts['port'];
+                    }
+                }
+            }
+        }
+
+        if ($baseUrl === null) {
+            return null;
+        }
+
+        return rtrim($baseUrl, '/') . '/wp-content/uploads/' . ltrim($attachedFile, '/');
     }
 
     private function extractContentAndMediaUrls(string $html): array
