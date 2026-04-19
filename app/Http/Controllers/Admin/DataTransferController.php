@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Services\DataTransfer\WordPressExportService;
-use App\Services\DataTransfer\WordPressTransferService;
+use App\Services\WordPressExportService;
+use App\Services\WordPressTransferService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;

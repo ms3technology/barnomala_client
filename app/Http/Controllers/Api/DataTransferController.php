@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Services\DataTransfer\WordPressTransferService;
+use App\Services\WordPressTransferService;
 use Illuminate\Http\JsonResponse;
 
 class DataTransferController extends Controller

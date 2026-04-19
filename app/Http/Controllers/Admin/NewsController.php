@@ -5,11 +5,19 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\News;
 use App\Models\NewsArtifact;
+use App\Services\ImageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
 {
+    protected $imageService;
+
+    public function __construct(ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -45,7 +53,7 @@ class NewsController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('news/images', 'public');
+            $path = $this->imageService->convertToWebp($request->file('image'), 'news/images');
             $validated['image_json'] = [
                 'url' => Storage::url($path),
                 'path' => $path,
@@ -103,7 +111,7 @@ class NewsController extends Controller
             if (isset($news->image_json['path'])) {
                 Storage::disk('public')->delete($news->image_json['path']);
             }
-            $path = $request->file('image')->store('news/images', 'public');
+            $path = $this->imageService->convertToWebp($request->file('image'), 'news/images');
             $validated['image_json'] = [
                 'url' => Storage::url($path),
                 'path' => $path,

@@ -118,6 +118,18 @@ class OptionRegistry
                         'type' => 'url',
                     ],
                 ]
+            ],
+            'links' => [
+                'label' => 'Important Links',
+                'description' => 'Manage board links shown on homepage and footer.',
+                'icon' => 'fas fa-link',
+                'options' => [
+                    'institute.links.important_json' => [
+                        'label' => 'Important Links (JSON)',
+                        'type' => 'json',
+                        'placeholder' => "[{\"title\":\"Ministry of Education\",\"url\":\"https://moedu.gov.bd\"}]",
+                    ],
+                ]
             ]
         ];
     }

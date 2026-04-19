@@ -30,10 +30,6 @@
                             class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700">
                             Sign In with Barnomala
                         </button>
-                        <button type="button" onclick="window.history.back();"
-                            class="inline-flex items-center justify-center rounded-lg border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-                            Go Back
-                        </button>
                     </div>
                 </div>
             </section>

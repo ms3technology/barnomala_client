@@ -24,6 +24,9 @@ deployment:
     - /bin/cp composer.lock $APPPATH || true
     - /bin/cp .env.example $APPPATH || true
 
+    # === Delete index.html if exists ===
+    - /bin/rm -f $PUBLICPATH/index.html
+
     # === Copy public folder contents to public_html ===
     - /bin/cp -R public/* $PUBLICPATH
     - /bin/cp -R public/.htaccess $PUBLICPATH || true

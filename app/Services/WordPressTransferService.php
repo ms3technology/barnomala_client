@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\DataTransfer;
+namespace App\Services;
 
 use App\Models\Gallery;
 use App\Models\News;

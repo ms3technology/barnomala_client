@@ -19,9 +19,6 @@
         <div class="space-y-8">
             <div class="flex flex-col gap-6">
                 <div class="flex items-center gap-4">
-                    {{-- <div class="p-2.5 bg-emerald-500/10 rounded-2xl backdrop-blur-md border border-emerald-500/20 shadow-xl">
-                        <img src="{{ $logoUrl }}" alt="Logo" class="w-14 h-14 object-contain filter brightness-0 invert opacity-90">
-                    </div> --}}
                     <h3 class="text-2xl font-black uppercase tracking-[0.15em] text-white">{{ $schoolName }}</h3>
                 </div>
                 <p class="text-slate-400 text-sm leading-relaxed max-w-sm font-medium font-bn">
@@ -103,25 +100,10 @@
     </div>
 
     <div class="border-t border-slate-900 bg-black/40 text-slate-400 text-sm py-8 backdrop-blur-md relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="order-last md:order-first text-center md:text-left font-medium">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-center gap-6">
+            <div class="order-last md:order-first text-center font-medium">
                 &copy; {{ now()->year }} <span class="font-bold text-emerald-400 tracking-wide">{{ $schoolName }}</span>. All rights reserved.<br>
                 <span class="text-xs mt-1.5 block text-slate-500">Website designed & developed by <a href="https://ms3technology.com.bd" target="_blank" class="text-emerald-500 hover:text-emerald-400 font-bold transition-colors">MS3 Technology BD</a>.</span>
-            </div>
-            
-            <div class="flex flex-col md:flex-row items-center gap-6">
-                <div class="flex items-center gap-4">
-                    @if($options['institute.social.facebook'] ?? null)
-                        <a href="{{ $options['institute.social.facebook'] }}" target="_blank" class="w-10 h-10 rounded-full border border-slate-800 hover:bg-emerald-500/10 hover:border-emerald-500/50 flex items-center justify-center transition-all duration-300 bg-slate-900 hover:-translate-y-1 group">
-                            <i class="fa-brands fa-facebook-f text-lg text-slate-400 group-hover:text-emerald-400 transition-colors"></i>
-                        </a>
-                    @endif
-                    @if($options['institute.social.youtube'] ?? null)
-                        <a href="{{ $options['institute.social.youtube'] }}" target="_blank" class="w-10 h-10 rounded-full border border-slate-800 hover:bg-emerald-500/10 hover:border-emerald-500/50 flex items-center justify-center transition-all duration-300 bg-slate-900 hover:-translate-y-1 group">
-                            <i class="fa-brands fa-youtube text-lg text-slate-400 group-hover:text-emerald-400 transition-colors"></i>
-                        </a>
-                    @endif
-                </div>
             </div>
         </div>
     </div>

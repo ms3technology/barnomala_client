@@ -96,6 +96,95 @@
                                                     rows="3" 
                                                     placeholder="{{ $meta['placeholder'] ?? '' }}"
                                                     class="block w-full text-sm rounded-lg border border-slate-300 bg-white/80 backdrop-blur-sm px-4 py-2.5 text-slate-800 placeholder-slate-400 shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 hover:border-slate-400">{{ $existingOptions->get($key)->option_value ?? '' }}</textarea>
+                                        @elseif($meta['type'] === 'json')
+                                            @if($key === 'institute.links.important_json')
+                                                @php
+                                                    $jsonRaw = old('settings.' . $key, $existingOptions->get($key)->option_value ?? '[]');
+                                                    $jsonDecoded = is_string($jsonRaw) ? json_decode($jsonRaw, true) : [];
+                                                    $linksForUi = is_array($jsonDecoded) ? array_values(array_filter(array_map(function ($item) {
+                                                        if (!is_array($item)) {
+                                                            return null;
+                                                        }
+
+                                                        return [
+                                                            'title' => (string) ($item['title'] ?? ''),
+                                                            'url' => (string) ($item['url'] ?? ''),
+                                                        ];
+                                                    }, $jsonDecoded))) : [];
+
+                                                    if (empty($linksForUi)) {
+                                                        $linksForUi = [['title' => '', 'url' => '']];
+                                                    }
+                                                @endphp
+
+                                                <div
+                                                    x-data="{ links: {{ \Illuminate\Support\Js::from($linksForUi) }} }"
+                                                    class="space-y-3"
+                                                >
+                                                    <input
+                                                        type="hidden"
+                                                        name="settings[{{ $key }}]"
+                                                        :value="JSON.stringify(links.filter(link => (link.title || '').trim() !== '' || (link.url || '').trim() !== ''))"
+                                                    >
+
+                                                    <template x-for="(link, index) in links" :key="index">
+                                                        <div class="grid grid-cols-12 gap-2 items-center">
+                                                            <input
+                                                                type="text"
+                                                                x-model="link.title"
+                                                                placeholder="Link title"
+                                                                class="col-span-5 block w-full text-sm rounded-lg border border-slate-300 bg-white/80 px-3 py-2.5 text-slate-800 placeholder-slate-400 shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                                                            >
+                                                            <input
+                                                                type="url"
+                                                                x-model="link.url"
+                                                                placeholder="https://example.com"
+                                                                class="col-span-6 block w-full text-sm rounded-lg border border-slate-300 bg-white/80 px-3 py-2.5 text-slate-800 placeholder-slate-400 shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                                                            >
+                                                            <button
+                                                                type="button"
+                                                                @click="links.splice(index, 1); if (links.length === 0) links.push({ title: '', url: '' })"
+                                                                class="col-span-1 inline-flex items-center justify-center rounded-lg border border-rose-300 bg-rose-50 px-2 py-2 text-rose-700 hover:bg-rose-100 transition"
+                                                                title="Remove Link"
+                                                            >
+                                                                <i class="fas fa-trash text-xs"></i>
+                                                            </button>
+                                                        </div>
+                                                    </template>
+
+                                                    <button
+                                                        type="button"
+                                                        @click="links.push({ title: '', url: '' })"
+                                                        class="inline-flex items-center px-3 py-2 text-xs font-bold uppercase tracking-wide rounded-lg border border-indigo-300 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition"
+                                                    >
+                                                        <i class="fas fa-plus mr-2"></i>
+                                                        Add Link
+                                                    </button>
+                                                </div>
+
+                                                @error($key)
+                                                    <p class="mt-2 text-xs text-red-600">{{ $message }}</p>
+                                                @enderror
+                                            @else
+                                                @php
+                                                    $jsonRaw = $existingOptions->get($key)->option_value ?? '';
+                                                    $jsonPretty = '';
+                                                    if (!empty($jsonRaw)) {
+                                                        $jsonDecoded = json_decode($jsonRaw, true);
+                                                        $jsonPretty = is_array($jsonDecoded)
+                                                            ? json_encode($jsonDecoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+                                                            : $jsonRaw;
+                                                    }
+                                                @endphp
+                                                <textarea name="settings[{{ $key }}]"
+                                                        id="{{ $key }}"
+                                                        rows="8"
+                                                        placeholder="{{ $meta['placeholder'] ?? '' }}"
+                                                        class="block w-full font-mono text-sm rounded-lg border border-slate-300 bg-white/80 backdrop-blur-sm px-4 py-2.5 text-slate-800 placeholder-slate-400 shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 hover:border-slate-400">{{ old('settings.' . $key, $jsonPretty) }}</textarea>
+                                                @error($key)
+                                                    <p class="mt-2 text-xs text-red-600">{{ $message }}</p>
+                                                @enderror
+                                            @endif
                                         @elseif($meta['type'] === 'number')
                                             <input type="number" 
                                                 name="settings[{{ $key }}]" 

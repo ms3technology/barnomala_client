@@ -15,7 +15,7 @@ trait BuildsPublicPageData
         return [
             'options' => $options,
             'navigationItems' => $this->getNavigationItems(),
-            'importantLinks' => config('navigation.important_links', []),
+            'importantLinks' => $this->getImportantLinks($options),
         ];
     }
 
@@ -39,9 +39,38 @@ trait BuildsPublicPageData
         }, config('navigation.navigation_items', []));
     }
 
-    protected function getImportantLinks(): array
+    protected function getImportantLinks(array $options): array
     {
-        return config('navigation.important_links', []);
+        $fallback = config('navigation.important_links', []);
+        $raw = $options['institute.links.important_json'] ?? null;
+
+        if (empty($raw)) {
+            return $fallback;
+        }
+
+        if (is_string($raw)) {
+            $raw = json_decode($raw, true);
+        }
+
+        if (!is_array($raw)) {
+            return $fallback;
+        }
+
+        $links = array_values(array_filter(array_map(function ($item) {
+            $title = trim((string) ($item['title'] ?? ''));
+            $url = trim((string) ($item['url'] ?? ''));
+
+            if ($title === '' || $url === '') {
+                return null;
+            }
+
+            return [
+                'title' => $title,
+                'url' => $url,
+            ];
+        }, $raw)));
+
+        return !empty($links) ? $links : $fallback;
     }
 
     protected function incrementVisitorCount(): void

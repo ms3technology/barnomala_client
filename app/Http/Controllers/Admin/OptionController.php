@@ -5,11 +5,19 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Option;
 use App\Registries\OptionRegistry;
+use App\Services\ImageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class OptionController extends Controller
 {
+    protected $imageService;
+
+    public function __construct(ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -74,7 +82,7 @@ class OptionController extends Controller
                         Storage::disk('public')->delete($slider['path']);
                     }
                     $file = $request->file("existing_sliders.$index.image");
-                    $path = $file->store('sliders', 'public');
+                    $path = $this->imageService->convertToWebp($file, 'sliders');
                     $item['path'] = $path;
                     $item['url'] = Storage::url($path);
                 }
@@ -86,7 +94,7 @@ class OptionController extends Controller
         // Handle new sliders
         if ($request->hasFile('new_sliders')) {
             foreach ($request->file('new_sliders') as $index => $file) {
-                $path = $file->store('sliders', 'public');
+                $path = $this->imageService->convertToWebp($file, 'sliders');
                 $sliders[] = [
                     'url' => Storage::url($path),
                     'path' => $path,
@@ -290,6 +298,12 @@ class OptionController extends Controller
     {
         $registry = OptionRegistry::getRegistration();
         $optionKeys = OptionRegistry::getAllKeys();
+        $optionMeta = [];
+        foreach ($registry as $category) {
+            foreach ($category['options'] as $key => $meta) {
+                $optionMeta[$key] = $meta;
+            }
+        }
 
         // Handle Image Uploads from Registry
         foreach ($registry as $category) {
@@ -319,6 +333,28 @@ class OptionController extends Controller
         if ($request->has('settings')) {
             foreach ($request->get('settings') as $key => $value) {
                 if (in_array($key, $optionKeys)) {
+                    $type = $optionMeta[$key]['type'] ?? 'text';
+
+                    if ($type === 'json') {
+                        $decoded = is_string($value) ? json_decode($value, true) : null;
+
+                        if (!is_array($decoded)) {
+                            return redirect()->back()
+                                ->withInput()
+                                ->withErrors([$key => 'Invalid JSON format for important links.']);
+                        }
+
+                        Option::updateOrCreate(
+                            ['option_key' => $key],
+                            [
+                                'option_value' => json_encode($decoded),
+                                'value_type' => 'json',
+                            ]
+                        );
+
+                        continue;
+                    }
+
                     Option::updateOrCreate(
                         ['option_key' => $key],
                         ['option_value' => $value]
@@ -351,7 +387,7 @@ class OptionController extends Controller
                 }
             }
 
-            $path = $request->file('logo')->store('branding', 'public');
+            $path = $this->imageService->convertToWebp($request->file('logo'), 'branding');
             Option::updateOrCreate(
                 ['option_key' => 'institute.branding.logo_json'],
                 [
@@ -371,7 +407,7 @@ class OptionController extends Controller
                 }
             }
 
-            $path = $request->file('banner')->store('branding', 'public');
+            $path = $this->imageService->convertToWebp($request->file('banner'), 'branding');
             Option::updateOrCreate(
                 ['option_key' => 'institute.branding.banner_json'],
                 [
