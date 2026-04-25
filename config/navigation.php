@@ -34,13 +34,4 @@ return [
         // ['label' => 'Result', 'route' => 'results.index', 'children' => []],
         // ['label' => 'Apply Online', 'route' => 'apply.index', 'children' => []],
     ],
-
-    'important_links' => [
-        ['title' => 'Sylhet Education Board', 'url' => 'https://www.sylhetboard.gov.bd'],
-        ['title' => 'Directorate of Secondary and Higher Education', 'url' => 'https://www.dshe.gov.bd'],
-        ['title' => 'Ministry of Education', 'url' => 'https://moedu.gov.bd'],
-        ['title' => 'Bangladesh National Portal', 'url' => 'https://bangladesh.gov.bd'],
-        ['title' => 'BANBEIS', 'url' => 'https://www.banbeis.gov.bd'],
-        ['title' => 'Teachers Portal', 'url' => 'https://www.teachers.gov.bd'],
-    ],
 ];

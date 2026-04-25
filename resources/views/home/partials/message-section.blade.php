@@ -96,7 +96,7 @@
                 @if($aboutSidePanelType === 'notice')
                     <!-- Latest News Side Panel (Copied from hero-slider) -->
                     <div class="flex flex-col h-full bg-gray-50/50">
-                        <div class="bg-indigo-600 text-white p-5 font-bold flex justify-between items-center shadow-lg relative overflow-hidden">
+                        <div class="bg-accent text-white p-5 font-bold flex justify-between items-center shadow-lg relative overflow-hidden">
                             <div class="absolute right-0 top-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -mr-10 -mt-10"></div>
                             <span class="text-xl flex items-center gap-3 relative z-10 tracking-wide">
                                 <span class="w-1.5 h-6 bg-yellow-400 rounded-full inline-block shadow-[0_0_10px_rgba(250,204,21,0.5)]"></span>

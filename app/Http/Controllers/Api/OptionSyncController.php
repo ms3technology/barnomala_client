@@ -9,13 +9,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
-class SyncController extends Controller
+class OptionSyncController extends Controller
 {
-    public function syncOptions(Request $request): JsonResponse
+    public function sync(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'options' => ['nullable', 'array'],
-
         ]);
 
         $locksOption = Option::where('option_key', 'transfer.locks.json')->first();
