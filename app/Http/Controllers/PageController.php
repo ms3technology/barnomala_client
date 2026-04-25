@@ -8,9 +8,13 @@ use App\Models\Gallery;
 use App\Models\Teacher;
 use App\Models\Staff;
 use App\Models\Committee;
+use App\Models\Option;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactMail;
+use Illuminate\Support\Facades\Log;
 
 class PageController extends Controller
 {
@@ -32,7 +36,7 @@ class PageController extends Controller
         $speeches = $query->orderBy('row_index', 'asc')
             ->orderBy('column_index', 'asc')
             ->get();
-            
+
         return view('pages.speeches', array_merge($this->getPublicPageData(), compact('speeches')));
     }
 
@@ -50,7 +54,7 @@ class PageController extends Controller
         }
 
         $items = $query->orderBy('date', 'desc')->paginate(12);
-        
+
         $categories = Gallery::whereNotNull('category')
             ->distinct()
             ->pluck('category')
@@ -207,13 +211,35 @@ class PageController extends Controller
 
     public function contactSubmit(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'subject' => 'required|string|max:255',
-            'message' => 'required|string',
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:120'],
+            'email' => ['required', 'email', 'max:255'],
+            'subject' => ['required', 'string', 'max:255'],
+            'message' => ['required', 'string', 'max:2000'],
         ]);
 
-        return back()->with('success', 'Your message has been sent successfully.');
+        try {
+            $defaultFromAddress = (string) config('mail.from.address', 'teambornomala@gmail.com');
+            $defaultFromName = (string) config('mail.from.name', config('app.name', 'Barnomala School System'));
+
+            $instituteEmail = trim((string) Option::get('institute.contact.email', $defaultFromAddress));
+            $recipient = $instituteEmail !== '' ? $instituteEmail : $defaultFromAddress;
+
+            Mail::to($recipient)->send(
+                (new ContactMail($validated))
+                    ->from($defaultFromAddress, $defaultFromName) // ✅ correct sender
+                    ->replyTo($validated['email'], $validated['name']) // ✅ user reply
+            );
+
+            return back()->with('success', 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে। দ্রুতই আমরা যোগাযোগ করব।');
+        } catch (\Throwable $exception) {
+            Log::error('Contact form submission failed: ' . $exception->getMessage(), [
+                'exception' => $exception,
+                'input' => $validated,
+            ]);
+            return back()
+                ->withInput()
+                ->with('error', 'দুঃখিত! বার্তা পাঠাতে সমস্যা হয়েছে। অনুগ্রহ করে কিছু সময় পর আবার চেষ্টা করুন।');
+        }
     }
 }

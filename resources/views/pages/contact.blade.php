@@ -8,6 +8,16 @@
     $phone = $options['institute.contact.phone'] ?? ($options['phone'] ?? '01234-567890');
     $email = $options['institute.contact.email'] ?? ($options['email'] ?? 'info@school.edu.bd');
     $address = $options['institute.contact.address'] ?? 'Institute address goes here';
+    $mapLink = trim((string) ($options['institute.contact.map_link'] ?? ''));
+    $mapEmbedUrl = '';
+
+    if ($mapLink !== '') {
+        $mapEmbedUrl = (str_contains($mapLink, '/embed') || str_contains($mapLink, 'output=embed'))
+            ? $mapLink
+            : (str_contains($mapLink, '?') ? $mapLink . '&output=embed' : $mapLink . '?output=embed');
+    } else {
+        $mapEmbedUrl = 'https://maps.google.com/maps?q=' . urlencode($address) . '&output=embed';
+    }
 @endphp
 
 <section class="py-16">
@@ -63,9 +73,27 @@
                         <textarea id="message" name="message" rows="6" required class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-slate-950 focus:bg-white">{{ old('message') }}</textarea>
                         @error('message')<p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>@enderror
                     </div>
+                    
+                    @if(session('error'))
+                        <p class="text-sm font-medium text-rose-600">{{ session('error') }}</p>
+                    @endif
 
                     <button type="submit" class="rounded-2xl bg-slate-950 px-6 py-3 text-sm font-bold text-white transition hover:bg-slate-800">Send Message</button>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Section -->
+        <div class="mt-16" id="map">
+        <!-- Responsive Map Container -->
+        <div class="w-full max-w-4xl mx-auto">
+            <div class="relative w-full h-0 pb-[68.29%] rounded-lg overflow-hidden shadow-lg">
+                <iframe class="absolute top-0 left-0 w-full h-full"
+                    src="{{ $mapEmbedUrl }}"
+                    frameborder="0" scrolling="no" marginheight="0" marginwidth="0" allowfullscreen loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
             </div>
         </div>
     </div>

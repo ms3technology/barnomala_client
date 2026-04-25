@@ -28,10 +28,11 @@
                     {{ $footerText }}
                 </p>
             </div>
-            <div class="flex items-center gap-4">
+            <div>
                 <p class="text-slate-400 text-sm leading-relaxed max-w-sm font-medium font-bn">
                     {{ $address }}
                 </p>
+                <a href="/contact-us#map" class="text-sm text-emerald-400 hover:text-emerald-300 transition-colors">View on Map</a>
             </div>
         </div>
         
@@ -50,7 +51,7 @@
                 <span class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center group-hover:bg-emerald-500/30 transition-all duration-300 border border-slate-700 group-hover:border-emerald-400/50 shadow-lg">
                     <svg class="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                 </span>
-                <span class="text-sm font-semibold text-slate-300 group-hover:text-emerald-400 transition-colors tracking-wide">{{ $email }}</span>
+                <a href="/contact-us" class="text-sm font-semibold text-slate-300 group-hover:text-emerald-400 transition-colors tracking-wide">{{ $email }}</a>
             </div>
             <div class="{{ $facebook ? 'flex' : 'hidden' }} items-center gap-4 group">
                 <span class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center group-hover:bg-emerald-500/30 transition-all duration-300 border border-slate-700 group-hover:border-emerald-400/50 shadow-lg">
