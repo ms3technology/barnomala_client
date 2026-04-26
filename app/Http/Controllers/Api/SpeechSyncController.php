@@ -13,10 +13,14 @@ class SpeechSyncController extends Controller
     public function sync(Request $request)
     {
         $speechesData = $request->input('speeches', []);
-        
+
         if (!is_array($speechesData)) {
             $speechesData = json_decode($request->getContent(), true)['speeches'] ?? [];
         }
+
+        // Preload all speeches in one query (avoid N+1)
+        $ids = collect($speechesData)->pluck('id')->filter()->all();
+        $existingSpeeches = Speech::whereIn('id', $ids)->get()->keyBy('id');
 
         $summary = [
             'updated' => 0,
@@ -27,21 +31,19 @@ class SpeechSyncController extends Controller
         try {
             DB::beginTransaction();
             foreach ($speechesData as $speech) {
-                if (!isset($speech['id'])) {
-                    $summary['failed']++;
-                    continue;
-                }
+                // Find existing speech by ID
+                $speechModel = $existingSpeeches[$speech['id']] ?? null;
 
-                $id = $speech['id'];
-                
-                // If body has only id, delete it
+                // If only ID is provided → delete
                 if (count($speech) === 1) {
-                    $deleted = Speech::where('id', $id)->delete();
-                    if ($deleted) $summary['deleted']++;
+                    if ($speechModel) {
+                        $speechModel->delete();
+                        $summary['deleted']++;
+                    }
                     continue;
                 }
 
-                // Map data from request to speech model attributes
+                // Prepare data once
                 $data = [
                     'name' => $speech['name'] ?? null,
                     'title' => $speech['title'] ?? null,
@@ -54,10 +56,11 @@ class SpeechSyncController extends Controller
                     'is_active' => $speech['is_active'] ?? true,
                 ];
 
-                Speech::updateOrCreate(
-                    ['id' => $id],
-                    $data
-                );
+                if ($speechModel) {
+                    $speechModel->update($data);
+                } else {
+                    Speech::create($data);
+                }
 
                 $summary['updated']++;
             }

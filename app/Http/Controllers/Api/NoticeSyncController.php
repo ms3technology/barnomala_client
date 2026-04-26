@@ -14,10 +14,14 @@ class NoticeSyncController extends Controller
     public function sync(Request $request)
     {
         $noticesData = $request->input('notices', []);
-        
+
         if (!is_array($noticesData)) {
             $noticesData = json_decode($request->getContent(), true)['notices'] ?? [];
         }
+        
+        // Preload all notices in one query (avoid N+1)
+        $ids = collect($noticesData)->pluck('id')->filter()->all();
+        $existingNotices = Notice::whereIn('id', $ids)->get()->keyBy('id');
 
         $summary = [
             'updated' => 0,
@@ -28,18 +32,12 @@ class NoticeSyncController extends Controller
         try {
             DB::beginTransaction();
             foreach ($noticesData as $notice) {
-                if (!isset($notice['id'])) {
-                    $summary['failed']++;
-                    continue;
-                }
+                // Find existing notice by ID
+                $noticeModel = $existingNotices[$notice['id']] ?? null;
 
-                $id = $notice['id'];
-                
-                // If body has only id, delete it (and its artifacts)
+                // If only ID is provided → delete
                 if (count($notice) === 1) {
-                    $noticeModel = Notice::find($id);
                     if ($noticeModel) {
-                        // Delete associated artifacts first
                         $noticeModel->artifacts()->delete();
                         $noticeModel->delete();
                         $summary['deleted']++;
@@ -47,7 +45,7 @@ class NoticeSyncController extends Controller
                     continue;
                 }
 
-                // Map data from request to notice model attributes
+                // Prepare data once
                 $data = [
                     'title' => $notice['title'] ?? null,
                     'content' => $notice['content'] ?? null,
@@ -56,13 +54,14 @@ class NoticeSyncController extends Controller
                     'is_urgent' => $notice['is_urgent'] ?? false,
                 ];
 
-                $noticeModel = Notice::updateOrCreate(
-                    ['id' => $id],
-                    $data
-                );
+                if ($noticeModel) {
+                    $noticeModel->update($data);
+                } else {
+                    $noticeModel = Notice::create($data);
+                }
 
                 // Sync artifacts if provided
-                if (isset($notice['artifacts']) && is_array($notice['artifacts'])) {
+                if (!empty($notice['artifacts']) && is_array($notice['artifacts'])) {
                     $this->syncArtifacts($noticeModel, $notice['artifacts']);
                 }
 
@@ -74,7 +73,6 @@ class NoticeSyncController extends Controller
                 'status' => 'success',
                 'summary' => $summary
             ]);
-
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Notice Sync Error: ' . $e->getMessage());

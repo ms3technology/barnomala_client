@@ -13,10 +13,14 @@ class GallerySyncController extends Controller
     public function sync(Request $request)
     {
         $galleriesData = $request->input('galleries', []);
-        
+
         if (!is_array($galleriesData)) {
             $galleriesData = json_decode($request->getContent(), true)['galleries'] ?? [];
         }
+
+        // Preload all galleries in one query (avoid N+1)
+        $ids = collect($galleriesData)->pluck('id')->filter()->all();
+        $existingGalleries = Gallery::whereIn('id', $ids)->get()->keyBy('id');
 
         $summary = [
             'updated' => 0,
@@ -27,21 +31,19 @@ class GallerySyncController extends Controller
         try {
             DB::beginTransaction();
             foreach ($galleriesData as $gallery) {
-                if (!isset($gallery['id'])) {
-                    $summary['failed']++;
-                    continue;
-                }
+                // Find existing gallery by ID
+                $galleryModel = $existingGalleries[$gallery['id']] ?? null;
 
-                $id = $gallery['id'];
-                
-                // If body has only id, delete it
+                // If only ID is provided → delete
                 if (count($gallery) === 1) {
-                    $deleted = Gallery::where('id', $id)->delete();
-                    if ($deleted) $summary['deleted']++;
+                    if ($galleryModel) {
+                        $galleryModel->delete();
+                        $summary['deleted']++;
+                    }
                     continue;
                 }
 
-                // Map data from request to gallery model attributes
+                // Prepare data once
                 $data = [
                     'type' => $gallery['type'] ?? Gallery::TYPE_PHOTO,
                     'title' => $gallery['title'] ?? null,
@@ -53,11 +55,12 @@ class GallerySyncController extends Controller
                     'description' => $gallery['description'] ?? null,
                 ];
 
-                Gallery::updateOrCreate(
-                    ['id' => $id],
-                    $data
-                );
-                
+                if ($galleryModel) {
+                    $galleryModel->update($data);
+                } else {
+                    Gallery::create($data);
+                }
+
                 $summary['updated']++;
             }
 

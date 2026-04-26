@@ -14,10 +14,14 @@ class NewsSyncController extends Controller
     public function sync(Request $request)
     {
         $newsData = $request->input('news', []);
-        
+
         if (!is_array($newsData)) {
             $newsData = json_decode($request->getContent(), true)['news'] ?? [];
         }
+
+        // Preload all news in one query (avoid N+1)
+        $ids = collect($newsData)->pluck('id')->filter()->all();
+        $existingNews = News::whereIn('id', $ids)->get()->keyBy('id');
 
         $summary = [
             'updated' => 0,
@@ -28,18 +32,12 @@ class NewsSyncController extends Controller
         try {
             DB::beginTransaction();
             foreach ($newsData as $news) {
-                if (!isset($news['id'])) {
-                    $summary['failed']++;
-                    continue;
-                }
+                // Find existing news by ID
+                $newsModel = $existingNews[$news['id']] ?? null;
 
-                $id = $news['id'];
-                
-                // If body has only id, delete it (and its artifacts)
+                // If only ID is provided → delete
                 if (count($news) === 1) {
-                    $newsModel = News::find($id);
                     if ($newsModel) {
-                        // Delete associated artifacts first
                         $newsModel->artifacts()->delete();
                         $newsModel->delete();
                         $summary['deleted']++;
@@ -47,7 +45,7 @@ class NewsSyncController extends Controller
                     continue;
                 }
 
-                // Map data from request to news model attributes
+                // Prepare data once
                 $data = [
                     'title' => $news['title'] ?? null,
                     'summary' => $news['summary'] ?? null,
@@ -58,13 +56,14 @@ class NewsSyncController extends Controller
                     'is_featured' => $news['is_featured'] ?? false,
                 ];
 
-                $newsModel = News::updateOrCreate(
-                    ['id' => $id],
-                    $data
-                );
+                if ($newsModel) {
+                    $newsModel->update($data);
+                } else {
+                    $newsModel = News::create($data);
+                }
 
                 // Sync artifacts if provided
-                if (isset($news['artifacts']) && is_array($news['artifacts'])) {
+                if (!empty($news['artifacts']) && is_array($news['artifacts'])) {
                     $this->syncArtifacts($newsModel, $news['artifacts']);
                 }
 
