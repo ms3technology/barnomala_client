@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\TeacherSyncController;
 use App\Http\Controllers\Api\StaffSyncController;
 use App\Http\Controllers\Api\CommitteeSyncController;
 use App\Http\Controllers\Api\NoticeSyncController;
+use App\Http\Controllers\Api\NewsSyncController;
 use App\Http\Controllers\Api\GallerySyncController;
 use App\Http\Controllers\Api\FileUploadController;
 use App\Http\Controllers\Api\TransferExportController;
@@ -18,6 +19,7 @@ Route::middleware('api.token')->group(function () {
     Route::post('staff/sync', [StaffSyncController::class, 'sync']);
     Route::post('committees/sync', [CommitteeSyncController::class, 'sync']);
     Route::post('notices/sync', [NoticeSyncController::class, 'sync']);
+    Route::post('news/sync', [NewsSyncController::class, 'sync']);
     Route::post('galleries/sync', [GallerySyncController::class, 'sync']);
     Route::post('transfer/all', [DataTransferController::class, 'transferAll'])->name('api.transfer.all');
     Route::post('setup/default-website', [DataTransferController::class, 'setupDefaultWebsite'])->name('api.setup.default-website');
@@ -36,5 +38,6 @@ Route::prefix('barnomala/v1')->group(function () {
     Route::get('governing-body', [TransferExportController::class, 'governingBody']);
     Route::get('options', [TransferExportController::class, 'options']);
     Route::get('notices', [NoticeSyncController::class, 'index']);
+    Route::get('news', [NewsSyncController::class, 'index']);
     Route::get('galleries', [GallerySyncController::class, 'index']);
 });

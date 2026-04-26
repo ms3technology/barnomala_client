@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Notice;
-use App\Models\NoticeArtifact;
+use App\Models\News;
+use App\Models\NewsArtifact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class NoticeSyncController extends Controller
+class NewsSyncController extends Controller
 {
     public function sync(Request $request)
     {
-        $noticesData = $request->input('notices', []);
+        $newsData = $request->input('news', []);
         
-        if (!is_array($noticesData)) {
-            $noticesData = json_decode($request->getContent(), true)['notices'] ?? [];
+        if (!is_array($newsData)) {
+            $newsData = json_decode($request->getContent(), true)['news'] ?? [];
         }
 
         $summary = [
@@ -27,43 +27,45 @@ class NoticeSyncController extends Controller
 
         try {
             DB::beginTransaction();
-            foreach ($noticesData as $notice) {
-                if (!isset($notice['id'])) {
+            foreach ($newsData as $news) {
+                if (!isset($news['id'])) {
                     $summary['failed']++;
                     continue;
                 }
 
-                $id = $notice['id'];
+                $id = $news['id'];
                 
                 // If body has only id, delete it (and its artifacts)
-                if (count($notice) === 1) {
-                    $noticeModel = Notice::find($id);
-                    if ($noticeModel) {
+                if (count($news) === 1) {
+                    $newsModel = News::find($id);
+                    if ($newsModel) {
                         // Delete associated artifacts first
-                        $noticeModel->artifacts()->delete();
-                        $noticeModel->delete();
+                        $newsModel->artifacts()->delete();
+                        $newsModel->delete();
                         $summary['deleted']++;
                     }
                     continue;
                 }
 
-                // Map data from request to notice model attributes
+                // Map data from request to news model attributes
                 $data = [
-                    'title' => $notice['title'] ?? null,
-                    'content' => $notice['content'] ?? null,
-                    'published_at' => $notice['published_at'] ?? null,
-                    'is_active' => $notice['is_active'] ?? true,
-                    'is_urgent' => $notice['is_urgent'] ?? false,
+                    'title' => $news['title'] ?? null,
+                    'summary' => $news['summary'] ?? null,
+                    'content' => $news['content'] ?? null,
+                    'published_at' => $news['published_at'] ?? null,
+                    'image_json' => $news['image_json'] ?? null,
+                    'is_active' => $news['is_active'] ?? true,
+                    'is_featured' => $news['is_featured'] ?? false,
                 ];
 
-                $noticeModel = Notice::updateOrCreate(
+                $newsModel = News::updateOrCreate(
                     ['id' => $id],
                     $data
                 );
 
                 // Sync artifacts if provided
-                if (isset($notice['artifacts']) && is_array($notice['artifacts'])) {
-                    $this->syncArtifacts($noticeModel, $notice['artifacts']);
+                if (isset($news['artifacts']) && is_array($news['artifacts'])) {
+                    $this->syncArtifacts($newsModel, $news['artifacts']);
                 }
 
                 $summary['updated']++;
@@ -77,7 +79,7 @@ class NoticeSyncController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Notice Sync Error: ' . $e->getMessage());
+            Log::error('News Sync Error: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => 'Sync failed',
@@ -86,25 +88,25 @@ class NoticeSyncController extends Controller
         }
     }
 
-    private function syncArtifacts(Notice $notice, array $artifacts)
+    private function syncArtifacts(News $news, array $artifacts)
     {
         $processedIds = [];
 
         foreach ($artifacts as $artifact) {
             // If only id is provided, delete the artifact
             if (isset($artifact['id']) && count($artifact) === 1) {
-                NoticeArtifact::where('id', $artifact['id'])
-                    ->where('notice_id', $notice->id)
+                NewsArtifact::where('id', $artifact['id'])
+                    ->where('news_id', $news->id)
                     ->delete();
                 continue;
             }
 
             // Upsert artifact by id
             if (isset($artifact['id'])) {
-                $artifactModel = NoticeArtifact::updateOrCreate(
+                $artifactModel = NewsArtifact::updateOrCreate(
                     ['id' => $artifact['id']],
                     [
-                        'notice_id' => $notice->id,
+                        'news_id' => $news->id,
                         'file_path' => $artifact['file_path'] ?? null,
                         'file_name' => $artifact['file_name'] ?? null,
                         'file_type' => $artifact['file_type'] ?? null,
@@ -114,8 +116,8 @@ class NoticeSyncController extends Controller
                 $processedIds[] = $artifactModel->id;
             } else {
                 // Create new artifact without id
-                $artifactModel = NoticeArtifact::create([
-                    'notice_id' => $notice->id,
+                $artifactModel = NewsArtifact::create([
+                    'news_id' => $news->id,
                     'file_path' => $artifact['file_path'] ?? null,
                     'file_name' => $artifact['file_name'] ?? null,
                     'file_type' => $artifact['file_type'] ?? null,
@@ -129,15 +131,15 @@ class NoticeSyncController extends Controller
     public function index()
     {
         $perPage = request()->get('per_page', 15);
-        $notices = Notice::with('artifacts')->orderBy('published_at', 'desc')->paginate($perPage);
+        $news = News::with('artifacts')->orderBy('published_at', 'desc')->paginate($perPage);
         return response()->json([
             'status' => 'success',
-            'data' => $notices->items(),
+            'data' => $news->items(),
             'pagination' => [
-                'current_page' => $notices->currentPage(),
-                'per_page' => $notices->perPage(),
-                'total' => $notices->total(),
-                'last_page' => $notices->lastPage(),
+                'current_page' => $news->currentPage(),
+                'per_page' => $news->perPage(),
+                'total' => $news->total(),
+                'last_page' => $news->lastPage(),
             ]
         ]);
     }
