@@ -14,7 +14,7 @@
             <div class="group relative flex flex-col overflow-hidden rounded-2xl bg-slate-50 border border-slate-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                 <div class="block aspect-square overflow-hidden bg-slate-200">
                     @if($member->photo)
-                        <img src="{{ asset('storage/' . $member->photo) }}" 
+                        <img src="{{ $member->photo }}" 
                              alt="{{ $member->name }}" 
                              class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
                     @else

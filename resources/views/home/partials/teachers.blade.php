@@ -10,8 +10,6 @@
                 <div class="bg-white rounded-xl shadow-md overflow-hidden group hover:shadow-xl transition duration-300 border border-slate-100">
                     <div class="aspect-square overflow-hidden bg-slate-100">
                         @if($teacher->photo)
-                            <img src="{{ asset('storage/' . $teacher->photo) }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="{{ $teacher->teacher_name }}">
-                        @elseif($teacher->photo)
                             <img src="{{ $teacher->photo }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="{{ $teacher->teacher_name }}">
                         @else
                             <div class="w-full h-full flex items-center justify-center text-slate-300">

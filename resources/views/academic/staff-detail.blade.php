@@ -21,7 +21,7 @@
                         <!-- Profile Card -->
                         <div class="relative group rounded-4xl overflow-hidden shadow-2xl bg-slate-100 aspect-square">
                             @if($staff->photo)
-                                <img src="{{ asset('storage/' . $staff->photo) }}" 
+                                <img src="{{ $staff->photo }}" 
                                      alt="{{ $staff->name }}" 
                                      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                             @else

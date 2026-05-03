@@ -30,7 +30,7 @@
         <div class="relative w-full overflow-hidden">
             <div class="flex items-center gap-6 pb-8 animate-scroll whitespace-nowrap">
                 @forelse($galleryItems as $item)
-                    <div class="group relative min-w-70 md:min-w-[320px] aspect-square overflow-hidden rounded-3xl bg-slate-800 border border-white/5 shadow-2xl transition-all duration-700 hover:-translate-y-2">
+                    <div class="group relative min-w-70 md:min-w-[320px] h-80 overflow-hidden rounded-3xl bg-slate-800 border border-white/5 shadow-2xl transition-all duration-700 hover:-translate-y-2">
                         @if($item->type === 'photo')
                             <img src="{{ asset('storage/' . $item->image_path) }}" 
                                  alt="{{ $item->title }}" 
@@ -77,7 +77,7 @@
 
                 {{-- Duplicate items for seamless loop --}}
                 @foreach($galleryItems as $item)
-                    <div class="group relative min-w-70 md:min-w-[320px] aspect-square overflow-hidden rounded-3xl bg-slate-800 border border-white/5 shadow-2xl transition-all duration-700 hover:-translate-y-2">
+                    <div class="group relative min-w-70 md:min-w-[320px] h-80 overflow-hidden rounded-3xl bg-slate-800 border border-white/5 shadow-2xl transition-all duration-700 hover:-translate-y-2">
                         @if($item->type === 'photo')
                             <img src="{{ asset('storage/' . $item->image_path) }}" 
                                  alt="{{ $item->title }}" 
