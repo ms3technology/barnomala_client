@@ -33,7 +33,7 @@ class NewsSyncController extends Controller
             DB::beginTransaction();
             foreach ($newsData as $news) {
                 // Find existing news by ID
-                $newsModel = $existingNews[$news['id']] ?? null;
+                $newsModel = $existingNews[$news['id'] ?? null] ?? null;
 
                 // If only ID is provided → delete
                 if (count($news) === 1) {

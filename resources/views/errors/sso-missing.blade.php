@@ -38,8 +38,8 @@
 
     <script>
         window.signInWithBarnomala = function(url) {
-            const width = 600;
-            const height = 700;
+            const width = 500;
+            const height = 600;
             const left = (window.innerWidth - width) / 2;
             const top = (window.innerHeight - height) / 2;
 

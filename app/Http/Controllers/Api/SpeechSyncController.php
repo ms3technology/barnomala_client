@@ -32,7 +32,7 @@ class SpeechSyncController extends Controller
             DB::beginTransaction();
             foreach ($speechesData as $speech) {
                 // Find existing speech by ID
-                $speechModel = $existingSpeeches[$speech['id']] ?? null;
+                $speechModel = $existingSpeeches[$speech['id'] ?? null] ?? null;
 
                 // If only ID is provided → delete
                 if (count($speech) === 1) {

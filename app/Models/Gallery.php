@@ -26,4 +26,9 @@ class Gallery extends Model
     protected $casts = [
         'date' => 'date',
     ];
+
+    public static function getCategories()
+    {
+        return self::distinct()->pluck('category')->filter()->toArray();
+    }
 }

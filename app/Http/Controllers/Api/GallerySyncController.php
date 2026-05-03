@@ -32,7 +32,7 @@ class GallerySyncController extends Controller
             DB::beginTransaction();
             foreach ($galleriesData as $gallery) {
                 // Find existing gallery by ID
-                $galleryModel = $existingGalleries[$gallery['id']] ?? null;
+                $galleryModel = $existingGalleries[$gallery['id'] ?? null] ?? null;
 
                 // If only ID is provided → delete
                 if (count($gallery) === 1) {
@@ -88,6 +88,7 @@ class GallerySyncController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => $galleries->items(),
+            'categories' => Gallery::getCategories(),
             'pagination' => [
                 'current_page' => $galleries->currentPage(),
                 'per_page' => $galleries->perPage(),
