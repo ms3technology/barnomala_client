@@ -9,6 +9,7 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SSOController;
 use App\Http\Controllers\Admin\NoticeController as AdminNoticeController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\Admin\SpeechController as AdminSpeechController;
 use App\Http\Controllers\Admin\OptionController as AdminOptionController;
@@ -76,7 +77,7 @@ Route::get('/class-schedule', [PageController::class, 'classSchedule'])->name('a
 Route::get('/exam-schedule', [PageController::class, 'examSchedule'])->name('academic.exam-schedule');
 
 Route::get('/tuition-fees', [PageController::class, 'tuitionFees'])->name('student.tuition-fees');
-Route::get('/our-students', [PageController::class, 'students'])->name('student.students');
+Route::get('/students', [StudentController::class, 'index'])->name('students.index');
 Route::get('/student-uniform', [PageController::class, 'uniform'])->name('student.uniform');
 Route::get('/daily-activities', [PageController::class, 'activities'])->name('student.activities');
 Route::get('/mobile-banking', [PageController::class, 'mobileBanking'])->name('student.mobile-banking');

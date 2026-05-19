@@ -12,7 +12,7 @@
     @php
         $schoolTenantId = \App\Models\Option::where('option_key', 'institute.tenant.id')->value('option_value') 
             ?? trim(request()->getHost());
-        $portalLoginUrl = 'https://cloud.barnomala.com/sign-in-with-barnomala/' . rawurlencode($schoolTenantId !== '' ? $schoolTenantId : 'demo');
+        $portalLoginUrl = 'http://localhost:8000/sign-in-with-barnomala/?school_key=' . rawurlencode($schoolTenantId !== '' ? $schoolTenantId : 'demo');
     @endphp
     <main class="mx-auto flex min-h-screen w-full max-w-3xl items-center px-6 py-16">
             <section

@@ -21,8 +21,8 @@ return [
             ['label' => 'Committees', 'route' => 'committees.index'],
         ]],
         ['label' => 'Student', 'route' => 'teachers.index', 'children' => [
+            ['label' => 'Student', 'route' => 'students.index'],
             ['label' => 'Tution Fees', 'route' => 'student.tuition-fees'],
-            ['label' => 'Our Student', 'route' => 'student.students'],
             ['label' => 'Student Uniform', 'route' => 'student.uniform'],
             ['label' => 'Daily Activities', 'route' => 'student.activities'],
             ['label' => 'Mobile Banking', 'route' => 'student.mobile-banking'],

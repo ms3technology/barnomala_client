@@ -59,13 +59,14 @@ class SSOController extends Controller
         }
 
         // 4. Always login the single admin account
-        $adminEmail = env('CLIENT_ADMIN_EMAIL', 'admin@barnomala.com');
-        $user = User::where('email', $adminEmail)->first();
+        $name = $data['name'] ?? 'Admin';
+        $email = $data['email'] ?? env('ADMIN_EMAIL', 'admin@barnomala.com');
+        $user = User::where('email', $email)->first();
 
         if (!$user) {
             $user = User::create([
-                'name' => 'Admin',
-                'email' => $adminEmail,
+                'name' => $name,
+                'email' => $email,
                 'password' => bcrypt(str()->random(16)), // Random password since login is via SSO
                 'is_admin' => true,
             ]);

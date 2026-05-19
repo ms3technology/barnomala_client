@@ -170,7 +170,7 @@
     </div>
 
     <!-- Navigation Bar -->
-    <div class="relative z-50 bg-accent border-b border-white/10 shadow-lg">
+    <div class="relative z-60 bg-accent border-b border-white/10 shadow-lg">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="relative transition-all duration-300">
                 <div class="flex items-center justify-between h-10 md:h-12 px-2 md:px-4">
