@@ -1,13 +1,13 @@
 ---
 deployment:
   tasks:
-
     # Set deployment path
     - export APPPATH=../../laravel_app
     - export PUBLICPATH=../../public_html
 
     # === Create backend folder if not exists ===
     - /bin/mkdir -p $APPPATH
+    - /bin/rm -rf $APPPATH/database/migrations/* || true
 
     # === Copy backend folders ===
     - /bin/cp -R app $APPPATH
@@ -32,6 +32,7 @@ deployment:
     - /bin/cp -R public/.htaccess $PUBLICPATH || true
 
     # === Unzip the build.zip file to the public directory ===
+    - /bin/rm -rf $APPPATH/public/build/* || true
     - /bin/unzip -o public/build.zip -d $APPPATH/public || true
     - /bin/unzip -o public/build.zip -d $PUBLICPATH || true
 
