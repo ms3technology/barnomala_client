@@ -16,7 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'api.token' => \App\Http\Middleware\EnsureApiTokenIsValid::class,
         ]);
         $middleware->redirectTo(
-            guests: '/sso/login',
+            guests: '/login',
             users: '/admin'
         );
     })

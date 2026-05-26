@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class SSOController extends Controller
+class AuthController extends Controller
 {
     /**
      * Handle the tenant SSO login request from the Cloud Platform.
@@ -22,7 +22,7 @@ class SSOController extends Controller
         $signature = $request->query('signature');
 
         if (!$payload || !$signature) {
-            return response()->view('errors.sso-missing', [
+            return response()->view('login', [
                 'title' => 'Invalid SSO Request',
                 'message' => 'The SSO payload or signature is missing. Please start the login process again from Barnomala Platform Dashboard or School Settings.',
             ], 400);
@@ -33,7 +33,7 @@ class SSOController extends Controller
         
         if (!$secret) {
             Log::error('SSO Error: CLIENT_API_KEY is not configured.');
-            return response()->view('errors.sso-missing', [
+            return response()->view('login', [
                 'title' => 'SSO Configuration Missing',
                 'message' => 'The CLIENT_API_KEY is not configured. Please contact support.',
             ], 500);

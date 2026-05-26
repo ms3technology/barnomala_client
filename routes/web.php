@@ -7,7 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PageController;
-use App\Http\Controllers\SSOController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\NoticeController as AdminNoticeController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
@@ -28,7 +28,7 @@ Route::get('/up', function () {
 Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery.index');
 Route::get('/gallery/{gallery}', [PageController::class, 'galleryDetail'])->name('gallery.show');
 
-Route::get('/sso/login', [SSOController::class, 'login'])->name('sso.login');
+Route::get('/login', [AuthController::class, 'login'])->name('login');
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', function () {

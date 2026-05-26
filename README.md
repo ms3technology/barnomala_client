@@ -129,7 +129,7 @@ php artisan test
 - `/notices` and `/notices/{notice}` - Public notices
 - `/news` and `/news/{news}` - Public news
 - `/contact-us` - Contact page and form submission
-- `/sso/login` - SSO entry endpoint
+- `/login` - SSO entry endpoint
 - `/admin` - Admin dashboard (auth + verified)
 - `/admin/transfer` - Data transfer manager (legacy DB preview + WordPress API preview + teacher import)
 
