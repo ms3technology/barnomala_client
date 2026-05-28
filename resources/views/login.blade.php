@@ -16,11 +16,11 @@
 
 <body class="min-h-screen bg-linear-to-br from-slate-50 via-indigo-50/30 to-slate-100 text-slate-900 antialiased flex items-center justify-center p-4 sm:p-6">
     @php
-        $options = \App\Models\Option::whereIn('option_key', ['institute.tenant.id', 'institute.name', 'institute.logo.image_json'])
+        $options = \App\Models\Option::whereIn('option_key', ['institute.tenant.id', 'institute.branding.name', 'institute.logo.image_json'])
             ->pluck('option_value', 'option_key');
 
         $schoolTenantId = $options['institute.tenant.id'] ?? trim(request()->getHost());
-        $schoolName = $options['institute.name'] ?? config('app.name', 'Barnomala');
+        $schoolName = $options['institute.branding.name'] ?? config('app.name', 'Barnomala');
         $logoJson = json_decode($options['institute.logo.image_json'] ?? '', true);
         $logoUrl = isset($logoJson['url']) ? asset('storage/' . $logoJson['url']) : null;
 
