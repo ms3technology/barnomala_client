@@ -10,6 +10,14 @@
     $visitorCount = \App\Models\Option::get('site.visitor_count', 0);
     $facebook = $options['institute.social.facebook'] ?? '';
     $youtube = $options['institute.social.youtube'] ?? '';
+    $whatsapp = $options['institute.social.whatsapp'] ?? $phone;
+    $instagram = $options['institute.social.instagram'] ?? '';
+    $linkedin = $options['institute.social.linkedin'] ?? '';
+    $twitter = $options['institute.social.twitter'] ?? '';
+
+    if( str_starts_with($whatsapp, '01')){
+        $whatsapp = '+88' . $whatsapp;
+    }
 @endphp
 
 <footer class="footer-new mt-20">
@@ -27,9 +35,27 @@
             </a>
         @endif
 
-        @if($phone)
-            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $phone) }}" target="_blank" title="WhatsApp">
+        @if($whatsapp)
+            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $whatsapp) }}" target="_blank" title="WhatsApp">
                 <i class="fab fa-whatsapp"></i>
+            </a>
+        @endif
+
+        @if($instagram)
+            <a href="{{ $instagram }}" target="_blank" title="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+        @endif
+
+        @if($linkedin)
+            <a href="{{ $linkedin }}" target="_blank" title="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+        @endif
+
+        @if($twitter)
+            <a href="{{ $twitter }}" target="_blank" title="Twitter">
+                <i class="fab fa-twitter"></i>
             </a>
         @endif
     </div>

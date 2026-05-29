@@ -11,9 +11,9 @@
 @endpush
 
 @section('content')
-    <div class="max-w-4xl mx-auto">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-8 text-gray-900">
+    <div>
+        <div class="bg-white overflow-hidden">
+            <div class="px-16 py-8 text-gray-900">
                 <h1 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
                     <i class="fas fa-palette mr-3 text-indigo-600"></i>
                     Branding & Visuals
@@ -143,7 +143,6 @@
                     </div>
                 </label>
             </div>
-            <p class="text-xs text-slate-400">Recommended size: 1920x800px. Used in Full Width and Overlay styles.</p>
         </div>
     </div>
     </form>

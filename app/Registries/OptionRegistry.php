@@ -113,8 +113,25 @@ class OptionRegistry
                         'label' => 'Facebook Page',
                         'type' => 'url',
                     ],
+                    'institute.social.whatsapp' => [
+                        'label' => 'WhatsApp Number',
+                        'type' => 'text',
+                        'placeholder' => 'Enter WhatsApp number with country code, e.g. +8801XXXXXXXXX',
+                    ],
                     'institute.social.youtube' => [
                         'label' => 'YouTube Channel',
+                        'type' => 'url',
+                    ],
+                    'institute.social.instagram' => [
+                        'label' => 'Instagram Profile',
+                        'type' => 'url',
+                    ],
+                    'institute.social.linkedin' => [
+                        'label' => 'LinkedIn Profile',
+                        'type' => 'url',
+                    ],
+                    'institute.social.twitter' => [
+                        'label' => 'Twitter Profile',
                         'type' => 'url',
                     ],
                 ]

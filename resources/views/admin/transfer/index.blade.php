@@ -193,7 +193,7 @@
 
         <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
             @foreach($exportResources as $resource)
-                <span class="font-mono text-slate-700">GET /api/barnomala/v1/{{ $resource }}</span>
+                <span class="font-mono text-slate-700">GET /api/v1/{{ $resource }}</span>
             @endforeach
         </div>
     </div>

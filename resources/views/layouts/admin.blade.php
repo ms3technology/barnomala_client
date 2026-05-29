@@ -94,16 +94,6 @@
 
                     <div class="pt-4 pb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider px-4">System Settings</div>
 
-                    <a href="{{ route('admin.layout.index') }}" 
-                       class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.layout.*') ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                        <i class="fas fa-th-large w-5 mr-3"></i>
-                        Homepage Layout
-                    </a>
-                    <a href="{{ route('admin.demographics.index') }}" 
-                       class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.demographics.*') ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                        <i class="fas fa-users w-5 mr-3"></i>
-                        Demographics
-                    </a>
                     <a href="{{ route('admin.branding.index') }}" 
                        class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.branding.*') ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                         <i class="fas fa-palette w-5 mr-3"></i>
@@ -114,6 +104,18 @@
                        class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.settings.*') ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                         <i class="fas fa-university w-5 mr-3"></i>
                         Institution Settings
+                    </a>
+
+                    <a href="{{ route('admin.layout.index') }}" 
+                       class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.layout.*') ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fas fa-th-large w-5 mr-3"></i>
+                        Homepage Layout
+                    </a>
+                    
+                    <a href="{{ route('admin.demographics.index') }}" 
+                       class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.demographics.*') ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fas fa-users w-5 mr-3"></i>
+                        Demographics
                     </a>
 
                     <a href="{{ route('admin.transfer.index') }}"
