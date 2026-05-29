@@ -14,7 +14,11 @@
                     @forelse($teachers as $teacher)
                     <div class="group relative flex flex-col overflow-hidden rounded-2xl bg-slate-50 border border-slate-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                         <a href="{{ route('teachers.show', $teacher->id) }}" class="block aspect-square overflow-hidden bg-slate-200 grayscale hover:grayscale-0 transition-all duration-500">
-                            @if($teacher->photo)
+                            @if($teacher->gender == 'female')
+                                <img src="{{ asset('images/female-teacher.png') }}" 
+                                    alt="{{ $teacher->teacher_name }}" 
+                                    class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            @elseif($teacher->photo)
                                 <img src="{{ $teacher->photo }}" 
                                     alt="{{ $teacher->teacher_name }}" 
                                     class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
