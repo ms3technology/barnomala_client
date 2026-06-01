@@ -46,7 +46,7 @@ class OptionController extends Controller
     public function slider()
     {
         $option = Option::where('option_key', 'institute.branding.slider_json')->first();
-        $sliders = $option ? json_decode($option->option_value, true) ?: [] : [];
+        $sliders = $option ? (json_decode($option->option_value, true) ?: []) : [];
         
         $options = Option::whereIn('option_key', ['institute.hero.type'])->get()->pluck('option_value', 'option_key');
 
@@ -383,7 +383,7 @@ class OptionController extends Controller
             $oldOption = Option::where('option_key', 'institute.branding.logo_json')->first();
             if ($oldOption) {
                 $oldData = json_decode($oldOption->option_value, true);
-                if (isset($oldData['path'])) {
+                if (is_array($oldData) && isset($oldData['path'])) {
                     Storage::disk('public')->delete($oldData['path']);
                 }
             }
@@ -403,7 +403,7 @@ class OptionController extends Controller
             $oldOption = Option::where('option_key', 'institute.branding.banner_json')->first();
             if ($oldOption) {
                 $oldData = json_decode($oldOption->option_value, true);
-                if (isset($oldData['path'])) {
+                if (is_array($oldData) && isset($oldData['path'])) {
                     Storage::disk('public')->delete($oldData['path']);
                 }
             }
