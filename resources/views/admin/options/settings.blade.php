@@ -62,7 +62,7 @@
                                                 </div>
 
                                                 <input type="file" class="hidden"
-                                                       name="{{ $key }}"
+                                                       name="settings_image_{{ str_replace('.', '_', $key) }}"
                                                        id="{{ $key }}"
                                                        x-ref="photo"
                                                        x-on:change="

@@ -308,16 +308,17 @@ class OptionController extends Controller
         // Handle Image Uploads from Registry
         foreach ($registry as $category) {
             foreach ($category['options'] as $key => $meta) {
-                if ($meta['type'] === 'image' && $request->hasFile($key)) {
+                $inputName = "settings_image_" . str_replace('.', '_', $key);
+                if ($meta['type'] === 'image' && $request->hasFile($inputName)) {
                     $oldOption = Option::where('option_key', $key)->first();
                     if ($oldOption) {
                         $oldData = json_decode($oldOption->option_value, true);
-                        if (isset($oldData['path'])) {
+                        if (is_array($oldData) && isset($oldData['path'])) {
                             Storage::disk('public')->delete($oldData['path']);
                         }
                     }
 
-                    $path = $request->file($key)->store('settings', 'public');
+                    $path = $this->imageService->convertToWebp($request->file($inputName), 'settings');
                     Option::updateOrCreate(
                         ['option_key' => $key],
                         [

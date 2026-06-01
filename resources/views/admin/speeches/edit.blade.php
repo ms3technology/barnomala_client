@@ -59,7 +59,7 @@
 
             <!-- Right Column: Image Upload -->
             <div class="md:col-span-1">
-                <div class="bg-slate-50 rounded-lg border-2 border-dashed border-slate-200 p-4 flex flex-col items-center justify-center h-full min-h-100">
+                <div id="drop-area" class="bg-slate-50 rounded-lg border-2 border-dashed border-slate-200 p-4 flex flex-col items-center justify-center h-full min-h-100">
                     <div class="w-full text-center">
                         <input type="file" id="image-input" name="image" accept="image/*" class="hidden" onchange="previewImage(event)">
                         
@@ -81,8 +81,6 @@
 
                         <p class="text-xs text-slate-500 mb-3">or drag and drop</p>
                         <p class="text-xs text-slate-400">JPG, PNG, GIF up to 2MB</p>
-
-                        <input type="file" id="dropzone" name="image" accept="image/*" class="hidden" onchange="previewImage(event)">
                     </div>
                 </div>
             </div>
@@ -109,10 +107,10 @@ function previewImage(event) {
 }
 
 // Drag and drop
-const dropzone = document.getElementById('dropzone');
-if (dropzone) {
+const dropArea = document.getElementById('drop-area');
+if (dropArea) {
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        dropzone.addEventListener(eventName, preventDefaults, false);
+        dropArea.addEventListener(eventName, preventDefaults, false);
     });
     
     function preventDefaults(e) {
@@ -121,25 +119,28 @@ if (dropzone) {
     }
     
     ['dragenter', 'dragover'].forEach(eventName => {
-        dropzone.addEventListener(eventName, () => {
-            document.querySelector('.bg-slate-50').classList.add('border-indigo-400', 'bg-indigo-50');
+        dropArea.addEventListener(eventName, () => {
+            dropArea.classList.add('border-indigo-400', 'bg-indigo-50');
         });
     });
     
     ['dragleave', 'drop'].forEach(eventName => {
-        dropzone.addEventListener(eventName, () => {
-            document.querySelector('.bg-slate-50').classList.remove('border-indigo-400', 'bg-indigo-50');
+        dropArea.addEventListener(eventName, () => {
+            dropArea.classList.remove('border-indigo-400', 'bg-indigo-50');
         });
     });
     
-    dropzone.addEventListener('drop', handleDrop);
+    dropArea.addEventListener('drop', handleDrop);
     
     function handleDrop(e) {
         const dt = e.dataTransfer;
         const files = dt.files;
-        document.getElementById('image-input').files = files;
-        const event = { target: { files: files } };
-        previewImage(event);
+        if (files.length > 0) {
+            const input = document.getElementById('image-input');
+            input.files = files;
+            const event = { target: { files: files } };
+            previewImage(event);
+        }
     }
 }
 </script>

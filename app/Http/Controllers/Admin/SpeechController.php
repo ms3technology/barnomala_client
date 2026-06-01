@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class SpeechController extends Controller
 {
+    protected $imageService;
+
+    public function __construct(\App\Services\ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -92,12 +99,11 @@ class SpeechController extends Controller
 
         $imageJson = null;
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $path = $file->store('speeches', 'public');
+            $path = $this->imageService->convertToWebp($request->file('image'), 'speeches');
             $imageJson = [
-                'url' => asset('storage/' . $path),
+                'url' => \Illuminate\Support\Facades\Storage::url($path),
                 'path' => $path,
-                'name' => $file->getClientOriginalName(),
+                'name' => $request->file('image')->getClientOriginalName(),
             ];
             $validated['image_json'] = $imageJson;
         }
@@ -139,12 +145,16 @@ class SpeechController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $path = $file->store('speeches', 'public');
+            // Delete old image
+            if ($speech->image_json && isset($speech->image_json['path'])) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($speech->image_json['path']);
+            }
+
+            $path = $this->imageService->convertToWebp($request->file('image'), 'speeches');
             $validated['image_json'] = [
-                'url' => asset('storage/' . $path),
+                'url' => \Illuminate\Support\Facades\Storage::url($path),
                 'path' => $path,
-                'name' => $file->getClientOriginalName(),
+                'name' => $request->file('image')->getClientOriginalName(),
             ];
         }
 
