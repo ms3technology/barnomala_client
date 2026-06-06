@@ -80,9 +80,12 @@
                                                 </button>
                                             </div>
                                         @elseif($meta['type'] === 'boolean')
+                                            @php
+                                                $currentBoolean = $existingOptions->get($key)->option_value ?? ($meta['default'] ?? '1');
+                                            @endphp
                                             <select name="settings[{{ $key }}]" id="{{ $key }}" class="block w-full text-sm rounded-lg border border-slate-300 bg-white/80 backdrop-blur-sm px-4 py-2.5 text-slate-800 shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 hover:border-slate-400">
-                                                <option value="1" {{ ($existingOptions->get($key)->option_value ?? '') == '1' ? 'selected' : '' }}>Enabled</option>
-                                                <option value="0" {{ ($existingOptions->get($key)->option_value ?? '') == '0' ? 'selected' : '' }}>Disabled</option>
+                                                <option value="1" {{ $currentBoolean == '1' ? 'selected' : '' }}>Enabled</option>
+                                                <option value="0" {{ $currentBoolean == '0' ? 'selected' : '' }}>Disabled</option>
                                             </select>
                                         @elseif($meta['type'] === 'select')
                                             <select name="settings[{{ $key }}]" id="{{ $key }}" class="block w-full text-sm rounded-lg border border-slate-300 bg-white/80 backdrop-blur-sm px-4 py-2.5 text-slate-800 shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 hover:border-slate-400">

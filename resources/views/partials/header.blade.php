@@ -12,6 +12,9 @@
     $centerCode = $options['institute.identity.center_code'] ?? null;
     $logoUrl = $options['institute.branding.logo_json']['url'] ?? ($options['logo_url'] ?? asset('images/school-logo.png'));
     $headerBg = $options['institute.branding.header_bg'] ?? '#ffffff';
+    $showTopHeader = ! array_key_exists('institute.branding.show_top_header', (array) $options)
+        || (string) $options['institute.branding.show_top_header'] === '1'
+        || (bool) $options['institute.branding.show_top_header'] === true;
     $schoolTenantId = trim($options['institute.tenant.id'] ?? request()->getHost());
     $portalLoginUrl = 'https://cloud.barnomala.com/login?school=' . rawurlencode($schoolTenantId !== '' ? $schoolTenantId : 'demo');
 
@@ -30,6 +33,7 @@
 
 <header class="overflow-visible relative z-50 transition-colors duration-300" style="background-color: {{ $headerBg }};" x-data="{ mobileMenuOpen: false }">
     <!-- Top Contact Bar -->
+    @if($showTopHeader)
     <div class="bg-gray-800 text-white border-b border-white/10">
         <div class="max-w-[90%] mx-auto px-0 md:px-6 lg:px-8">
             <!-- Desktop: phone, email, address -->
@@ -100,6 +104,7 @@
             </div>
         </div>
     </div>
+    @endif
 
     <!-- Banner and Overlay Information -->
     <div class="max-w-[90%] mx-auto px-0 md:px-4 lg:px-8">

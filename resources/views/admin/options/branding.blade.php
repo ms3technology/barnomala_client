@@ -55,11 +55,39 @@
                         <div class="space-y-3">
                             <label class="block text-xs font-black text-slate-500 uppercase tracking-widest">Header Background</label>
                             <div class="flex items-center gap-4 p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
-                                <input type="color" name="settings[institute.branding.header_bg]" value="{{ $options['institute.branding.header_bg'] ?? '#ffffff' }}" 
+                                <input type="color" name="settings[institute.branding.header_bg]" value="{{ $options['institute.branding.header_bg'] ?? '#ffffff' }}"
                                        class="h-8 w-16 rounded cursor-pointer border-none bg-transparent">
                                 <span class="text-xs font-mono font-bold text-slate-600 uppercase">{{ $options['institute.branding.header_bg'] ?? '#ffffff' }}</span>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Top Header Bar Toggle -->
+                    <div class="pt-6 border-t border-slate-100">
+                        @php
+                            $showTopHeader = ($options['institute.branding.show_top_header'] ?? '1') === '1';
+                        @endphp
+                        <label for="institute.branding.show_top_header"
+                            class="flex items-center justify-between gap-4 p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-all">
+                            <div class="flex items-start gap-3 min-w-0">
+                                <span class="shrink-0 w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                                    <i class="fas fa-window-maximize"></i>
+                                </span>
+                                <div class="min-w-0">
+                                    <p class="text-xs font-black text-slate-500 uppercase tracking-widest">Top Header Bar</p>
+                                    <p class="text-sm font-semibold text-slate-700 mt-0.5">Show the dark contact strip (phone, email, social links, online apply)</p>
+                                </div>
+                            </div>
+                            <span class="relative inline-flex items-center shrink-0">
+                                <input type="hidden" name="settings[institute.branding.show_top_header]" value="0">
+                                <input type="checkbox" id="institute.branding.show_top_header"
+                                    name="settings[institute.branding.show_top_header]" value="1"
+                                    class="peer sr-only"
+                                    {{ $showTopHeader ? 'checked' : '' }}>
+                                <span class="w-11 h-6 bg-slate-300 rounded-full peer-checked:bg-indigo-600 transition-colors"></span>
+                                <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow transform peer-checked:translate-x-5 transition-transform"></span>
+                            </span>
+                        </label>
                     </div>
 
                     <!-- Banner Section -->
