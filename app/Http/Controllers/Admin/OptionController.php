@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Option;
 use App\Registries\OptionRegistry;
 use App\Services\ImageService;
+use App\Services\ThemeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -34,10 +35,21 @@ class OptionController extends Controller
     /**
      * Display branding management.
      */
-    public function branding()
+    public function branding(ThemeService $theme)
     {
-        $options = Option::where('option_key', 'like', 'institute.branding.%')->get()->pluck('option_value', 'option_key');
-        return view('admin.options.branding', compact('options'));
+        // Load branding keys (accent color, header bg, show_top_header, logo, banner, etc.)
+        $brandingOptions = Option::where('option_key', 'like', 'institute.branding.%')
+            ->get()->pluck('option_value', 'option_key');
+
+        // Load the keys the Section Designs card writes to (institute.theme.*)
+        // so its @foreach can read the currently selected value for each section.
+        $themeOptions = Option::where('option_key', 'like', 'institute.theme.%')
+            ->get()->pluck('option_value', 'option_key');
+
+        $options = $brandingOptions->union($themeOptions);
+
+        $themeSections = $theme->sections();
+        return view('admin.options.branding', compact('options', 'theme', 'themeSections'));
     }
 
     /**
@@ -47,10 +59,8 @@ class OptionController extends Controller
     {
         $option = Option::where('option_key', 'institute.branding.slider_json')->first();
         $sliders = $option ? (json_decode($option->option_value, true) ?: []) : [];
-        
-        $options = Option::whereIn('option_key', ['institute.hero.type'])->get()->pluck('option_value', 'option_key');
 
-        return view('admin.options.slider', compact('sliders', 'options'));
+        return view('admin.options.slider', compact('sliders'));
     }
 
     /**
@@ -375,7 +385,15 @@ class OptionController extends Controller
         $settings = $request->get('settings', []);
 
         foreach ($settings as $key => $value) {
-            Option::where('option_key', $key)->update(['option_value' => $value]);
+            Option::updateOrCreate(
+                ['option_key' => $key],
+                ['option_value' => (string) $value, 'value_type' => 'string']
+            );
+        }
+
+        // Flush the cached options map so subsequent reads see the new values.
+        if (function_exists('setting_forget')) {
+            setting_forget();
         }
 
         // Handle Logo Upload

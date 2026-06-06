@@ -9,12 +9,13 @@ use App\Models\Speech;
 use App\Models\Teacher;
 use App\Models\CommitteeMember;
 use App\Models\Gallery;
+use App\Services\ThemeService;
 
 class HomeController extends Controller
 {
     use BuildsPublicPageData;
 
-    public function index()
+    public function index(ThemeService $theme)
     {
         $publicData = $this->getPublicPageData();
         $options = $publicData['options'];
@@ -93,6 +94,7 @@ class HomeController extends Controller
             'generalCommitteeMembers' => $generalCommitteeMembers,
             'stats' => $stats,
             'quickLinks' => $quickLinks,
+            'theme' => $theme,
         ]));
     }
 }

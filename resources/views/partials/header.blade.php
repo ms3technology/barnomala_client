@@ -1,5 +1,5 @@
 @php
-    $bannerType = $options['institute.branding.banner_type'] ?? 'banner_with_overlay';
+    $bannerType = $theme->currentValue('banner_type');
     $bannerUrl = $options['institute.branding.banner_json']['url'] ?? ($options['logo_url'] ?? asset('images/banner.png'));
     $phone = $options['institute.contact.phone'] ?? ($options['phone'] ?? '01234-567890');
     $phone2 = $options['institute.contact.phone_extra'] ?? '01700-000000';
@@ -118,39 +118,7 @@
                 </a>
             </div>
 
-        <!-- 2. Banner Left and Info Right -->
-        @elseif ($bannerType === 'banner_split')
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6 bg-white">
-                <div class="overflow-hidden shadow-lg group w-full md:w-auto">
-                    <a href="{{ route('home') }}">
-                        <img src="{{ $bannerUrl }}" 
-                             alt="Institute Banner" 
-                             class="w-full h-auto object-contain transform transition-transform duration-700 group-hover:scale-105">
-                    </a>
-                </div>
-                <div class="flex md:flex-col gap-4 pb-4">
-                    <div class="flex items-center gap-2">
-                        <div class="w-7 h-7 md:w-12 md:h-12 rounded-full bg-indigo-600 flex items-center justify-center text-white shadow-md">
-                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                        </div>
-                        <div>
-                            <h4 class="text-[8px] md:text-xs font-bold text-indigo-900/50 uppercase tracking-widest">Call Us</h4>
-                            <p class="text-[8px] md:text-lg font-black text-indigo-900">{{ $phone }}</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="w-7 h-7 md:w-12 md:h-12 rounded-full bg-yellow-500 flex items-center justify-center text-indigo-950 shadow-md">
-                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        </div>
-                        <div>
-                            <h4 class="text-[8px] md:text-xs font-bold text-yellow-700/50 uppercase tracking-widest">Email Us</h4>
-                            <p class="text-[8px] md:text-lg font-black text-indigo-900">{{ $email }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        <!-- 3. Only Informations -->
+        <!-- 2. Only Informations -->
         @elseif ($bannerType === 'info_only' || $bannerType === 'banner_with_overlay')
             <div class="relative {{ $bannerType === 'banner_with_overlay' ? 'overflow-hidden shadow-2xl' : 'bg-white' }} py-4">
 
