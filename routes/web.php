@@ -25,6 +25,10 @@ Route::get('/up', function () {
     return redirect('/')->with('status', 'Application is up to date!');
 });
 
+Route::get('/health', function () {
+    return response()->json(['status' => 'ok']);
+});
+
 Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery.index');
 Route::get('/gallery/{gallery}', [PageController::class, 'galleryDetail'])->name('gallery.show');
 

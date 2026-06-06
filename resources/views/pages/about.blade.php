@@ -15,7 +15,7 @@
     <div class="absolute top-0 right-0 w-1/2 h-1/2 bg-indigo-50/50 rounded-full blur-3xl -mr-64 -mt-64"></div>
     <div class="absolute bottom-0 left-0 w-1/3 h-1/3 bg-blue-50/50 rounded-full blur-3xl -ml-32 -mb-32"></div>
 
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="mx-auto max-w-[90%] px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <!-- Image Side -->
             <div class="relative group">

@@ -1,4 +1,4 @@
-<div class="mx-auto max-w-7xl">
+<div class="mx-auto max-w-[90%]">
     @if (session('success'))
         <div class="border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-semibold text-emerald-700 shadow-sm">
             {{ session('success') }}

@@ -21,7 +21,7 @@
 @endphp
 
 <section class="py-16">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-[90%] px-4 sm:px-6 lg:px-8">
         <div class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
             <div class="rounded-4xl bg-[#002147] p-8 text-white shadow-2xl">
                 <p class="text-sm font-semibold uppercase tracking-[0.35em] text-amber-300">Contact</p>

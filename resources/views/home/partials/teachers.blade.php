@@ -1,4 +1,4 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 pb-20 font-bn reveal">
+<div class="max-w-[90%] mx-auto px-0 md:px-6 lg:px-8 mt-16 pb-20 font-bn reveal">
     <div class="flex items-center gap-4 mb-8">
         <h2 class="text-2xl font-bold text-gray-900">সম্মানিত শিক্ষকবৃন্দ</h2>
         <div class="flex-1 h-px bg-gray-200"></div>

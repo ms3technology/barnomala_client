@@ -4,7 +4,7 @@
 
 @section('content')
 <section class="py-16">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-[90%] px-4 sm:px-6 lg:px-8">
         <div>
             <p class="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">Academic Team</p>
             <h1 class="mt-4 text-4xl font-black text-slate-950">Our Dedicated Teachers</h1>

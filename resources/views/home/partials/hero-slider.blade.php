@@ -14,7 +14,7 @@
     }
 @endphp
 
-<div class="{{ $sliderDesign === 'overlay' && $isSliderOnly ? 'w-full mb-16' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-16' }}">
+<div class="{{ $sliderDesign === 'overlay' && $isSliderOnly ? 'w-full mb-16' : 'max-w-[90%] mx-auto px-0 md:px-6 lg:px-8 mt-8 mb-16' }}">
     <div class="flex flex-col lg:flex-row {{ $sliderDesign === 'overlay' && $isSliderOnly ? '' : 'gap-8' }}">
         
         <!-- Slider -->

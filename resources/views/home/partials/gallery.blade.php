@@ -49,7 +49,7 @@
         }
     </style>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[90%] mx-auto px-0 md:px-6 lg:px-8">
 
         <!-- Header -->
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8 mb-10 md:mb-12">

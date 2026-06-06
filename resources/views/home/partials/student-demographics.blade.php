@@ -1,5 +1,5 @@
 <section class="py-12 bg-white reveal">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[90%] mx-auto px-0 md:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-8">
             {{-- Left Side: Class-wise Grid (w-2/3) --}}
             <div class="w-full lg:w-2/3">

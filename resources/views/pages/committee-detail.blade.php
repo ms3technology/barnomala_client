@@ -4,7 +4,7 @@
 
 @section('content')
 <section class="py-16">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-[90%] px-4 sm:px-6 lg:px-8">
         <!-- Back Navigation -->
         <div class="mb-12">
             <a href="{{ route('committees.index') }}" class="group inline-flex items-center gap-2 text-slate-500 hover:text-accent font-bold text-sm transition-colors">

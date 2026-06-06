@@ -30,7 +30,7 @@
     }
 </style>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 font-bn reveal">
+<div class="max-w-[90%] mx-auto px-0 md:px-6 lg:px-8 mt-16 font-bn reveal">
     <!-- About Us Redesign -->
     <div class="relative overflow-hidden bg-white rounded-lg shadow-[0_32px_120px_-20px_rgba(30,41,59,0.08)] mb-20 group border border-slate-100">
         <!-- Decorative Background Elements -->
@@ -104,7 +104,7 @@
                             </span>
                         </div>
                         <div class="flex-1 overflow-hidden">
-                            <div class="p-4 space-y-3 overflow-y-auto h-full scrollbar-thin scrollbar-thumb-indigo-100 scrollbar-track-transparent">
+                            <div class="p-4 space-y-3 overflow-y-auto h-96 scrollbar-thin scrollbar-thumb-indigo-100 scrollbar-track-transparent">
                                 @foreach($notices as $notice)
                                     <div class="group/item border border-gray-100 bg-white rounded-xl p-4 hover:bg-indigo-50/80 hover:border-indigo-100 transition-all duration-300">
                                         <a href="{{ route('notices.show', $notice->id) }}" class="flex gap-4 items-start">

@@ -1,6 +1,6 @@
 @if($generalCommitteeMembers->isNotEmpty())
 <section class="py-16 bg-white">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-[90%] px-0 md:px-6 lg:px-8">
         <div class="flex items-center justify-between mb-12">
             <div>
                 <p class="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">Administration</p>
