@@ -182,7 +182,7 @@
                                         <div class="absolute inset-0 bg-indigo-600 rounded-full blur-lg opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
                                         <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-2xl mb-4 relative">
                                             <img src="{{ getImageUrl($speech) }}"
-                                                 class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition duration-700"
+                                                 class="w-full h-full object-cover transition duration-700"
                                                  alt="{{ $speech['name'] ?? $speech->name }}">
                                         </div>
                                     </div>

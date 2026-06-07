@@ -202,7 +202,7 @@
                                         <svg class="w-3 h-3 transform group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                     </div>
                                     <div class="absolute hidden group-hover:block top-full left-0 w-48 pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <div class="bg-white text-gray-800 shadow-2xl rounded-lg overflow-hidden border border-gray-100 transform origin-top scale-95 group-hover:scale-100 transition-all duration-300 border-t-2 border-t-yellow-500">
+                                        <div class="bg-white text-gray-800 shadow-2xl rounded-lg overflow-hidden border border-gray-100 transform origin-top scale-95 group-hover:scale-100 transition-all duration-300">
                                             @foreach ($item['children'] as $child)
                                                 <a href="{{ $child['url'] }}" 
                                                       class="block px-4 py-2 hover:bg-indigo-50 hover:text-indigo-600 transition-colors border-b border-gray-50 last:border-0 text-sm">
