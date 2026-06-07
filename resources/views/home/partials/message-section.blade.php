@@ -195,7 +195,7 @@
                                     @php
                                         $speechText = $speech['speech'] ?? $speech->speech;
                                     @endphp
-                                    <div class="max-h-52 overflow-y-auto scrollbar-hide text-slate-600 italic text-center px-4 leading-relaxed bg-white">
+                                    <div lang="bn" class="font-bn max-h-52 overflow-y-auto scrollbar-hide text-slate-600 text-center px-4 leading-relaxed bg-white">
                                         {{ $speechText }}
                                     </div>
                                     <div class="absolute bottom-0 left-0 right-0 h-8 bg-linear-to-t from-white to-transparent pointer-events-none opacity-0 group-hover/speech:opacity-100 transition-opacity"></div>

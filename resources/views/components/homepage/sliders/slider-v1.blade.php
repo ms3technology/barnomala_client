@@ -38,6 +38,9 @@
                             <span class="text-gray-300 text-xs md:text-sm font-medium tracking-wide">Featured</span>
                         </div>
                     @endif
+                    <h2 class="font-black text-white mb-2 leading-tight drop-shadow-2xl {{ $isSliderOnly ? 'text-xl md:text-3xl lg:text-5xl' : 'text-xl md:text-2xl' }}">
+                        {{ $slide['title'] ?? 'Institute Update' }}
+                    </h2>
                 </div>
             </div>
         </div>

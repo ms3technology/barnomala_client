@@ -20,11 +20,7 @@
                     <div class="sticky top-8 space-y-10">
                         <!-- Profile Card -->
                         <div class="relative group rounded-4xl overflow-hidden shadow-2xl bg-slate-100 aspect-square">
-                            @if($teacher->gender == 'female')
-                                <img src="{{ asset('images/female-teacher.png') }}" 
-                                     alt="{{ $teacher->teacher_name }}" 
-                                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                            @elseif($teacher->photo)
+                            @if($teacher->photo)
                                 <img src="{{ $teacher->photo }}" 
                                      alt="{{ $teacher->teacher_name }}" 
                                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
