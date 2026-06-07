@@ -5,9 +5,14 @@
         </div>
     @endif
 
-    @if ($errors->any())
+    @if (session('error'))
+        <div class="mt-4 border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700 shadow-sm">
+            {{ session('error') }}
+        </div>
+    @elseif ($errors->any())
         <div class="mt-4 border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700 shadow-sm">
             <p class="font-bold">Please fix the highlighted fields.</p>
+            <p class="mt-1">{{ $errors->first() }}</p>
         </div>
     @endif
 </div>

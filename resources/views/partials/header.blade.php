@@ -1,4 +1,5 @@
 @php
+    $theme = $theme ?? app(\App\Services\ThemeService::class);
     $bannerType = $theme->currentValue('banner_type');
     $bannerUrl = $options['institute.branding.banner_json']['url'] ?? ($options['logo_url'] ?? asset('images/banner.png'));
     $phone = $options['institute.contact.phone'] ?? ($options['phone'] ?? '01234-567890');
@@ -107,7 +108,7 @@
     @endif
 
     <!-- Banner and Overlay Information -->
-    <div class="max-w-[90%] mx-auto px-0 md:px-4 lg:px-8">
+    <div class="w-full md:w-[90%] mx-auto px-0 md:px-4 lg:px-8">
         <!-- 1. Only Banner Image -->
         @if ($bannerType === 'banner_only')
             <div class="relative group overflow-hidden shadow-2xl transition-all duration-500">
@@ -167,7 +168,7 @@
     <div class="relative z-60 bg-accent border-b border-white/10 shadow-lg">
         <nav class="max-w-[90%] mx-auto px-0 md:px-6 lg:px-8">
             <div class="relative transition-all duration-300">
-                <div class="flex items-center justify-between h-10 px-0 md:px-4">
+                <div class="flex items-center justify-between">
                     <!-- Mobile Menu Button -->
                     <div class="flex md:hidden">
                         <button @click="mobileMenuOpen = !mobileMenuOpen" 
@@ -189,13 +190,13 @@
                             <!-- Single Link -->
                             @if (empty($item['children']))
                                 <a href="{{ $item['url'] }}" 
-                                      class="px-3 py-1 uppercase tracking-widest text-white font-semibold transition-all rounded-md hover:bg-white/10 text-xs xl:text-sm">
+                                      class="px-3 py-2.5 uppercase tracking-widest text-white font-semibold transition-all hover:bg-white/15 text-xs xl:text-sm">
                                     {{ $item['label'] }}
                                 </a>
 
                             <!-- Dropdown -->
                             @else
-                                <div class="relative group px-3 py-1 cursor-pointer font-bold text-white transition-all rounded-md hover:bg-white/10 group text-xs xl:text-sm">
+                                <div class="relative group px-3 py-2.5 cursor-pointer font-bold text-white transition-all hover:bg-white/15 group text-xs xl:text-sm">
                                     <div class="flex items-center gap-1 uppercase tracking-widest font-semibold">
                                         <span>{{ $item['label'] }}</span>
                                         <svg class="w-3 h-3 transform group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -218,10 +219,10 @@
                     {{-- PORTAL LOGIN with Admin Panel reveal --}}
                     <div class="relative ml-4 flex group/login">                        
                         <a href="{{ route('admin.dashboard') }}"
-                           class="opacity-0 group-hover/login:opacity-100 px-3 py-1.5 text-white font-bold transition-all rounded-md hover:bg-white/5 text-sm hover:bg-indigo-800">
+                           class="opacity-0 group-hover/login:opacity-100 px-3 py-2.5 text-white font-bold transition-all hover:bg-white/15 text-sm hover:bg-indigo-800">
                             Web Panel
                         </a>
-                        <a href="{{ $portalLoginUrl }}" target="_blank" class="block px-3 py-1.5 text-white font-bold transition-all rounded-md hover:bg-white/5 text-sm">
+                        <a href="{{ $portalLoginUrl }}" target="_blank" class="block px-3 py-2.5 text-white font-bold transition-all hover:bg-white/15 text-sm">
                             PORTAL LOGIN
                         </a>
                     </div>

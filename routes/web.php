@@ -101,6 +101,7 @@ Route::get('/committees/{committee}', [PageController::class, 'committeeDetail']
 
 Route::get('/contact-us', [PageController::class, 'contact'])->name('contact.index');
 Route::get('/apply', [PageController::class, 'apply'])->name('apply.index');
+Route::post('/apply', [PageController::class, 'applySubmit'])->name('apply.submit');
 Route::post('/contact-us', [PageController::class, 'contactSubmit'])->name('contact.submit');
 
 Route::prefix('notices')->name('notices.')->group(function () {

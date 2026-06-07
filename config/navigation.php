@@ -32,6 +32,5 @@ return [
         ['label' => 'Gallery', 'route' => 'gallery.index', 'children' => []],
         ['label' => 'Contact', 'route' => 'contact.index', 'children' => []],
         // ['label' => 'Result', 'route' => 'results.index', 'children' => []],
-        // ['label' => 'Apply Online', 'route' => 'apply.index', 'children' => []],
     ],
 ];

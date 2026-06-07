@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\ThemeService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 
@@ -31,5 +32,7 @@ class AppServiceProvider extends ServiceProvider
             $instituteName = $options['institute.branding.name'] ?? config('app.name', 'Laravel');
             $view->with('instituteName', $instituteName);
         });
+
+        \Illuminate\Support\Facades\View::share('theme', app(ThemeService::class));
     }
 }
