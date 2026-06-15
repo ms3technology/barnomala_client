@@ -37,7 +37,6 @@
 
             @if ($notice->artifacts->isNotEmpty())
                 <section class="mt-10 border-t border-slate-200 pt-8">
-                    <h2 class="text-2xl font-black text-slate-950">Attached Files</h2>
                     <div class="mt-6 space-y-4">
                         @foreach ($notice->artifacts as $artifact)
                             <div class="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:flex-row md:items-center md:justify-between">

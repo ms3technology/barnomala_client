@@ -214,12 +214,18 @@
                                 </div>
                             @endif
                         @endforeach
+                        @if(!$showTopHeader)
+                            <a href="{{ $applyUrl }}" 
+                               class="px-3 py-2.5 uppercase tracking-widest text-white font-semibold transition-all hover:bg-white/15 text-xs xl:text-sm inline-flex items-center gap-1.5">
+                                Online Apply
+                            </a>
+                        @endif
                     </div>
                     
                     {{-- PORTAL LOGIN with Admin Panel reveal --}}
                     <div class="relative ml-4 flex group/login">                        
                         <a href="{{ route('admin.dashboard') }}"
-                           class="opacity-0 group-hover/login:opacity-100 px-3 py-2.5 text-white font-bold transition-all hover:bg-white/15 text-sm hover:bg-indigo-800">
+                           class="opacity-0 group-hover/login:opacity-100 px-3 py-2.5 text-white font-bold transition-all hover:bg-white/15 text-sm">
                             Web Panel
                         </a>
                         <a href="{{ $portalLoginUrl }}" target="_blank" class="block px-3 py-2.5 text-white font-bold transition-all hover:bg-white/15 text-sm">
@@ -264,8 +270,18 @@
                         </div>
                     @endif
                 @endforeach
-                <div class="pt-4 mt-4 border-t border-white/10">
-                    <a href="{{ $portalLoginUrl }}" target="_blank" class="block px-4 py-2 text-sm font-bold hover:bg-white/10 rounded-md transition-all">
+                
+                @if(!$showTopHeader)
+                    <a href="{{ $applyUrl }}" 
+                        class="uppercase block px-4 py-2 text-sm font-bold text-white hover:bg-white/10 rounded-md transition-all">
+                        Online Apply
+                    </a>
+                @endif
+                <div class="pt-4 mt-4 border-t border-white/10 flex gap-2">
+                    <a href="{{ route('admin.dashboard') }}" class="flex-1 block px-4 py-2 text-sm font-bold text-white hover:bg-white/10 rounded-md transition-all text-center">
+                        Web Panel
+                    </a>
+                    <a href="{{ $portalLoginUrl }}" target="_blank" class="flex-1 block px-4 py-2 text-sm font-bold text-white hover:bg-white/10 rounded-md transition-all text-center">
                         Portal Login
                     </a>
                 </div>
