@@ -214,6 +214,7 @@
                 <button @click="sidebarOpen = true" class="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 focus:outline-none lg:hidden mr-4 transition-colors">
                     <i class="fas fa-bars fa-lg"></i>
                 </button>
+
                 <div class="flex-1 flex items-center justify-between">
                     <div class="flex items-center space-x-3">
                         <div class="w-9 h-9 bg-linear-to-r from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center shadow-md lg:hidden">
