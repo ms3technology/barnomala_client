@@ -21,8 +21,7 @@ class PageController extends Controller
 {
     use BuildsPublicPageData;
 
-    // private const APPLICANT_API_BASE_URL = 'https://cloud.barnomala.com/api/v1';
-    private const APPLICANT_API_BASE_URL = 'http://localhost:8000/api/v1';
+    private const APPLICANT_API_BASE_URL = 'https://cloud.barnomala.com/api/v1';
 
     public function about(): View
     {
@@ -519,8 +518,7 @@ class PageController extends Controller
 
     private function getSchoolContext(): array
     {
-        // $schoolIdentifier = Option::where('option_key', 'institute.tenant.id')->value('option_value');
-        $schoolIdentifier = 3;
+        $schoolIdentifier = Option::where('option_key', 'institute.tenant.id')->value('option_value');
         $schoolIdentifier = (int) $schoolIdentifier;
 
         if ($schoolIdentifier !== null && $schoolIdentifier !== '') {

@@ -61,10 +61,8 @@
                             <span class="text-xs font-mono font-bold text-slate-600 uppercase">{{ $options['institute.branding.header_bg'] ?? '#ffffff' }}</span>
                         </div>
                     </div>
-                </div>
 
-                <!-- Top Header Bar Toggle -->
-                <div class="pt-6 border-t border-slate-100">
+                    <div class="pt-6 border-t border-slate-100">
                     @php
                         $showTopHeader = ($options['institute.branding.show_top_header'] ?? '1') === '1';
                     @endphp
@@ -89,6 +87,7 @@
                             <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow transform peer-checked:translate-x-5 transition-transform"></span>
                         </span>
                     </label>
+                </div>
                 </div>
 
                 <!-- Banner Section -->
@@ -180,15 +179,11 @@
                     <i class="fas fa-palette mr-3 text-indigo-600"></i>
                     Section Designs
                 </h2>
-                <p class="text-xs text-slate-500 font-medium mb-6">
-                    Switch the visual design of dynamic homepage sections. Dropdowns are auto-generated from
-                    <code class="font-mono text-indigo-600">config/themes.php</code> — add a new section there to expose it here.
-                </p>
 
                 @if(empty($themeSections))
                     <p class="text-sm text-slate-500 italic">No theme sections registered.</p>
                 @else
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         @foreach($themeSections as $sectionKey => $section)
                             @php
                                 $optionKey    = $theme->optionKey($sectionKey);
@@ -208,14 +203,13 @@
                                 </label>
                                 <select id="{{ $optionKey }}"
                                     name="settings[{{ $optionKey }}]"
-                                    class="w-full border-slate-300 rounded-lg text-sm font-semibold text-slate-700 focus:ring-indigo-500 focus:border-indigo-500">
+                                    class="w-full p-2 border-slate-300 rounded-lg text-sm font-semibold text-slate-700 focus:ring-indigo-500 focus:border-indigo-500">
                                     @foreach($available as $valueKey => $valueLabel)
                                         <option value="{{ $valueKey }}" {{ (string) $currentValue === (string) $valueKey ? 'selected' : '' }}>
                                             {{ $valueLabel }}
                                         </option>
                                     @endforeach
                                 </select>
-                                <p class="text-[10px] text-slate-400 font-mono">key: {{ $optionKey }}@if($isDesign) · component: homepage.{{ \Illuminate\Support\Str::plural($sectionKey) }}.{ {{ $currentValue }} }@endif</p>
                             </div>
                         @endforeach
                     </div>
