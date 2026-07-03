@@ -72,7 +72,7 @@ class HomeController extends Controller
             ['label' => 'Students', 'icon' => 'user-graduate', 'color' => 'bg-green-600', 'url' => '/students'],
             ['label' => 'Teachers', 'icon' => 'user', 'color' => 'bg-orange-500', 'url' => '/teachers'],
             ['label' => 'Attendance', 'icon' => 'check', 'color' => 'bg-blue-600', 'url' => '/attendance'],
-            ['label' => 'Result', 'icon' => 'bolt', 'color' => 'bg-red-600', 'url' => '/results'],
+            ['label' => 'Result', 'icon' => 'bolt', 'color' => 'bg-red-600', 'url' => '/result'],
             ['label' => 'Routine', 'icon' => 'bell', 'color' => 'bg-green-600', 'url' => '/routine'],
             ['label' => 'Syllabus', 'icon' => 'book', 'color' => 'bg-orange-500', 'url' => '/syllabus'],
             ['label' => 'Academic Calendar', 'icon' => 'calendar', 'color' => 'bg-blue-600', 'url' => '/academic-calendar'],

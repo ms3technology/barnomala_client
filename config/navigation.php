@@ -27,10 +27,10 @@ return [
             ['label' => 'Daily Activities', 'route' => 'student.activities'],
             ['label' => 'Mobile Banking', 'route' => 'student.mobile-banking'],
         ]],
+        ['label' => 'Result', 'route' => 'result.index', 'children' => []],
         ['label' => 'Notice', 'route' => 'notices.index', 'children' => []],
         ['label' => 'News', 'route' => 'news.index', 'children' => []],
         ['label' => 'Gallery', 'route' => 'gallery.index', 'children' => []],
         ['label' => 'Contact', 'route' => 'contact.index', 'children' => []],
-        // ['label' => 'Result', 'route' => 'results.index', 'children' => []],
     ],
 ];

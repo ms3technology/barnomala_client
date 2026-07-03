@@ -66,10 +66,6 @@
                         </svg>
                         Sign in with Barnomala Account
                     </button>
-                    
-                    <p class="mt-3.5 text-xs text-slate-400">
-                        One-click passwordless authentication portal
-                    </p>
                 </div>
             </div>
 

@@ -4,7 +4,6 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "postbuild": "powershell Compress-Archive -Path public/build -DestinationPath public/build.zip -Force",
         "dev": "vite"
     },
     "devDependencies": {
