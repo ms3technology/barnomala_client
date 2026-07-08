@@ -24,13 +24,6 @@
             @csrf
             
             <div class="space-y-6">
-                <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 mb-6">
-                    <p class="text-sm text-indigo-700">
-                        Toggle visibility of various sections on your homepage. 
-                        To show a section, check the box. To hide it, uncheck.
-                    </p>
-                </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                     @php
                         $sections = [

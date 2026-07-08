@@ -33,7 +33,7 @@ return [
     */
 
     'slider_type' => [
-        'label'      => 'Hero Slider Type',
+        'label'      => 'Slider Type',
         'option_key' => 'institute.theme.slider_type',
         'type'       => 'option',
         'default'    => 'slider_with_notice',

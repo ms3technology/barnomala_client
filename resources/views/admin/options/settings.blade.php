@@ -28,7 +28,7 @@
                 @endforeach
             </div>
 
-            <form id="settings-form" action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
+            <form id="settings-form" action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data" novalidate>
                 @csrf
 
                 <div class="space-y-12">
