@@ -40,7 +40,6 @@ return [
         'options'    => [
             'banner_only'         => 'Banner Only',
             'info_only'           => 'Info Only',
-            'banner_with_overlay' => 'Banner with Info Overlay',
         ],
     ],
 

@@ -9,7 +9,6 @@ use App\Models\Notice;
 use App\Models\NoticeArtifact;
 use App\Models\Option;
 use App\Models\Speech;
-use App\Registries\OptionRegistry;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -44,17 +43,8 @@ class WordPressTransferService
             &$speechesCreated,
             &$speechesUpdated
         ): void {
-            foreach (OptionRegistry::getRegistration() as $category) {
-                foreach (($category['options'] ?? []) as $key => $meta) {
-                    $existing = Option::query()->where('option_key', $key)->exists();
-                    Option::set($key, $this->getSampleOptionValue($key, (string) ($meta['type'] ?? 'text')));
-
-                    if ($existing) {
-                        $optionsUpdated++;
-                    } else {
-                        $optionsCreated++;
-                    }
-                }
+            foreach ($this->getSampleOptions() as $key => $value) {
+                Option::set($key, $value);
             }
 
             $sliderOptionExists = Option::query()->where('option_key', 'institute.branding.slider_json')->exists();
@@ -748,7 +738,7 @@ class WordPressTransferService
         ];
     }
 
-    private function getSampleOptionValue(string $key, string $type): mixed
+    private function getSampleOptions(): array
     {
         $staticLogo = [
             'url' => asset('images/default-logo.png'),
@@ -756,7 +746,8 @@ class WordPressTransferService
             'provider' => 'static',
         ];
 
-        return match ($key) {
+        return [
+            'site.vistor_count' => 100,
             'institute.branding.name' => 'New School Name',
             'institute.branding.show_top_header' => 1,
             'institute.branding.logo_json' => $staticLogo,
@@ -770,13 +761,14 @@ class WordPressTransferService
             'institute.contact.email' => 'info@barnomala.edu.bd',
             'institute.contact.website' => 'https://example.com',
             'institute.contact.map_link' => 'https://maps.google.com/?q=23.8103,90.4125',
+            'institute.footer.text' => 'পরিপূর্ণ ডিজিটালাইজেশনে ডায়নামিক ওয়েব সাইট উন্নয়ন চলছে। শীঘ্রই পরিপূর্ণ ওয়েবসাইট দেখতে পাবেন। আশা করি এর মাধ্যমে বিদ্যালয়ের সামগ্রিক ব্যবস্থাপনা পরিপূর্ণ ডিজিটালাইজেশন হবে। এবং সকলেই উপকৃত হবেন।',
+            'institute.social.facebook' => '#',
+            'institute.social.youtube' => '#',
+            'speech.row.1.config' => '2 items',
             'institute.about.title' => 'About Our Institute',
             'institute.about.side_panel_type' => 'notice',
             'institute.about.button_text' => 'Read More',
             'institute.about.text' => 'আমাদের শিক্ষা প্রতিষ্ঠান একটি ঐতিহ্যবাহী বিদ্যাপীঠ। দীর্ঘ পথচলায় আমরা অসংখ্য মেধাবী শিক্ষার্থী উপহার দিয়েছি যারা দেশ ও দশের কল্যাণে নিয়োজিত। আমাদের লক্ষ্য হলো শিক্ষার্থীদের সুপ্ত প্রতিভা বিকাশে সহায়তা করা এবং তাদের সুনাগরিক হিসেবে গড়ে তোলা।',
-            'institute.footer.text' => 'পরিপূর্ণ ডিজিটালাইজেশনে ডায়নামিক ওয়েব সাইট উন্নয়ন চলছে। শীঘ্রই পরিপূর্ণ ওয়েবসাইট দেখতে পাবেন। আশা করি এর মাধ্যমে বিদ্যালয়ের সামগ্রিক ব্যবস্থাপনা পরিপূর্ণ ডিজিটালাইজেশন হবে। এবং সকলেই উপকৃত হবেন।',
-            'institute.social.facebook' => '#',
-            'institute.social.youtube' => '#',
             'institute.about.image_json' => [
                 'url' => asset('images/about-image.webp'),
                 'path' => 'images/about-image.webp',
@@ -832,14 +824,7 @@ class WordPressTransferService
                 'Christian' => 0,
                 'Buddhism' => 0
             ],
-            default => match ($type) {
-                'json', 'object', 'array' => [],
-                'integer', 'int' => 0,
-                'float', 'double' => 0.0,
-                'boolean', 'bool' => false,
-                default => '',
-            },
-        };
+        ];
     }
 
     private function getOptionMapForSpeechTransfer(): array
