@@ -32,17 +32,6 @@ return [
     |
     */
 
-    'slider' => [
-        'label'      => 'Hero Slider',
-        'option_key' => 'institute.theme.slider_design',
-        'type'       => 'design',
-        'default'    => 'slider-v1',
-        'designs'    => [
-            'slider-v1' => 'Classic (Compact)',
-            'slider-v2' => 'Overlay (Netflix style)',
-        ],
-    ],
-
     'slider_type' => [
         'label'      => 'Hero Slider Type',
         'option_key' => 'institute.theme.slider_type',

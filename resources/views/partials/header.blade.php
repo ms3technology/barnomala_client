@@ -1,7 +1,7 @@
 @php
     $theme = $theme ?? app(\App\Services\ThemeService::class);
     $bannerType = $theme->currentValue('banner_type');
-    $bannerUrl = $options['institute.branding.banner_json']['url'] ?? ($options['logo_url'] ?? asset('images/banner.png'));
+    $bannerUrl = $options['institute.branding.banner_json']['url'] ?? ($options['logo_url']);
     $phone = $options['institute.contact.phone'] ?? ($options['phone'] ?? '01234-567890');
     $phone2 = $options['institute.contact.phone_extra'] ?? '01700-000000';
     $email = $options['institute.contact.email'] ?? ($options['email'] ?? 'info@school.edu.bd');
@@ -11,7 +11,7 @@
     $estd = $options['institute.identity.established_year'] ?? ($options['institute.estd_year'] ?? '1995');
     $instituteCode = $options['institute.identity.code'] ?? null;
     $centerCode = $options['institute.identity.center_code'] ?? null;
-    $logoUrl = $options['institute.branding.logo_json']['url'] ?? ($options['logo_url'] ?? asset('images/school-logo.png'));
+    $logoUrl = $options['institute.branding.logo_json']['url'] ?? ($options['logo_url'] ?? asset('images/default-logo.png'));
     $headerBg = $options['institute.branding.header_bg'] ?? '#ffffff';
     $showTopHeader = ! array_key_exists('institute.branding.show_top_header', (array) $options)
         || (string) $options['institute.branding.show_top_header'] === '1'

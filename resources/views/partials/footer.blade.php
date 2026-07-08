@@ -101,7 +101,7 @@
 
             <!-- Right: Maintained By & Visitors -->
             <div class="footer-new-right">
-                <div class="visitor">{{ number_format($visitorCount) }}</div>
+                <div class="visitor">{{ number_format( floatval($visitorCount) ) }}</div>
                 <p>ONLINE VISITOR</p>
                 <br/>
                 <br/>

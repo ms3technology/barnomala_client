@@ -60,16 +60,10 @@ class WordPressTransferService
             $sliderOptionExists = Option::query()->where('option_key', 'institute.branding.slider_json')->exists();
             Option::set('institute.branding.slider_json', [
                 [
-                    'url' => asset('images/slider-1.jpg'),
-                    'path' => 'images/slider-1.jpg',
-                    'title' => 'Welcome to Barnomala',
-                    'order' => 1,
-                ],
-                [
-                    'url' => asset('images/slider-2.jpg'),
-                    'path' => 'images/slider-2.jpg',
+                    'url' => asset('images/default-slider.jpeg'),
+                    'path' => 'images/default-slider.jpeg',
                     'title' => 'A Better Future Through Education',
-                    'order' => 2,
+                    'order' => 1,
                 ],
             ]);
 
@@ -80,13 +74,6 @@ class WordPressTransferService
             }
 
             $noticeSamples = [
-                [
-                    'title' => '2026 সালের বার্ষিক পরীক্ষার ফলাফল সংক্রান্ত জরুরি বিজ্ঞপ্তি',
-                    'content' => 'আগামী ১০ই ডিসেম্বর ২০২৪ তারিখে বিদ্যালয়ের সকল শ্রেণীর বার্ষিক পরীক্ষার ফলাফল প্রকাশিত হবে। সকল শিক্ষার্থীকে উপস্থিত থাকার জন্য বলা হচ্ছে।',
-                    'published_at' => now()->subDays(2)->toDateString(),
-                    'is_active' => true,
-                    'is_urgent' => true,
-                ],
                 [
                     'title' => 'নতুন শিক্ষাবর্ষের ইউনিফর্ম ও পাঠ্যপুস্তক বিতরণ',
                     'content' => 'নতুন শিক্ষাবর্ষের সকল শিক্ষার্থীদের মধ্যে বিনামূল্যে পাঠ্যপুস্তক বিতরণ করা হবে। ১লা জানুয়ারি বই উৎসব পালন করা হবে।',
@@ -112,7 +99,7 @@ class WordPressTransferService
                     'title' => 'Sample Gallery 1',
                     'category' => 'sample',
                     'date' => now()->subDays(7)->toDateString(),
-                    'image_path' => 'images/slider-1.jpg',
+                    'image_path' => 'images/picture-1.jpg',
                     'description' => 'Sample gallery photo 1 for initial setup.',
                 ],
                 [
@@ -121,7 +108,7 @@ class WordPressTransferService
                     'title' => 'Sample Gallery 2',
                     'category' => 'sample',
                     'date' => now()->subDays(6)->toDateString(),
-                    'image_path' => 'images/slider-2.jpg',
+                    'image_path' => 'images/picture-2.jpg',
                     'description' => 'Sample gallery photo 2 for initial setup.',
                 ],
             ];
@@ -764,30 +751,32 @@ class WordPressTransferService
     private function getSampleOptionValue(string $key, string $type): mixed
     {
         $staticLogo = [
-            'url' => asset('images/school-logo.png'),
-            'path' => 'images/school-logo.png',
+            'url' => asset('images/default-logo.png'),
+            'path' => 'images/default-logo.png',
             'provider' => 'static',
         ];
 
         return match ($key) {
-            'institute.branding.name' => 'Barnomala Model School',
-            'institute.hero.type' => 'slider_with_notice',
-            'institute.branding.banner_type' => 'info_only',
+            'institute.branding.name' => 'New School Name',
+            'institute.branding.show_top_header' => 1,
+            'institute.branding.logo_json' => $staticLogo,
+            'institute.theme.slider_type' => 'slider_only',
+            'institute.theme.banner_type' => 'info_only',
             'institute.identity.established_year' => 2001,
             'institute.identity.eiin' => '123456',
             'institute.identity.code' => 'BMS-001',
-            'institute.contact.address' => 'সিলেট, সিলেট বিভাগ, বাংলাদেশ',
+            'institute.contact.address' => 'Sylhet, Bangladesh',
             'institute.contact.phone' => '+8801700000000',
             'institute.contact.email' => 'info@barnomala.edu.bd',
             'institute.contact.website' => 'https://example.com',
             'institute.contact.map_link' => 'https://maps.google.com/?q=23.8103,90.4125',
-            'institute.about.title' => 'আমাদের প্রতিষ্ঠান সম্পর্কে',
+            'institute.about.title' => 'About Our Institute',
+            'institute.about.side_panel_type' => 'notice',
             'institute.about.button_text' => 'Read More',
             'institute.about.text' => 'আমাদের শিক্ষা প্রতিষ্ঠান একটি ঐতিহ্যবাহী বিদ্যাপীঠ। দীর্ঘ পথচলায় আমরা অসংখ্য মেধাবী শিক্ষার্থী উপহার দিয়েছি যারা দেশ ও দশের কল্যাণে নিয়োজিত। আমাদের লক্ষ্য হলো শিক্ষার্থীদের সুপ্ত প্রতিভা বিকাশে সহায়তা করা এবং তাদের সুনাগরিক হিসেবে গড়ে তোলা।',
             'institute.footer.text' => 'পরিপূর্ণ ডিজিটালাইজেশনে ডায়নামিক ওয়েব সাইট উন্নয়ন চলছে। শীঘ্রই পরিপূর্ণ ওয়েবসাইট দেখতে পাবেন। আশা করি এর মাধ্যমে বিদ্যালয়ের সামগ্রিক ব্যবস্থাপনা পরিপূর্ণ ডিজিটালাইজেশন হবে। এবং সকলেই উপকৃত হবেন।',
             'institute.social.facebook' => '#',
             'institute.social.youtube' => '#',
-            'institute.branding.logo_json' => $staticLogo,
             'institute.about.image_json' => [
                 'url' => asset('images/about-image.webp'),
                 'path' => 'images/about-image.webp',
@@ -821,6 +810,35 @@ class WordPressTransferService
                 ['title' => 'BANBEIS', 'url' => 'https://www.banbeis.gov.bd'],
                 ['title' => 'Teachers Portal', 'url' => 'https://www.teachers.gov.bd'],
             ],
+            'institute.stats.classes_count' => 7,
+            'institute.stats.students_count' => 1200,
+            'institute.stats.teachers_count' => 20,
+            'institute.stats.staffs_count' => 4,
+            'institute.demographics.classes' => [
+                'Six' => 120,
+                'Seven' => 110,
+                'Eight' => 105,
+                'Nine' => 95,
+                'Ten' => 80,
+            ],
+            'institute.demographics.gender' => [
+                'Male' => 260,
+                'Female' => 250,
+                'Other' => 0
+            ],
+            'institute.demographics.religion' => [
+                'Islam' => 430,
+                'Hindu' => 80,
+                'Christian' => 0,
+                'Buddhism' => 0
+            ],
+            default => match ($type) {
+                'json', 'object', 'array' => [],
+                'integer', 'int' => 0,
+                'float', 'double' => 0.0,
+                'boolean', 'bool' => false,
+                default => '',
+            },
         };
     }
 
