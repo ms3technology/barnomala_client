@@ -19,7 +19,6 @@
         {{-- Branding & Visuals card --}}
         <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700 overflow-hidden">
             <div class="p-6 md:p-8">
-
                 <!-- Banner Section -->
                 @php
                     $logo = json_decode($options['institute.branding.logo_json'] ?? '{}', true);
@@ -38,7 +37,7 @@
                         <!-- Logo (3 cols) -->
                         <div class="md:col-span-3 space-y-3">
                             <label class="block text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Logo</label>
-                            <div class="relative group aspect-square bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-600 border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-2xl overflow-hidden flex items-center justify-center transition-all duration-300 hover:border-indigo-300 dark:hover:border-indigo-500 hover:shadow-lg"
+                            <div class="relative group aspect-4/3 bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-600 border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-2xl overflow-hidden flex items-center justify-center transition-all duration-300 hover:border-indigo-300 dark:hover:border-indigo-500 hover:shadow-lg"
                                 x-data="{
                                     logoPreview: '{{ isset($logo['url']) ? $logo['url'] : '' }}',
                                     handleLogoChange(e) {
@@ -47,11 +46,11 @@
                                     }
                                 }">
                                 <template x-if="logoPreview">
-                                    <img :src="logoPreview" class="max-w-full max-h-full object-contain p-4">
+                                    <img :src="logoPreview" class="max-w-full max-h-full object-contain p-2">
                                 </template>
                                 <template x-if="!logoPreview">
-                                    <div class="text-center p-4">
-                                        <i class="fas fa-image text-slate-300 dark:text-slate-500 text-3xl mb-2"></i>
+                                    <div class="text-center p-2">
+                                        <i class="fas fa-image text-slate-300 dark:text-slate-500 text-xl mb-1"></i>
                                         <p class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase">No Logo</p>
                                     </div>
                                 </template>
@@ -69,14 +68,14 @@
                         <!-- Banner (9 cols) -->
                         <div class="md:col-span-9 space-y-3">
                             <label class="block text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Main Banner</label>
-                            <div class="relative group min-h-70 w-full bg-linear-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600 border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-2xl overflow-hidden flex items-center justify-center transition-all duration-300 hover:border-indigo-300 dark:hover:border-indigo-500 hover:shadow-lg">
+                            <div class="relative group min-h-44 w-full bg-linear-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600 border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-2xl overflow-hidden flex items-center justify-center transition-all duration-300 hover:border-indigo-300 dark:hover:border-indigo-500 hover:shadow-lg">
                                 <template x-if="bannerPreview">
                                     <img :src="bannerPreview" class="w-full h-full object-cover">
                                 </template>
                                 <template x-if="!bannerPreview">
-                                    <div class="text-center p-8">
-                                        <div class="w-16 h-16 rounded-2xl bg-slate-200 dark:bg-slate-600 flex items-center justify-center mx-auto mb-3">
-                                            <i class="fas fa-mountain text-slate-400 dark:text-slate-500 text-2xl"></i>
+                                    <div class="text-center p-4">
+                                        <div class="w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-600 flex items-center justify-center mx-auto mb-2">
+                                            <i class="fas fa-mountain text-slate-400 dark:text-slate-500 text-lg"></i>
                                         </div>
                                         <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">No Banner Set</p>
                                         <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">Upload a banner image for your site header</p>
@@ -125,6 +124,20 @@
                                     <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md transform peer-checked:translate-x-6 peer-checked:shadow-lg transition-all duration-300"></span>
                                 </span>
                             </label>
+                        </div>                                   
+
+                        <!-- Side Panel Type -->
+                        <div class="bg-slate-50/50 dark:bg-slate-700/30 rounded-xl p-5 border border-slate-100 dark:border-slate-600">
+                            <label class="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <i class="fas fa-layout text-indigo-500"></i>
+                                About Side Panel Type
+                            </label>
+                            <select id="institute.about.side_panel_type"
+                                name="settings[institute.about.side_panel_type]"
+                                class="w-full px-3 py-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                                <option value="image" {{ ($options['institute.about.side_panel_type'] ?? 'image') === 'image' ? 'selected' : '' }}>Image</option>
+                                <option value="notice" {{ ($options['institute.about.side_panel_type'] ?? 'image') === 'notice' ? 'selected' : '' }}>Notice</option>
+                            </select>
                         </div>
 
                         @if(empty($themeSections))
@@ -215,6 +228,45 @@
                                             x-model="selectedColor"
                                             class="w-full pl-6 pr-3 py-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm font-mono uppercase focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- About Image -->
+                        <div class="bg-slate-50/50 dark:bg-slate-700/30 rounded-xl p-5 border border-slate-100 dark:border-slate-600">
+                            @php
+                                $aboutImage = json_decode($options['institute.about.image_json'] ?? '{}', true);
+                            @endphp
+                            <label class="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <i class="fas fa-image text-indigo-500"></i>
+                                About Image
+                            </label>
+                            <div x-data="{
+                                aboutPreview: '{{ $aboutImage['url'] ?? '' }}',
+                                handleAboutChange(e) {
+                                    const file = e.target.files[0];
+                                    if (file) this.aboutPreview = URL.createObjectURL(file);
+                                }
+                            }">
+                                <div class="relative group w-full bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-600 border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-2xl overflow-hidden flex items-center justify-center transition-all duration-300 hover:border-indigo-300 dark:hover:border-indigo-500 hover:shadow-lg"
+                                    style="min-height: 160px;">
+                                    <template x-if="aboutPreview">
+                                        <img :src="aboutPreview" class="max-w-full max-h-full object-contain p-4">
+                                    </template>
+                                    <template x-if="!aboutPreview">
+                                        <div class="text-center p-6">
+                                            <i class="fas fa-image text-slate-300 dark:text-slate-500 text-3xl mb-2"></i>
+                                            <p class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase">No Image</p>
+                                        </div>
+                                    </template>
+                                    <label class="absolute inset-0 bg-linear-to-t from-indigo-900/80 to-purple-900/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center cursor-pointer backdrop-blur-sm">
+                                        <div class="text-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                            <i class="fas fa-cloud-upload-alt text-xl text-white mb-1"></i>
+                                            <span class="block text-white text-[10px] font-black uppercase tracking-widest">Change Image</span>
+                                        </div>
+                                        <input type="file" name="about_image" class="hidden" accept="image/*"
+                                            @change="handleAboutChange">
+                                    </label>
                                 </div>
                             </div>
                         </div>

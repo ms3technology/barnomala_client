@@ -46,7 +46,11 @@ class OptionController extends Controller
         $themeOptions = Option::where('option_key', 'like', 'institute.theme.%')
             ->get()->pluck('option_value', 'option_key');
 
-        $options = $brandingOptions->union($themeOptions);
+        // Load about keys (side_panel_type, image_json, etc.)
+        $aboutOptions = Option::where('option_key', 'like', 'institute.about.%')
+            ->get()->pluck('option_value', 'option_key');
+
+        $options = $brandingOptions->union($themeOptions)->union($aboutOptions);
 
         $themeSections = $theme->sections();
         return view('admin.options.branding', compact('options', 'theme', 'themeSections'));
@@ -429,6 +433,26 @@ class OptionController extends Controller
             $path = $this->imageService->convertToWebp($request->file('banner'), 'branding');
             Option::updateOrCreate(
                 ['option_key' => 'institute.branding.banner_json'],
+                [
+                    'option_value' => json_encode(['url' => Storage::url($path), 'path' => $path]),
+                    'value_type' => 'json'
+                ]
+            );
+        }
+
+        // Handle About Image Upload
+        if ($request->hasFile('about_image')) {
+            $oldOption = Option::where('option_key', 'institute.about.image_json')->first();
+            if ($oldOption) {
+                $oldData = json_decode($oldOption->option_value, true);
+                if (is_array($oldData) && isset($oldData['path'])) {
+                    Storage::disk('public')->delete($oldData['path']);
+                }
+            }
+
+            $path = $this->imageService->convertToWebp($request->file('about_image'), 'about');
+            Option::updateOrCreate(
+                ['option_key' => 'institute.about.image_json'],
                 [
                     'option_value' => json_encode(['url' => Storage::url($path), 'path' => $path]),
                     'value_type' => 'json'

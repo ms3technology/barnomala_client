@@ -157,14 +157,6 @@
                         </div>
                         <span>Institution Settings</span>
                     </a>
-
-                    <a href="{{ route('admin.layout.index') }}" 
-                       class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.layout.*') ? 'bg-white/5 text-white' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
-                        <div class="w-7 h-7 flex items-center justify-center rounded-lg {{ request()->routeIs('admin.layout.*') ? 'bg-linear-to-r from-indigo-500 to-purple-500' : 'bg-slate-800/50' }} mr-3 shrink-0 transition-colors">
-                            <i class="fas fa-th-large text-sm"></i>
-                        </div>
-                        <span>Homepage Layout</span>
-                    </a>
                     
                     <a href="{{ route('admin.demographics.index') }}" 
                        class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.demographics.*') ? 'bg-white/5 text-white' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
@@ -172,6 +164,14 @@
                             <i class="fas fa-users text-sm"></i>
                         </div>
                         <span>Demographics</span>
+                    </a>
+
+                    <a href="{{ route('admin.layout.index') }}" 
+                       class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.layout.*') ? 'bg-white/5 text-white' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
+                        <div class="w-7 h-7 flex items-center justify-center rounded-lg {{ request()->routeIs('admin.layout.*') ? 'bg-linear-to-r from-indigo-500 to-purple-500' : 'bg-slate-800/50' }} mr-3 shrink-0 transition-colors">
+                            <i class="fas fa-th-large text-sm"></i>
+                        </div>
+                        <span>Homepage Layout</span>
                     </a>
 
                     <div class="pt-5 pb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider px-3">Other</div>

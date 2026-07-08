@@ -17,19 +17,6 @@ class OptionRegistry
                 'description' => 'Institution summary and about section image.',
                 'icon' => 'fas fa-info-circle',
                 'options' => [
-                    'institute.about.side_panel_type' => [
-                        'label' => 'About Side Panel Type',
-                        'type' => 'select',
-                        'options' => [
-                            'image' => 'Image',
-                            'notice' => 'Notice Side Panel',
-                        ],
-                        'default' => 'image',
-                    ],
-                    'institute.about.image_json' => [
-                        'label' => 'About Image',
-                        'type' => 'image',
-                    ],
                     'institute.about.title' => [
                         'label' => 'About Title',
                         'type' => 'text',
