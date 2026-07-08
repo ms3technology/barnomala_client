@@ -298,7 +298,7 @@
                             @if($enrollment['group'] ?? null)
                                 <div class="flex justify-between border-b pb-2">
                                     <span class="text-slate-500">Group</span>
-                                    <span class="font-semibold">{{ $enrollment['group'] }}</span>
+                                    <span class="font-semibold">{{ $enrollment['group']['name'] ?? $enrollment['group'] }}</span>
                                 </div>
                             @endif
 

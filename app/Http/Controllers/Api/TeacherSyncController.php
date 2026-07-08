@@ -54,7 +54,7 @@ class TeacherSyncController extends Controller
                     'permanent_address' => $teacher['permanent_address'] ?? null,
                     'gender' => $teacher['gender'] ?? null,
                     'priority_index' => $teacher['priority_index'] ?? 0,
-                    'photo' => $this->resolvePhotoUrl($teacher['photo'] ?? null),
+                    'photo' => $this->resolvePhotoUrl($teacher['photo'] ?? null) ?? '',
                     'teacher_code' => $teacher['teacher_code'] ?? null,
                     'phone' => $teacher['phone'] ?? null,
                     'email' => $teacher['email'] ?? null,
@@ -89,10 +89,10 @@ class TeacherSyncController extends Controller
         }
     }
 
-    private function resolvePhotoUrl(String $photoPath)
+    private function resolvePhotoUrl(?string $photoPath): string
     {
         if (!$photoPath) {
-            return null;
+            return '';
         }
 
         if (filter_var($photoPath, FILTER_VALIDATE_URL)) {
