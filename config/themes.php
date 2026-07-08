@@ -32,6 +32,18 @@ return [
     |
     */
 
+    'banner_type' => [
+        'label'      => 'Header Banner Type',
+        'option_key' => 'institute.theme.banner_type',
+        'type'       => 'option',
+        'default'    => 'banner_with_overlay',
+        'options'    => [
+            'banner_only'         => 'Banner Only',
+            'info_only'           => 'Info Only',
+            'banner_with_overlay' => 'Banner with Info Overlay',
+        ],
+    ],
+
     'slider_type' => [
         'label'      => 'Slider Type',
         'option_key' => 'institute.theme.slider_type',
@@ -39,19 +51,7 @@ return [
         'default'    => 'slider_with_notice',
         'options'    => [
             'slider_with_notice' => 'Slider with Notice Panel',
-            'slider_only'        => 'Slider Only (Full Width)',
-        ],
-    ],
-
-    'banner_type' => [
-        'label'      => 'Header Banner Type',
-        'option_key' => 'institute.theme.banner_type',
-        'type'       => 'option',
-        'default'    => 'banner_with_overlay',
-        'options'    => [
-            'banner_only'         => 'Banner Only (full image)',
-            'info_only'           => 'Info Only (logo + identity)',
-            'banner_with_overlay' => 'Banner with Info Overlay',
+            'slider_only'        => 'Slider Only',
         ],
     ],
 ];

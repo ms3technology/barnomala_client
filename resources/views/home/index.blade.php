@@ -36,8 +36,12 @@
             @include('home.partials.institute-info', ['options' => $options])
         @endif
 
-        @if($layout['message_section'] ?? true)
-            @include('home.partials.message-section', [
+        @include('home.partials.about-section', [
+            'options' => $options
+        ])
+
+        @if($layout['speech_section'] ?? true)
+            @include('home.partials.speech-section', [
                 'options' => $options,
                 'speeches' => $speeches
             ])

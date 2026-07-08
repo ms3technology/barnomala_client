@@ -786,7 +786,7 @@ class WordPressTransferService
                 'hero' => true,
                 'latest_news' => true,
                 'institute_info' => true,
-                'message_section' => true,
+                'speech_section' => true,
                 'stats_counter' => true,
                 'quick_links' => true,
                 'teachers' => false,

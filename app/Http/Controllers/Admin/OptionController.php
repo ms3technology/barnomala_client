@@ -232,7 +232,7 @@ class OptionController extends Controller
             'hero',
             'latest_news',
             'institute_info',
-            'message_section',
+            'speech_section',
             'stats_counter',
             'quick_links',
             'teachers',

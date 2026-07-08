@@ -124,20 +124,6 @@
                                     <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md transform peer-checked:translate-x-6 peer-checked:shadow-lg transition-all duration-300"></span>
                                 </span>
                             </label>
-                        </div>                                   
-
-                        <!-- Side Panel Type -->
-                        <div class="bg-slate-50/50 dark:bg-slate-700/30 rounded-xl p-5 border border-slate-100 dark:border-slate-600">
-                            <label class="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                                <i class="fas fa-layout text-indigo-500"></i>
-                                About Side Panel Type
-                            </label>
-                            <select id="institute.about.side_panel_type"
-                                name="settings[institute.about.side_panel_type]"
-                                class="w-full px-3 py-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
-                                <option value="image" {{ ($options['institute.about.side_panel_type'] ?? 'image') === 'image' ? 'selected' : '' }}>Image</option>
-                                <option value="notice" {{ ($options['institute.about.side_panel_type'] ?? 'image') === 'notice' ? 'selected' : '' }}>Notice</option>
-                            </select>
                         </div>
 
                         @if(empty($themeSections))
@@ -178,7 +164,21 @@
                                     @endforeach
                                 </div>
                             </div>
-                        @endif
+                        @endif                                                         
+
+                        <!-- Side Panel Type -->
+                        <div class="bg-slate-50/50 dark:bg-slate-700/30 rounded-xl p-5 border border-slate-100 dark:border-slate-600">
+                            <label class="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <i class="fas fa-layout text-indigo-500"></i>
+                                About Side Panel Type
+                            </label>
+                            <select id="institute.about.side_panel_type"
+                                name="settings[institute.about.side_panel_type]"
+                                class="w-full px-3 py-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                                <option value="image" {{ ($options['institute.about.side_panel_type'] ?? 'image') === 'image' ? 'selected' : '' }}>Image</option>
+                                <option value="notice" {{ ($options['institute.about.side_panel_type'] ?? 'image') === 'notice' ? 'selected' : '' }}>Notice</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="space-y-6">

@@ -14,12 +14,6 @@
     <div class="p-6 text-gray-900 border-b border-gray-200">
         <h1 class="text-2xl font-semibold mb-6">Homepage Layout Visibility</h1>
 
-        @if(session('success'))
-            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6" role="alert">
-                <p>{{ session('success') }}</p>
-            </div>
-        @endif
-
         <form id="layout-form" action="{{ route('admin.layout.update') }}" method="POST">
             @csrf
             
@@ -30,7 +24,7 @@
                             'hero' => 'Top Banner / Hero Slider',
                             'latest_news' => 'Latest News Ticker',
                             'institute_info' => 'Identity (EIIN, Center Code etc)',
-                            'message_section' => 'Message Section (Principal/Chairman Speeches)',
+                            'speech_section' => 'Speech Section (Principal/Chairman Speeches)',
                             'stats_counter' => 'Statistics Counter',
                             'quick_links' => 'Quick Links & Important Links',
                             'teachers' => 'Teachers Section',

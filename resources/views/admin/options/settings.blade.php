@@ -41,6 +41,7 @@
                             <div class="space-y-4">
                                 <div class="space-y-4 group bg-slate-50/50 dark:bg-slate-700/20 border border-slate-100 dark:border-slate-600 rounded-xl p-5 hover:bg-white dark:hover:bg-slate-700/40 hover:border-indigo-200 dark:hover:border-indigo-700 hover:shadow-md transition-all duration-200">
                                     @foreach($category['options'] as $key => $meta)
+                                        @if ($key !== 'institute.branding.logo_json')
                                         <div class="flex flex-col md:flex-row md:items-start gap-4">
                                             <label for="{{ $key }}" class="block text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wide md:w-1/4 shrink-0 pt-1">
                                                 {{ $meta['label'] }}
@@ -193,6 +194,7 @@
                                                 @endif
                                             </div>
                                         </div>
+                                        @endif
                                     @endforeach
                                 </div>
                             </div>
