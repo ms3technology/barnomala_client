@@ -36,43 +36,16 @@
 
                     <div class="space-y-6">
                         <div class="relative group/text">
-                            <div class="max-h-36 overflow-y-auto scrollbar-hide text-slate-600 text-lg leading-relaxed font-medium">
+                            <div class="h-48 overflow-y-auto scrollbar-hide text-slate-600 text-lg leading-relaxed font-medium">
                                 {{ $options['institute.about.text'] ?? 'আমাদের শিক্ষা প্রতিষ্ঠান একটি ঐতিহ্যবাহী বিদ্যাপীঠ। দীর্ঘ পথচলায় আমরা অসংখ্য মেধাবী শিক্ষার্থী উপহার দিয়েছি যারা দেশ ও দশের কল্যাণে নিয়োজিত।' }}
                             </div>
                             <div class="absolute bottom-0 left-0 right-0 h-4 bg-linear-to-t from-white to-transparent pointer-events-none opacity-0 group-hover/text:opacity-100 transition-opacity"></div>
                         </div>
                         
                         <a href="{{ route('about') }}" 
-                            class="inline-flex items-center text-xs font-black text-indigo-600 hover:text-indigo-800 transition-colors uppercase tracking-widest">
+                            class="inline-flex items-center text-sm font-black text-indigo-600 hover:text-indigo-800 transition-colors uppercase tracking-widest">
                             {{ $options['institute.about.button_text'] ?? 'Read More' }} <i class="fas fa-arrow-right ml-2 text-[10px]"></i>
                         </a>
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-                            <div class="flex items-center gap-3 text-slate-700">
-                                <div class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                                    <i class="fas fa-check text-[10px]"></i>
-                                </div>
-                                <span class="text-sm font-bold">Smart Classrooms</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-slate-700">
-                                <div class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                                    <i class="fas fa-check text-[10px]"></i>
-                                </div>
-                                <span class="text-sm font-bold">Expert Faculty</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-slate-700">
-                                <div class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                                    <i class="fas fa-check text-[10px]"></i>
-                                </div>
-                                <span class="text-sm font-bold">Modern Library</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-slate-700">
-                                <div class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                                    <i class="fas fa-check text-[10px]"></i>
-                                </div>
-                                <span class="text-sm font-bold">ICT Lab</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

@@ -76,7 +76,7 @@
 
                                 <div class="text-center mt-4">
                                     <a href="{{ route('speeches.index', ['id' => $speech['id'] ?? $speech->id]) }}" 
-                                        class="inline-flex items-center text-xs font-black text-indigo-600 hover:text-indigo-800 transition-colors uppercase tracking-widest">
+                                        class="inline-flex items-center text-sm font-black text-indigo-600 hover:text-indigo-800 transition-colors uppercase tracking-widest">
                                         {{ $options['institute.about.button_text'] ?? 'Read Full Message' }} <i class="fas fa-arrow-right ml-2 text-[10px]"></i>
                                     </a>
                                 </div>

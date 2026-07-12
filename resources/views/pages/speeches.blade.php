@@ -21,7 +21,7 @@
                     <div class="grid grid-cols-1 gap-12 lg:grid-cols-3 items-start">
                         <div class="lg:col-span-1">
                             <div class="aspect-3/4 overflow-hidden rounded-3xl bg-slate-100 shadow-lg ring-1 ring-slate-200">
-                                <img src="{{ $speech->image_url }}" alt="{{ $speech->name }}" class="h-full w-full object-cover grayscale transition duration-500 hover:grayscale-0">
+                                <img src="{{ $speech->image_url }}" alt="{{ $speech->name }}" class="h-full w-full object-cover transition duration-500">
                             </div>
                             <div class="mt-6 text-center lg:text-left">
                                 <h3 class="text-2xl font-black text-slate-950">{{ $speech->name }}</h3>

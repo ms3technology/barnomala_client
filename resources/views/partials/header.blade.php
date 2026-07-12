@@ -229,7 +229,7 @@
                             Web Panel
                         </a>
                         <a href="{{ $portalLoginUrl }}" target="_blank" class="block px-3 py-2.5 text-white font-bold transition-all hover:bg-white/15 text-sm">
-                            PORTAL LOGIN
+                            LOGIN
                         </a>
                     </div>
                 </div>
@@ -282,7 +282,7 @@
                         Web Panel
                     </a>
                     <a href="{{ $portalLoginUrl }}" target="_blank" class="flex-1 block px-4 py-2 text-sm font-bold text-white hover:bg-white/10 rounded-md transition-all text-center">
-                        Portal Login
+                        Login
                     </a>
                 </div>
             </div>
