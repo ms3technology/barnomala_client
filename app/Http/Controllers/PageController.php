@@ -134,7 +134,7 @@ class PageController extends Controller
 
     public function results(): View
     {
-        return view('pages.results', $this->getPublicPageData());
+        return view('student.results', $this->getPublicPageData());
     }
 
     public function teachers(): View

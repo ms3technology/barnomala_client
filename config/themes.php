@@ -36,10 +36,10 @@ return [
         'label'      => 'Header Banner Type',
         'option_key' => 'institute.theme.banner_type',
         'type'       => 'option',
-        'default'    => 'banner_with_overlay',
+        'default'    => 'info_only',
         'options'    => [
-            'banner_only'         => 'Banner Only',
             'info_only'           => 'Info Only',
+            'banner_only'         => 'Banner Only',
         ],
     ],
 
@@ -47,10 +47,10 @@ return [
         'label'      => 'Slider Type',
         'option_key' => 'institute.theme.slider_type',
         'type'       => 'option',
-        'default'    => 'slider_with_notice',
+        'default'    => 'slider_only',
         'options'    => [
-            'slider_with_notice' => 'Slider with Notice Panel',
             'slider_only'        => 'Slider Only',
+            'slider_with_notice' => 'Slider with Notice Panel',
         ],
     ],
 ];

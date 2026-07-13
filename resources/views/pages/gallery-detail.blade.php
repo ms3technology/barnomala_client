@@ -23,13 +23,13 @@
                 <div class="lg:col-span-8">
                     <div class="relative group rounded-3xl overflow-hidden shadow-2xl bg-slate-950 aspect-video flex items-center justify-center">
                         @if($item->type === 'photo')
-                            <img src="{{ asset('storage/' . $item->image_path) }}" 
+                            <img src="{{ asset($item->category === 'sample' ? $item->image_path : 'storage/' . $item->image_path) }}" 
                                  alt="{{ $item->title }}" 
                                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                         @elseif($item->type === 'video')
                             @if($item->video_path)
                                 <video class="w-full h-full" controls>
-                                    <source src="{{ asset('storage/' . $item->video_path) }}" type="video/mp4">
+                                    <source src="{{ asset($item->category === 'sample' ? $item->video_path : 'storage/' . $item->video_path) }}" type="video/mp4">
                                     Your browser does not support the video tag.
                                 </video>
                             @elseif($item->video_url)

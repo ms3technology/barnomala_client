@@ -96,7 +96,7 @@
 
                         @if($item->type === 'photo')
 
-                            <img src="{{ asset('storage/' . $item->image_path) }}"
+                            <img src="{{ asset($item->category === 'sample' ? $item->image_path : 'storage/' . $item->image_path) }}"
                                  alt="{{ $item->title }}"
                                  class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 md:group-hover:scale-125 md:group-hover:rotate-3 opacity-70 group-hover:opacity-100">
 
@@ -112,7 +112,7 @@
                                     onmouseover="this.play()"
                                     onmouseout="this.pause()">
 
-                                    <source src="{{ asset('storage/' . $item->video_path) }}" type="video/mp4">
+                                    <source src="{{ asset($item->category === 'sample' ? $item->video_path : 'storage/' . $item->video_path) }}" type="video/mp4">
                                 </video>
 
                             @else
