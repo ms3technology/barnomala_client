@@ -33,7 +33,7 @@
                     <div class="group relative flex flex-col overflow-hidden rounded-2xl bg-slate-50 border border-slate-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                         <a href="{{ route('gallery.show', $item->id) }}" class="block aspect-4/3 overflow-hidden relative">
                             @if($item->type === 'photo')
-                                <img src="{{ asset('storage/' . $item->image_path) }}" 
+                                <img src="{{ asset( $item->category === 'sample' ? $item->image_path : 'storage/' . $item->image_path) }}" 
                                      alt="{{ $item->title }}" 
                                      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
                             @elseif($item->type === 'video')

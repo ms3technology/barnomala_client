@@ -21,5 +21,7 @@ class DatabaseSeeder extends Seeder
                 'password' => \Illuminate\Support\Facades\Hash::make(\Illuminate\Support\Str::random(32)),
             ]
         );
+
+        $this->call(WebsiteDefaultsSeeder::class);
     }
 }

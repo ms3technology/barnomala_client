@@ -25,7 +25,6 @@ Route::prefix('v1')->group(function () {
         Route::post('galleries/sync', [GallerySyncController::class, 'sync']);
         Route::post('speeches/sync', [SpeechSyncController::class, 'sync']);
         Route::post('transfer/all', [DataTransferController::class, 'transferAll'])->name('api.transfer.all');
-        Route::post('setup/default-website', [DataTransferController::class, 'setupDefaultWebsite'])->name('api.setup.default-website');
     });
 
     Route::get('students', [TransferExportController::class, 'students']);
