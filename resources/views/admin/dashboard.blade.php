@@ -17,7 +17,7 @@
                 </div>
                 <div class="mt-4 md:mt-0">
                     <div class="bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3 text-center border border-white/10">
-                        <div class="text-xl font-bold">{{ now()->format('h:i A') }}</div>
+                        <div class="text-xl font-bold">{{ now('Asia/Dhaka')->format('h:i A') }}</div>
                         <div class="text-xs text-indigo-200">BD Time (UTC+6)</div>
                     </div>
                 </div>

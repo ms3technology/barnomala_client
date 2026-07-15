@@ -5,6 +5,7 @@
     $aboutImageUrl = $aboutImageOption ? (json_decode($aboutImageOption->option_value, true)['url'] ?? asset('images/about-image.webp')) : asset('images/about-image.webp');
     $aboutText = $options['institute.about.text'] ?? 'আমাদের শিক্ষা প্রতিষ্ঠান একটি ঐতিহ্যবাহী বিদ্যাপীঠ। দীর্ঘ পথচলায় আমরা অসংখ্য মেধাবী শিক্ষার্থী উপহার দিয়েছি যারা দেশ ও দশের কল্যাণে নিয়োজিত।';
     $aboutTitle = $options['institute.about.title'] ?? 'আমাদের প্রতিষ্ঠান সম্পর্কে';
+    $establishedYear = $options['institute.established_year'] ?? '';
 @endphp
 
 @section('title', 'About Us')
@@ -30,6 +31,7 @@
                 </div>
 
                 <!-- Floating Stats/Feature -->
+                @if(!empty($establishedYear))
                 <div class="absolute -bottom-8 -right-8 bg-white p-6 rounded-3xl shadow-xl border border-slate-100 hidden sm:block animate-bounce-slow">
                     <div class="flex items-center gap-4">
                         <div class="w-14 h-14 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-200">
@@ -37,16 +39,16 @@
                         </div>
                         <div>
                             <p class="text-xs font-black text-indigo-600 uppercase tracking-widest leading-none">Established</p>
-                            <p class="text-2xl font-black text-slate-950 mt-1">{{ $options['institute.established_year'] ?? 'Since 1990' }}</p>
+                            <p class="text-2xl font-black text-slate-950 mt-1">{{ $establishedYear }}</p>
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
 
             <!-- Content Side -->
             <div class="space-y-8">
                 <div>
-                    <p class="text-indigo-600 font-black uppercase tracking-[0.3em] text-sm mb-4">Learn More</p>
                     <h1 class="text-4xl md:text-5xl font-black text-slate-950 leading-tight">
                         {{ $aboutTitle }}
                     </h1>
