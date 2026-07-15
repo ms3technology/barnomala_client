@@ -1,6 +1,6 @@
 @php
     $schoolName = $options['institute.branding.name'] ?? config('app.name', 'Barnomala');
-    $footerText = $options['institute.footer.text'] ?? 'শোভন এবং আধুনিক ডিজাইনের সাথে আমাদের প্রতিষ্ঠান এগিয়ে যাচ্ছে আগামীর পথে।';
+    $footerText = $options['institute.footer.text'] ?? '';
     $address = $options['institute.contact.address'] ?? '';
     $phone = $options['institute.contact.phone'] ?? '01234-567890';
     $email = $options['institute.contact.email'] ?? 'info@school.edu.bd';
@@ -20,7 +20,7 @@
     }
 @endphp
 
-<footer class="footer-new mt-20">
+<footer class="footer-new">
     <!-- Top Social Bar -->
     <div class="footer-new-top">
         @if($facebook)
@@ -188,8 +188,7 @@
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
-        margin-top: 20px;
-        padding: 30px 50px;
+        padding: 10px 50px;
         gap: 40px;
     }
 
@@ -295,7 +294,6 @@
         font-size: 14px;
         border-top: 1px solid #ddd;
         padding: 15px 0;
-        margin-top: 20px;
         color: #666;
     }
 
@@ -335,7 +333,7 @@
     /* Responsive Design */
     @media (max-width: 1024px) {
         .footer-new-main {
-            padding: 25px 30px;
+            padding: 10px 30px;
             gap: 30px;
         }
 
@@ -348,9 +346,8 @@
     @media (max-width: 768px) {
         .footer-new-main {
             flex-direction: column;
-            padding: 20px 15px;
+            padding: 10px 15px;
             gap: 15px;
-            margin-top: 15px;
         }
 
         .footer-new-left, .footer-new-right {
@@ -438,7 +435,7 @@
 
     @media (max-width: 480px) {
         .footer-new-main {
-            padding: 15px 10px;
+            padding: 10px;
             gap: 10px;
         }
 

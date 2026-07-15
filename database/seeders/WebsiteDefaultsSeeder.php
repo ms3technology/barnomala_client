@@ -36,7 +36,7 @@ class WebsiteDefaultsSeeder extends Seeder
         ];
 
         $options = [
-            'site.vistor_count' => 100,
+            'site.visitor_count' => 1000,
             'institute.branding.name' => 'New School Name',
             'institute.branding.show_top_header' => 1,
             'institute.branding.logo_json' => $staticLogo,
@@ -50,7 +50,7 @@ class WebsiteDefaultsSeeder extends Seeder
             'institute.contact.email' => 'info@barnomala.edu.bd',
             'institute.contact.website' => 'https://example.com',
             'institute.contact.map_link' => 'https://maps.google.com/?q=23.8103,90.4125',
-            'institute.footer.text' => 'পরিপূর্ণ ডিজিটালাইজেশনে ডায়নামিক ওয়েব সাইট উন্নয়ন চলছে। শীঘ্রই পরিপূর্ণ ওয়েবসাইট দেখতে পাবেন। আশা করি এর মাধ্যমে বিদ্যালয়ের সামগ্রিক ব্যবস্থাপনা পরিপূর্ণ ডিজিটালাইজেশন হবে। এবং সকলেই উপকৃত হবেন।',
+            'institute.footer.text' => '',
             'institute.social.facebook' => '#',
             'institute.social.youtube' => '#',
             'speech.row.1.config' => '2 items',
@@ -126,7 +126,7 @@ class WebsiteDefaultsSeeder extends Seeder
             [
                 'url' => asset('images/default-slider.jpeg'),
                 'path' => 'images/default-slider.jpeg',
-                'title' => 'A Better Future Through Education',
+                'title' => '',
                 'order' => 1,
             ],
         ]);
