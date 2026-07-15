@@ -32,13 +32,13 @@
         .border-accent { border-color: var(--accent-color); }
 
         /* Smooth sidebar scrollbar */
-        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+        .sidebar-scroll::-webkit-scrollbar { width: 10px; }
         .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
-        .sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.3); border-radius: 2px; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(228, 230, 232, 0.645); border-radius: 2px; }
         .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.5); }
 
         /* Custom scrollbar for main content */
-        .main-scroll::-webkit-scrollbar { width: 6px; }
+        .main-scroll::-webkit-scrollbar { width: 10px; }
         .main-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
         .main-scroll::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
         .main-scroll::-webkit-scrollbar-thumb:hover { background: #64748b; }

@@ -39,27 +39,27 @@
 
                 <ul class="space-y-4">
                     <li class="flex justify-between items-center py-2 border-b border-gray-200">
-                        <span class="text-gray-600 font-medium font-bn">Total Students</span>
+                        <span class="text-gray-600 font-medium">Total Students</span>
                         <span class="font-bold text-lg text-indigo-600 counter-up" data-count="{{ $totalStudents }}">0</span>
                     </li>
                     <li class="flex justify-between items-center py-2 border-b border-gray-200">
-                        <span class="text-gray-600 font-medium font-bn">Boys</span>
+                        <span class="text-gray-600 font-medium">Boys</span>
                         <span class="font-bold text-gray-800 counter-up" data-count="{{ $genderData['Male'] ?? 0 }}">0</span>
                     </li>
                     <li class="flex justify-between items-center py-2 border-b border-gray-200">
-                        <span class="text-gray-600 font-medium font-bn">Girls</span>
+                        <span class="text-gray-600 font-medium">Girls</span>
                         <span class="font-bold text-gray-800 counter-up" data-count="{{ $genderData['Female'] ?? 0 }}">0</span>
                     </li>
                     <li class="flex justify-between items-center py-2 border-b border-gray-200">
-                        <span class="text-gray-600 font-medium font-bn">Muslim</span>
+                        <span class="text-gray-600 font-medium">Muslim</span>
                         <span class="font-bold text-gray-800 counter-up" data-count="{{ $religionData['Islam'] ?? 0 }}">0</span>
                     </li>
                     <li class="flex justify-between items-center py-2 border-b border-gray-200">
-                        <span class="text-gray-600 font-medium font-bn">Hindu</span>
+                        <span class="text-gray-600 font-medium">Hindu</span>
                         <span class="font-bold text-gray-800 counter-up" data-count="{{ $religionData['Hindu'] ?? 0 }}">0</span>
                     </li>
                     <li class="flex justify-between items-center py-2">
-                        <span class="text-gray-600 font-medium font-bn">Other</span>
+                        <span class="text-gray-600 font-medium">Other</span>
                         <span class="font-bold text-gray-800 counter-up" 
                               data-count="{{ ($religionData['Christian'] ?? 0) + ($religionData['Buddhism'] ?? 0) }}">0</span>
                     </li>

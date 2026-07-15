@@ -36,7 +36,7 @@
                 <div class="space-y-3">
                     @foreach($importantLinks as $link)
                         <a href="{{ $link['url'] ?? $link->url }}" target="_blank"
-                           class="flex items-center gap-3 p-4 rounded-xl bg-white border border-gray-200 text-gray-700 font-semibold transition-all duration-300 hover:border-indigo-400 hover:bg-indigo-50 hover:text-indigo-600 group font-bn">
+                           class="flex items-center gap-3 p-4 rounded-xl bg-white border border-gray-200 text-gray-700 font-semibold transition-all duration-300 hover:border-indigo-400 hover:bg-indigo-50 hover:text-indigo-600 group">
                             <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 transition-all group-hover:bg-indigo-100">
                                 <svg class="w-4 h-4 text-gray-600 transition-colors group-hover:text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101"></path>
