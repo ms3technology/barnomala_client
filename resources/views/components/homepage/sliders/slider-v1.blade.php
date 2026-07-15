@@ -20,8 +20,8 @@
                  :class="currentSlide === {{ $index }} ? 'scale-110' : 'scale-100'"
                  alt="Slide">
 
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
-            <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent"></div>
+            <div class="absolute inset-0 bg-linear-to-t from-black via-black/20 to-transparent"></div>
+            <div class="absolute inset-0 bg-linear-to-r from-black/60 via-transparent to-transparent"></div>
 
             <div class="absolute bottom-0 left-0 w-full p-6 {{ $isSliderOnly ? 'md:p-16 lg:p-24' : 'md:p-8 lg:p-12' }} z-20"
                  x-show="currentSlide === {{ $index }}"

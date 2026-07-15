@@ -31,7 +31,7 @@
     @php
         $rows = [1, 2, 3];
     @endphp
-    <div class="space-y-8 mb-16">
+    <div class="space-y-4 mb-10">
         @foreach($rows as $rowIndex)
             @php
                 $rowConfig = $options["speech.row.{$rowIndex}.config"] ?? '1 item';
