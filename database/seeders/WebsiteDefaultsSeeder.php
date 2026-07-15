@@ -54,7 +54,7 @@ class WebsiteDefaultsSeeder extends Seeder
             'institute.social.facebook' => '#',
             'institute.social.youtube' => '#',
             'speech.row.1.config' => '2 items',
-            'institute.about.title' => 'About Our Institute',
+            'institute.about.title' => 'আমাদের সম্পর্কে',
             'institute.about.side_panel_type' => 'notice',
             'institute.about.button_text' => 'Read More',
             'institute.about.text' => 'আমাদের শিক্ষা প্রতিষ্ঠান একটি ঐতিহ্যবাহী বিদ্যাপীঠ। দীর্ঘ পথচলায় আমরা অসংখ্য মেধাবী শিক্ষার্থী উপহার দিয়েছি যারা দেশ ও দশের কল্যাণে নিয়োজিত। আমাদের লক্ষ্য হলো শিক্ষার্থীদের সুপ্ত প্রতিভা বিকাশে সহায়তা করা এবং তাদের সুনাগরিক হিসেবে গড়ে তোলা।',

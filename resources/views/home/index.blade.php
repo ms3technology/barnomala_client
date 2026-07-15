@@ -83,7 +83,7 @@
 @push('styles')
 <style>
     .font-bn {
-        font-family: 'Hind Siliguri', sans-serif;
+        font-family: 'Kalpurush', sans-serif;
     }
 </style>
 @endpush

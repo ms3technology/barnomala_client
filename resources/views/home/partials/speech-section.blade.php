@@ -46,7 +46,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-6 gap-8">
                     @foreach($rowItems as $speech)
                         <div class="bg-white rounded-4xl hover:shadow-[0_40px_80px_rgba(79,70,229,0.2)] transition-all duration-700 group flex flex-col border border-indigo-50/50 {{ getRowItemClass($rowConfig) }}">
-                            <div class="p-10 flex-1 flex flex-col relative overflow-hidden">
+                            <div class="p-7 flex-1 flex flex-col relative overflow-hidden">
                                 <!-- Background Decoration -->
                                 <div class="absolute -top-24 -right-24 w-48 h-48 bg-indigo-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-1000"></div>
                                 
@@ -81,7 +81,7 @@
                                     </a>
                                 </div>
 
-                                <div class="mt-8 text-right pt-6 border-t border-indigo-50 relative z-10">
+                                <div class="text-right pt-4 border-t border-indigo-50 relative z-10">
                                     <div class="font-black text-indigo-950 text-lg">{{ $speech['name'] ?? $speech->name }}</div>
                                     {{-- <div class="text-[10px] text-indigo-600 font-black tracking-[0.2em] uppercase mt-1">{{ $speech['designation'] ?? $speech->designation }}</div> --}}
                                 </div>
