@@ -231,7 +231,7 @@
 
             <!-- Page Content -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto main-scroll bg-slate-50 dark:bg-slate-900">
-                @include('partials.flash')
+                @include('layouts.partials.flash')
                 <div class="p-6 md:p-8">
                     @yield('content')
                 </div>

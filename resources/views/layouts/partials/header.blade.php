@@ -32,7 +32,7 @@
     $applyUrl = \Illuminate\Support\Facades\Route::has('apply.index') ? route('apply.index') : url('/apply');
 @endphp
 
-<header class="overflow-visible relative z-50 transition-colors duration-300" style="background-color: {{ $headerBg }};" x-data="{ mobileMenuOpen: false }">
+<header class="overflow-visible relative z-50 transition-colors duration-300" style="background-color: {{ $headerBg }};"">
     <!-- Top Contact Bar -->
     @if($showTopHeader)
     <div class="bg-gray-800 text-white border-b border-white/10">
@@ -166,15 +166,20 @@
 </header>
 
 <!-- Navigation Bar -->
-<div class="sticky top-0 z-50 bg-accent border-b border-white/10 shadow-lg">
+<div
+    class="sticky top-0 z-50 bg-accent border-b border-white/10 shadow-lg"
+    x-data="{ mobileMenuOpen: false }"
+>
     <nav class="max-w-[90%] mx-auto px-0 md:px-6 lg:px-8">
         <div class="relative transition-all duration-300">
             <div class="flex items-center justify-between">
                 <!-- Mobile Menu Button -->
                 <div class="flex md:hidden">
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" 
-                            class="text-white hover:text-yellow-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white p-1 rounded-md transition-colors"
-                            aria-expanded="false">
+                    <button
+                        @click="mobileMenuOpen = !mobileMenuOpen"
+                        :aria-expanded="mobileMenuOpen"
+                        class="text-white hover:text-yellow-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white p-1 rounded-md transition-colors"
+                    >
                         <span class="sr-only">Open main menu</span>
                         <svg x-show="!mobileMenuOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />

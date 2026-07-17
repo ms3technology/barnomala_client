@@ -31,14 +31,14 @@
 </head>
 <body class="min-h-screen bg-slate-50 font-sans text-slate-800 antialiased">
     <div class="flex min-h-screen flex-col">
-        @include('partials.header')
+        @include('layouts.partials.header')
 
         <main class="flex-1">
-            @include('partials.flash')
+            @include('layouts.partials.flash')
             @yield('content')
         </main>
 
-        @include('partials.footer')
+        @include('layouts.partials.footer')
     </div>
 </body>
 </html>
