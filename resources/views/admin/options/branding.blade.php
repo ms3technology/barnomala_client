@@ -164,21 +164,7 @@
                                     @endforeach
                                 </div>
                             </div>
-                        @endif                                                         
-
-                        <!-- Side Panel Type -->
-                        <div class="bg-slate-50/50 dark:bg-slate-700/30 rounded-xl p-5 border border-slate-100 dark:border-slate-600">
-                            <label class="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                                <i class="fas fa-layout text-indigo-500"></i>
-                                About Side Panel Type
-                            </label>
-                            <select id="institute.about.side_panel_type"
-                                name="settings[institute.about.side_panel_type]"
-                                class="w-full px-3 py-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
-                                <option value="image" {{ ($options['institute.about.side_panel_type'] ?? 'image') === 'image' ? 'selected' : '' }}>Image</option>
-                                <option value="notice" {{ ($options['institute.about.side_panel_type'] ?? 'image') === 'notice' ? 'selected' : '' }}>Notice</option>
-                            </select>
-                        </div>
+                        @endif
                     </div>
 
                     <div class="space-y-6">

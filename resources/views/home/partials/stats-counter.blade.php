@@ -1,4 +1,4 @@
-<div class="bg-indigo-900 py-16 text-white overflow-hidden relative reveal">
+<div class="bg-indigo-900 py-12 text-white overflow-hidden relative reveal">
     <div class="absolute inset-0 opacity-10">
         <div class="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-1/2 -translate-y-1/2"></div>
         <div class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/3 translate-y-1/3"></div>

@@ -40,6 +40,7 @@ class WebsiteDefaultsSeeder extends Seeder
             'institute.branding.name' => 'New School Name',
             'institute.branding.show_top_header' => 1,
             'institute.branding.logo_json' => $staticLogo,
+            'institute.theme.about' => 'with-notice',
             'institute.theme.slider_type' => 'slider_only',
             'institute.theme.banner_type' => 'info_only',
             'institute.identity.established_year' => 2001,
@@ -55,7 +56,6 @@ class WebsiteDefaultsSeeder extends Seeder
             'institute.social.youtube' => '#',
             'speech.row.1.config' => '2 items',
             'institute.about.title' => 'আমাদের সম্পর্কে',
-            'institute.about.side_panel_type' => 'notice',
             'institute.about.button_text' => 'Read More',
             'institute.about.text' => 'আমাদের শিক্ষা প্রতিষ্ঠান একটি ঐতিহ্যবাহী বিদ্যাপীঠ। দীর্ঘ পথচলায় আমরা অসংখ্য মেধাবী শিক্ষার্থী উপহার দিয়েছি যারা দেশ ও দশের কল্যাণে নিয়োজিত। আমাদের লক্ষ্য হলো শিক্ষার্থীদের সুপ্ত প্রতিভা বিকাশে সহায়তা করা এবং তাদের সুনাগরিক হিসেবে গড়ে তোলা।',
             'institute.about.image_json' => [

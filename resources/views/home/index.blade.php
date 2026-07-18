@@ -36,9 +36,11 @@
             @include('home.partials.institute-info', ['options' => $options])
         @endif
 
-        @include('home.partials.about-section', [
-            'options' => $options
-        ])
+        {{-- About section resolved at runtime by ThemeService --}}
+        <x-dynamic-component
+            :component="$theme->component('about')"
+            :options="$options"
+            :notices="$notices" />
 
         @if($layout['speech_section'] ?? true)
             @include('home.partials.speech-section', [

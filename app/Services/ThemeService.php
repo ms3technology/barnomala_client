@@ -11,7 +11,7 @@ class ThemeService
      * setting() helper) and falls back to the configured default. The
      * result is a dot-path that pairs with Blade's <x-dynamic-component>:
      *
-     *   $theme->component('slider')   // "homepage.sliders.slider-v1"
+     *   $theme->component('slider')   // "sliders.slider-v1"
      *
      * @param  string  $section  Section key (e.g. "slider", "feature").
      * @return string  Blade view path.
@@ -22,7 +22,7 @@ class ThemeService
         $plural  = $this->pluralize($section);
         $name    = $this->sanitize($design);
 
-        return "homepage.{$plural}.{$name}";
+        return "{$plural}.{$name}";
     }
 
     /**

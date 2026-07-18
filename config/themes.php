@@ -64,4 +64,15 @@ return [
             'slider-v2' => 'Slider v2 (Thumbnail Navigation)',
         ],
     ],
+
+    'about' => [
+        'label'      => 'About Section Side Panel',
+        'option_key' => 'institute.theme.about',
+        'type'       => 'design',
+        'default'    => 'with-notice',
+        'designs'    => [
+            'with-notice' => 'With Notice Panel',
+            'with-image'  => 'With Image Panel',
+        ],
+    ],
 ];

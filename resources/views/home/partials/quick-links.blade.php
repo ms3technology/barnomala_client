@@ -1,4 +1,4 @@
-<div class="bg-linear-to-b from-gray-50 to-white py-20 reveal">
+<div class="bg-linear-to-b from-gray-50 to-white py-10 reveal">
     <div class="max-w-[90%] mx-auto px-0 md:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-16">
             <!-- Quick Access Grid -->
