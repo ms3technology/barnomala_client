@@ -3,7 +3,7 @@
     $isSliderOnly = $heroType === 'slider_only';
 @endphp
 
-<div class="{{ $isSliderOnly ? 'w-full mt-8 mb-4' : 'max-w-[90%] mx-auto px-0 md:px-6 lg:px-8 mt-8 mb-4' }}">
+<div class="mt-8 mb-3 {{ $isSliderOnly ? 'w-full' : 'max-w-[90%] mx-auto px-0 md:px-6 lg:px-8' }}">
     <div class="flex flex-col lg:flex-row {{ $isSliderOnly ? '' : 'gap-8' }}">
 
         {{-- Slider design is resolved at runtime by ThemeService --}}

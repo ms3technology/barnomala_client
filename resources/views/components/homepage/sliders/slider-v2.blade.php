@@ -8,7 +8,7 @@
     $interval = 7000;
 @endphp
 
-<div class="relative overflow-hidden group font-sans {{ $isSliderOnly ? 'w-full h-[30vh] md:h-[65vh]' : 'lg:w-2/3 h-64 md:h-80 lg:h-96 rounded-2xl shadow-2xl' }}"
+<div class="relative rounded-md overflow-hidden group font-sans {{ $isSliderOnly ? 'w-full max-w-[90%] md:max-w-[86%] mx-auto h-[30vh] md:h-[65vh]' : 'lg:w-2/3 h-64 md:h-80 lg:h-96 rounded-2xl shadow-2xl' }}"
      x-data="{ currentSlide: 0, totalSlides: {{ count($slides) }}, next() { this.currentSlide = (this.currentSlide + 1) % this.totalSlides }, prev() { this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides } }"
      x-init="setInterval(() => next(), {{ $interval }})">
 
@@ -19,10 +19,7 @@
                  class="w-full h-full object-cover transform duration-10000 ease-linear"
                  :class="currentSlide === {{ $index }} ? 'scale-110' : 'scale-100'"
                  alt="Slide">
-
-            <div class="absolute inset-0 bg-linear-to-t from-black via-black/20 to-transparent"></div>
-            <div class="absolute inset-0 bg-linear-to-r from-black/60 via-transparent to-transparent"></div>
-
+            
             <div class="absolute bottom-0 left-0 w-full p-6 {{ $isSliderOnly ? 'md:p-16 lg:p-24' : 'md:p-8 lg:p-12' }} z-20"
                  x-show="currentSlide === {{ $index }}"
                  x-transition:enter="transition ease-out duration-700 delay-300"
@@ -46,13 +43,16 @@
         </div>
     @endforeach
 
-    <div class="absolute bottom-8 right-8 {{ $isSliderOnly ? 'lg:right-24' : '' }} z-30 flex gap-2">
+    {{-- Thumbnail navigation overlay --}}
+    <div class="absolute bottom-0 left-0 right-0 z-30 flex justify-center gap-2 p-3">
         @foreach($slides as $index => $slide)
-            <div @click="currentSlide = {{ $index }}"
-                 class="h-1.5 {{ $isSliderOnly ? 'w-12 md:w-20' : 'w-10' }} bg-gray-600/50 cursor-pointer overflow-hidden rounded-full">
-                <div class="h-full bg-white transition-all duration-7000 ease-linear"
-                     :style="currentSlide === {{ $index }} ? 'width: 100%' : 'width: 0%'"></div>
-            </div>
+            <button @click="currentSlide = {{ $index }}"
+                class="shrink-0 w-14 h-10 md:w-20 md:h-14 rounded-lg overflow-hidden border-2 transition-all duration-300 hover:scale-105 hover:shadow-lg focus:outline-none"
+                :class="currentSlide === {{ $index }} ? 'border-white scale-105 shadow-lg ring-2 ring-white/50' : 'border-white/30 opacity-60 hover:opacity-100'">
+                <img src="{{ is_array($slide) ? $slide['url'] : $slide->url }}"
+                     class="w-full h-full object-cover"
+                     alt="Go to slide {{ $index + 1 }}">
+            </button>
         @endforeach
     </div>
 </div>

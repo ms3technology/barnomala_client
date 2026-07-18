@@ -47,7 +47,7 @@ class WebsiteDefaultsSeeder extends Seeder
             'institute.identity.code' => 'BMS-001',
             'institute.contact.address' => 'Sylhet, Bangladesh',
             'institute.contact.phone' => '+8801700000000',
-            'institute.contact.email' => 'info@barnomala.edu.bd',
+            'institute.contact.email' => 'info@barnomala.com',
             'institute.contact.website' => 'https://example.com',
             'institute.contact.map_link' => 'https://maps.google.com/?q=23.8103,90.4125',
             'institute.footer.text' => '',

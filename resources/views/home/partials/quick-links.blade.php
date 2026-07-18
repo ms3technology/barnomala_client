@@ -10,7 +10,7 @@
                     <p class="text-gray-500 font-medium">Find what you need in seconds</p>
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
                     @foreach($quickLinks as $link)
                         <a href="{{ $link['url'] }}" 
                            class="group flex flex-col items-center justify-center p-6 rounded-2xl border border-gray-100 transition-all duration-300 hover:border-indigo-300 hover:shadow-lg bg-indigo-50">
@@ -30,7 +30,7 @@
             </div>
 
             <!-- Important Links Sidebar -->
-            <div class="lg:col-span-1 bg-amber-200 rounded-2xl p-6 border border-gray-200">
+            <div class="h-min lg:col-span-1 bg-amber-200 rounded-2xl p-6 border border-gray-200">
                 <h2 class="text-2xl font-black text-gray-900 mb-8 font-bn">গুরুত্বপূর্ণ লিঙ্ক</h2>
 
                 <div class="space-y-3">

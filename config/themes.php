@@ -53,4 +53,15 @@ return [
             'slider_with_notice' => 'Slider with Notice Panel',
         ],
     ],
+
+    'slider' => [
+        'label'      => 'Slider',
+        'option_key' => 'institute.theme.slider',
+        'type'       => 'design',
+        'default'    => 'slider-v1',
+        'designs'    => [
+            'slider-v1' => 'Slider v1 (Default)',
+            'slider-v2' => 'Slider v2 (Thumbnail Navigation)',
+        ],
+    ],
 ];

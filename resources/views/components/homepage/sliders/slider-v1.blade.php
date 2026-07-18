@@ -8,7 +8,7 @@
     $interval = 7000;
 @endphp
 
-<div class="relative overflow-hidden group font-sans rounded-md max-w-[90%] md:max-w-[86%] mx-auto {{ $isSliderOnly ? 'w-full h-[30vh] md:h-[65vh]' : 'lg:w-2/3 h-64 md:h-80 lg:h-96 rounded-2xl shadow-2xl' }}"
+<div class="relative rounded-md overflow-hidden group font-sans {{ $isSliderOnly ? 'w-full max-w-[90%] md:max-w-[86%] mx-auto h-[30vh] md:h-[65vh]' : 'lg:w-2/3 h-64 md:h-80 lg:h-96 rounded-2xl shadow-2xl' }}"
      x-data="{ currentSlide: 0, totalSlides: {{ count($slides) }}, next() { this.currentSlide = (this.currentSlide + 1) % this.totalSlides }, prev() { this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides } }"
      x-init="setInterval(() => next(), {{ $interval }})">
 

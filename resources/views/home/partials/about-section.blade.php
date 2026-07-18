@@ -15,7 +15,7 @@
     }
 </style>
 
-<div class="max-w-[90%] mx-auto font-bn reveal">
+<div class="max-w-[90%] mx-auto md:px-6 lg:px-8 font-bn reveal">
     <!-- About Us Redesign -->
     <div class="relative overflow-hidden bg-white rounded-lg shadow-[0_32px_120px_-20px_rgba(30,41,59,0.08)] group border border-slate-100">
         <!-- Decorative Background Elements -->
