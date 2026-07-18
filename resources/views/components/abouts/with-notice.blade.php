@@ -25,7 +25,7 @@
 
         <div class="relative flex flex-col lg:flex-row items-stretch">
             {{-- Content Side --}}
-            <div class="lg:w-2/3 p-8 flex flex-col justify-center">
+            <div class="lg:w-2/3 p-2 md:p-8 flex flex-col justify-center">
                 <div class="space-y-8">
                     <div>
                         <h2 class="text-3xl lg:text-4xl font-black text-slate-900 leading-[1.1] tracking-tight">
@@ -63,7 +63,7 @@
                         </span>
                     </div>
                     <div class="flex-1 overflow-hidden">
-                        <div class="p-2 space-y-3 overflow-y-auto h-96 scrollbar-thin scrollbar-thumb-indigo-100 scrollbar-track-transparent">
+                        <div class="p-2 space-y-3 overflow-y-auto max-h-96 scrollbar-thin scrollbar-thumb-indigo-100 scrollbar-track-transparent">
                             @foreach($notices as $notice)
                                 <div class="group/item border border-gray-100 bg-white rounded-xl px-4 py-3 hover:bg-indigo-50/80 hover:border-indigo-100 transition-all duration-300">
                                     <a href="{{ route('notices.show', $notice->id) }}" class="flex gap-4 items-start">

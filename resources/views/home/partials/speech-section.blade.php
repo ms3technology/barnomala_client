@@ -46,7 +46,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-6 gap-8">
                     @foreach($rowItems as $speech)
                         <div class="bg-white rounded-4xl hover:shadow-[0_40px_80px_rgba(79,70,229,0.2)] transition-all duration-700 group flex flex-col border border-indigo-50/50 {{ getRowItemClass($rowConfig) }}">
-                            <div class="p-7 flex-1 flex flex-col relative overflow-hidden">
+                            <div class="p-2 md:p-7 flex-1 flex flex-col relative overflow-hidden">
                                 <!-- Background Decoration -->
                                 <div class="absolute -top-24 -right-24 w-48 h-48 bg-indigo-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-1000"></div>
                                 
@@ -68,7 +68,7 @@
                                     @php
                                         $speechText = $speech['speech'] ?? $speech->speech;
                                     @endphp
-                                    <div lang="bn" class="font-bn max-h-52 overflow-y-auto scrollbar-hide text-slate-600 text-center px-4 leading-relaxed bg-white">
+                                    <div lang="bn" class="font-bn max-h-52 overflow-y-auto scrollbar-hide text-slate-600 text-justify px-4 leading-relaxed bg-white">
                                         {{ $speechText }}
                                     </div>
                                     <div class="absolute bottom-0 left-0 right-0 h-8 bg-linear-to-t from-white to-transparent pointer-events-none opacity-0 group-hover/speech:opacity-100 transition-opacity"></div>

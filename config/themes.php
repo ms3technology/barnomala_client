@@ -72,7 +72,7 @@ return [
         'default'    => 'with-notice',
         'designs'    => [
             'with-notice' => 'With Notice Panel',
-            'with-image'  => 'With Image Panel',
+            'with-image'  => 'With About Image',
         ],
     ],
 

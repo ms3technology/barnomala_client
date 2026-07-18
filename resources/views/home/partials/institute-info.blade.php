@@ -10,10 +10,10 @@
 <div class="max-w-[90%] mx-auto px-0 md:px-6 lg:px-8 mb-6 reveal">
     <div class="grid grid-cols-2 md:grid-cols-4">
         @foreach($instituteInfo as $info)
-            <div class="relative overflow-hidden group bg-linear-to-br p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 {{ $info['colors'] }}">
+            <div class="relative overflow-hidden group bg-linear-to-br p-2 md:p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 {{ $info['colors'] }}">
                 <div class="relative z-10 gap-4">
                     <div class="text-xs font-bold uppercase tracking-wider opacity-80 mb-0.5">{{ $info['label'] }}</div>
-                    <div class="text-2xl font-black tabular-nums">{{ $info['value'] }}</div>
+                    <div class="text-sm md:text-2xl font-black tabular-nums">{{ $info['value'] }}</div>
                 </div>
 
                 <!-- Hover indicator line -->
