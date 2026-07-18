@@ -9,17 +9,15 @@ use App\Models\Speech;
 use App\Models\Teacher;
 use App\Models\CommitteeMember;
 use App\Models\Gallery;
-use App\Services\ThemeService;
 
 class HomeController extends Controller
 {
     use BuildsPublicPageData;
 
-    public function index(ThemeService $theme)
+    public function index()
     {
         $publicData = $this->getPublicPageData();
         $options = $publicData['options'];
-        $navigationItems = $publicData['navigationItems'];
 
         $notices = Notice::with('artifacts')
             ->where('is_active', true)
@@ -84,7 +82,6 @@ class HomeController extends Controller
         ];
 
         return view('home.index', array_merge($publicData, [
-            'navigationItems' => $navigationItems,
             'notices' => $notices,
             'speeches' => $speeches,
             'featuredNews' => $featuredNews,
@@ -94,7 +91,6 @@ class HomeController extends Controller
             'generalCommitteeMembers' => $generalCommitteeMembers,
             'stats' => $stats,
             'quickLinks' => $quickLinks,
-            'theme' => $theme,
         ]));
     }
 }

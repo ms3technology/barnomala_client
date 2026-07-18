@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Concerns;
 
 use App\Models\Option;
+use App\Services\ThemeService;
 
 trait BuildsPublicPageData
 {
@@ -16,27 +17,13 @@ trait BuildsPublicPageData
             'options' => $options,
             'navigationItems' => $this->getNavigationItems(),
             'importantLinks' => $this->getImportantLinks($options),
+            'theme' => app(ThemeService::class),
         ];
     }
 
     protected function getNavigationItems(): array
     {
-        return array_map(function ($item) {
-            if (isset($item['route'])) {
-                $item['url'] = route($item['route']);
-            }
-
-            if (!empty($item['children'])) {
-                $item['children'] = array_map(function ($child) {
-                    if (isset($child['route'])) {
-                        $child['url'] = route($child['route']);
-                    }
-                    return $child;
-                }, $item['children']);
-            }
-
-            return $item;
-        }, config('navigation.navigation_items', []));
+        return app(ThemeService::class)->navigationItems();
     }
 
     protected function getImportantLinks(array $options): array

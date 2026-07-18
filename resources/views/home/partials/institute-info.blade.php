@@ -8,7 +8,7 @@
 @endphp
 
 <div class="max-w-[90%] mx-auto px-0 md:px-6 lg:px-8 mb-6 reveal">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="grid grid-cols-2 md:grid-cols-4">
         @foreach($instituteInfo as $info)
             <div class="relative overflow-hidden group bg-linear-to-br p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 {{ $info['colors'] }}">
                 <div class="relative z-10 gap-4">

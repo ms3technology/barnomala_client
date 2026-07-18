@@ -60,7 +60,7 @@
         @endif
     </div>
 
-    <div class="max-w-[90%] mx-auto">
+    <div class="max-w-[90%] mx-auto my-2">
         <div class="footer-new-main">
             <!-- Left: School Info -->
             <div class="footer-new-left">

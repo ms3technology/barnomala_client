@@ -63,13 +63,12 @@
                         </span>
                     </div>
                     <div class="flex-1 overflow-hidden">
-                        <div class="p-4 space-y-3 overflow-y-auto h-96 scrollbar-thin scrollbar-thumb-indigo-100 scrollbar-track-transparent">
+                        <div class="p-2 space-y-3 overflow-y-auto h-96 scrollbar-thin scrollbar-thumb-indigo-100 scrollbar-track-transparent">
                             @foreach($notices as $notice)
-                                <div class="group/item border border-gray-100 bg-white rounded-xl p-4 hover:bg-indigo-50/80 hover:border-indigo-100 transition-all duration-300">
+                                <div class="group/item border border-gray-100 bg-white rounded-xl px-4 py-3 hover:bg-indigo-50/80 hover:border-indigo-100 transition-all duration-300">
                                     <a href="{{ route('notices.show', $notice->id) }}" class="flex gap-4 items-start">
-                                        <div class="bg-white text-indigo-700 w-13 h-13 rounded-xl shrink-0 flex flex-col items-center justify-center font-bold shadow-sm border border-indigo-50 transition-all duration-300 transform group-hover/item:-translate-y-1">
-                                            <span class="text-base leading-none">{{ formatDateBN($notice->published_at, 'day') }}</span>
-                                            <span class="text-[10px] uppercase font-bold tracking-wider mt-1 opacity-80">{{ formatDateBN($notice->published_at, 'month') }}</span>
+                                        <div class="bg-white text-indigo-700 w-22 h-8 text-sm rounded-xl shrink-0 flex items-center justify-center font-bold shadow-sm border border-indigo-50 transition-all duration-300 transform group-hover/item:-translate-y-1">
+                                            <span class="text-base leading-none">{{ formatDateBN($notice->published_at, 'day') }} - {{ formatDateBN($notice->published_at, 'month') }}</span>
                                         </div>
                                         <div class="flex-1">
                                             @if($notice->is_urgent)

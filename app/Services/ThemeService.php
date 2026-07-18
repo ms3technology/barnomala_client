@@ -121,4 +121,45 @@ class ThemeService
     {
         return preg_replace('/[^a-z0-9_\-]/i', '', $design) ?? '';
     }
+
+    /**
+     * Resolve the navigation menu items for the current navigation design.
+     *
+     * Reads the base items from `config/navigation.navigation_items`,
+     * resolves named routes to URLs, and merges any design-specific
+     * overrides defined in `config/themes.navigation.menus.{design}`.
+     *
+     * @return array<int, array{label: string, url: string, children: array}>
+     */
+    public function navigationItems(): array
+    {
+        $design = $this->currentValue('navigation');
+
+        // Start with the base items defined in config/navigation.php
+        $items = config('navigation.navigation_items', []);
+
+        // Merge design-specific overrides from config/themes.php
+        $overrides = config("themes.navigation.menus.{$design}", []);
+        if (!empty($overrides)) {
+            $items = array_replace_recursive($items, $overrides);
+        }
+
+        // Resolve named routes to URLs
+        return array_map(function ($item) {
+            if (isset($item['route'])) {
+                $item['url'] = route($item['route']);
+            }
+
+            if (!empty($item['children'])) {
+                $item['children'] = array_map(function ($child) {
+                    if (isset($child['route'])) {
+                        $child['url'] = route($child['route']);
+                    }
+                    return $child;
+                }, $item['children']);
+            }
+
+            return $item;
+        }, $items);
+    }
 }

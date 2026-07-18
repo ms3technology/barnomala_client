@@ -75,4 +75,14 @@ return [
             'with-image'  => 'With Image Panel',
         ],
     ],
+
+    'navigation' => [
+        'label'      => 'Navigation Bar',
+        'option_key' => 'institute.theme.navigation',
+        'type'       => 'design',
+        'default'    => 'nav-v1',
+        'designs'    => [
+            'nav-v1' => 'Navigation v1 (Default)',
+        ],
+    ],
 ];
