@@ -16,9 +16,6 @@
     $showTopHeader = ! array_key_exists('institute.branding.show_top_header', (array) $options)
         || (string) $options['institute.branding.show_top_header'] === '1'
         || (bool) $options['institute.branding.show_top_header'] === true;
-    $schoolTenantId = trim($options['institute.tenant.id'] ?? request()->getHost());
-    $portalLoginUrl = 'https://cloud.barnomala.com/login?school=' . rawurlencode($schoolTenantId !== '' ? $schoolTenantId : 'demo');
-
     $facebook  = $options['institute.social.facebook']  ?? '';
     $youtube   = $options['institute.social.youtube']   ?? '';
     $whatsapp  = $options['institute.social.whatsapp']  ?? $phone;
@@ -30,6 +27,9 @@
     }
     $waDigits = preg_replace('/[^0-9]/', '', $whatsapp);
     $applyUrl = \Illuminate\Support\Facades\Route::has('apply.index') ? route('apply.index') : url('/apply');
+    
+    $schoolTenantId = trim($options['institute.tenant.id'] ?? request()->getHost());
+    $portalLoginUrl = 'https://cloud.barnomala.com/login/' . rawurlencode($schoolTenantId);
 @endphp
 
 <header class="overflow-visible relative z-50 transition-colors duration-300" style="background-color: {{ $headerBg }};"">

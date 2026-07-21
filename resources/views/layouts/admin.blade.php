@@ -190,10 +190,7 @@
                         </div>
                         <span>Data Transfer</span>
                     </a>
-                </nav>
 
-                <!-- Sidebar Footer -->
-                <div class="p-4 bg-linear-to-r from-slate-900 to-slate-800 dark:from-slate-950 dark:to-slate-900 border-t border-white/5">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="w-full flex items-center px-3 py-2.5 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all duration-200">
@@ -203,7 +200,7 @@
                             Log out
                         </button>
                     </form>
-                </div>
+                </nav>
             </div>
         </aside>
 
