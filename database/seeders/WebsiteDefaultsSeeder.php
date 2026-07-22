@@ -113,6 +113,14 @@ class WebsiteDefaultsSeeder extends Seeder
                 'Christian' => 0,
                 'Buddhism' => 0,
             ],
+            'institute.branches.json' => [
+                [
+                    'name' => 'Main Branch',
+                    'sub_domain' => 'www',
+                    'root_domain' => '',
+                    'school_id' => '',
+                ],
+            ],
         ];
 
         foreach ($options as $key => $value) {

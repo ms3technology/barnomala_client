@@ -23,7 +23,30 @@ trait BuildsPublicPageData
 
     protected function getNavigationItems(): array
     {
-        return app(ThemeService::class)->navigationItems();
+        $items = app(ThemeService::class)->navigationItems();
+
+        // Add Branches dropdown from options JSON (only if there are branches other than the main www branch)
+        $branches = Option::where('option_key', 'institute.branches.json')->value('option_value');
+        $branches = $branches ? json_decode($branches, true) : [];
+        $extraBranches = collect($branches)->filter(fn($b) => ($b['sub_domain'] ?? 'www') !== 'www')->values();
+
+        if ($extraBranches->isNotEmpty()) {
+            $children = collect($branches)->map(function ($branch) {
+                $subDomain = $branch['sub_domain'] ?? '';
+                return [
+                    'label' => $branch['name'] ?? $subDomain,
+                    'url' => url('/' . $subDomain),
+                ];
+            })->toArray();
+
+            $items[] = [
+                'label' => 'Our Branches',
+                'url' => '#',
+                'children' => $children,
+            ];
+        }
+
+        return $items;
     }
 
     protected function getImportantLinks(array $options): array

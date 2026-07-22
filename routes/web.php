@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\SpeechController as AdminSpeechController;
 use App\Http\Controllers\Admin\OptionController as AdminOptionController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\DataTransferController as AdminDataTransferController;
+use App\Http\Controllers\RedirectToBranchController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -113,3 +114,6 @@ Route::prefix('news')->name('news.')->group(function () {
     Route::get('/', [NewsController::class, 'index'])->name('index');
     Route::get('/{news}', [NewsController::class, 'show'])->name('show');
 });
+
+// Catch-all route for branch subdomain redirects — must be last
+Route::get('/{subdomain}', RedirectToBranchController::class);
