@@ -49,9 +49,7 @@ class TransferExportController extends Controller
 
     public function examResults(): JsonResponse
     {
-        $perPage = (int) request()->query('per_page', 15);
-
-        return response()->json($this->exportService->exportExamResults($perPage));
+        return response()->json($this->exportService->exportExamResults());
     }
 
     public function sliderImages(): JsonResponse
