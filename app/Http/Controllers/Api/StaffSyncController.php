@@ -59,6 +59,7 @@ class StaffSyncController extends Controller
                 $data = [
                     'legacy_id' => $legacyId,
                     'staff_code' => $staffCode,
+                    'order_index' => $item['order_index'] ?? null,
                     'name' => $item['name'] ?? 'Unknown',
                     'department' => $item['department'] ?? null,
                     'designation' => $item['designation'] ?? null,

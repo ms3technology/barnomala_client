@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('galleries', function (Blueprint $table) {
-            $table->unsignedBigInteger('legacy_id')->nullable()->unique()->after('id');
-        });
+        // Schema::table('galleries', function (Blueprint $table) {
+        //     $table->unsignedBigInteger('legacy_id')->nullable()->unique()->after('id');
+        // });
         
         Schema::table('notices', function (Blueprint $table) {
             $table->unsignedBigInteger('legacy_id')->nullable()->unique()->after('id');

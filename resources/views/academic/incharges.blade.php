@@ -4,7 +4,7 @@
 
 @section('content')
 <section class="py-16">
-    <div class="mx-auto max-w-[90%] px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto md:max-w-[70%] px-4 md:px-8">
         <div>
             <p class="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">Leadership Team</p>
             <h1 class="mt-4 text-4xl font-black text-slate-950">Our Incharges</h1>
@@ -12,7 +12,7 @@
             <div class="mt-12 space-y-8">
                 @forelse($incharges as $incharge)
                 <div class="group flex flex-col md:flex-row overflow-hidden rounded-2xl bg-white border border-slate-100 transition-all duration-300 hover:shadow-xl">
-                    <a href="{{ route('staff.show', $incharge->id) }}" class="block w-full md:w-72 shrink-0 aspect-square md:aspect-auto overflow-hidden bg-slate-200">
+                    <div class="block w-2/3 md:w-60 mx-auto shrink-0 aspect-square md:aspect-auto overflow-hidden bg-slate-200">
                         @if($incharge->photo)
                             <img src="{{ $incharge->photo }}"
                                 alt="{{ $incharge->name }}"
@@ -22,26 +22,19 @@
                                 <i class="fas fa-user text-slate-400 text-6xl"></i>
                             </div>
                         @endif
-                    </a>
+                    </div>
                     <div class="flex flex-1 flex-col p-6">
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                             <div>
-                                <h3 class="text-2xl font-black text-slate-900 group-hover:text-accent transition-colors">
-                                    <a href="{{ route('staff.show', $incharge->id) }}">{{ $incharge->name }}</a>
-                                </h3>
+                                <h3 class="text-2xl font-black text-slate-900">{{ $incharge->name }}</h3>
                                 <p class="text-sm font-bold text-accent uppercase tracking-wider mt-1">{{ $incharge->designation }}</p>
                                 @if($incharge->department)
                                     <p class="text-xs font-semibold text-slate-500 mt-1">{{ $incharge->department }}</p>
                                 @endif
                             </div>
-                            @if($incharge->staff_code)
-                                <span class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                                    ID: {{ $incharge->staff_code }}
-                                </span>
-                            @endif
                         </div>
 
-                        <dl class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
+                        <dl class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4">
                             @if($incharge->email)
                                 <div>
                                     <dt class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Email</dt>
@@ -109,14 +102,6 @@
                                 </div>
                             @endif
                         </dl>
-
-                        <div class="mt-6 pt-4 border-t border-slate-100">
-                            <a href="{{ route('staff.show', $incharge->id) }}"
-                               class="inline-flex items-center gap-2 text-sm font-bold text-accent hover:text-accent/80 transition-colors">
-                                View full profile
-                                <i class="fas fa-arrow-right text-xs"></i>
-                            </a>
-                        </div>
                     </div>
                 </div>
                 @empty

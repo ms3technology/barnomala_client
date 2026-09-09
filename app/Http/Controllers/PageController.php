@@ -169,7 +169,8 @@ class PageController extends Controller
                 $query->whereNull('type')
                     ->orWhere('type', '!=', 'incharge');
             })
-            ->orderBy('name', 'asc')
+            ->orderByRaw('COALESCE(order_index, 2147483647) ASC')
+            ->orderBy('staff_code', 'asc')
             ->get();
         return view('academic.staff', array_merge($this->getPublicPageData(), ['staffMembers' => $staffMembers]));
     }
@@ -177,7 +178,8 @@ class PageController extends Controller
     public function formerStaff(): View
     {
         $staffMembers = Staff::whereIn('status', ['inactive', 'resigned'])
-            ->orderBy('name', 'asc')
+            ->orderByRaw('COALESCE(order_index, 2147483647) ASC')
+            ->orderBy('staff_code', 'asc')
             ->get();
         return view('academic.former-staff', array_merge($this->getPublicPageData(), ['staffMembers' => $staffMembers]));
     }
@@ -191,6 +193,7 @@ class PageController extends Controller
     {
         $incharges = Staff::where('status', 'active')
             ->where('type', 'incharge')
+            ->orderByRaw('COALESCE(order_index, 2147483647) ASC')
             ->orderBy('name', 'asc')
             ->get();
 
@@ -200,6 +203,9 @@ class PageController extends Controller
     public function committees(): View
     {
         $committees = Committee::where('status', 'active')
+            ->with(['members' => function ($query) {
+                $query->where('is_active', true)->orderBy('id');
+            }])
             ->orderBy('order_index')
             ->get();
         return view('pages.committees', array_merge($this->getPublicPageData(), compact('committees')));
