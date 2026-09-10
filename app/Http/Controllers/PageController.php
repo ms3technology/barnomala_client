@@ -211,14 +211,6 @@ class PageController extends Controller
         return view('pages.committees', array_merge($this->getPublicPageData(), compact('committees')));
     }
 
-    public function committeeDetail(Committee $committee): View
-    {
-        $committee->load(['members' => function ($query) {
-            $query->where('is_active', true);
-        }]);
-        return view('pages.committee-detail', array_merge($this->getPublicPageData(), compact('committee')));
-    }
-
     public function contactSubmit(Request $request): RedirectResponse
     {
         $validated = $request->validate([

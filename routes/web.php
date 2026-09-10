@@ -111,7 +111,6 @@ Route::get('/former-staff', [PageController::class, 'formerStaff'])->name('staff
 Route::get('/staff/{staff}', [PageController::class, 'staffDetail'])->name('staff.show');
 
 Route::get('/committees', [PageController::class, 'committees'])->name('committees.index');
-Route::get('/committees/{committee}', [PageController::class, 'committeeDetail'])->name('committees.show');
 
 Route::get('/contact-us', [PageController::class, 'contact'])->name('contact.index');
 Route::get('/download', [DownloadController::class, 'index'])->name('download.index');
