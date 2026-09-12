@@ -34,12 +34,19 @@ return [
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DB_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
+            'database' => env('DB_DATABASE', env('DB_SQLITE_DATABASE', database_path('database.sqlite'))),
             'prefix' => '',
+            // Enable foreign keys for schema migrations. Laravel toggles this
+            // off internally during ->change() rebuilds when needed.
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
-            'busy_timeout' => null,
-            'journal_mode' => null,
-            'synchronous' => null,
+            // Wait up to 5s for a write lock instead of failing immediately.
+            'busy_timeout' => (int) env('DB_SQLITE_BUSY_TIMEOUT', 5000),
+            // WAL gives us concurrent readers + a single writer — the right
+            // mode for an app behind PHP-FPM on a VPS.
+            'journal_mode' => env('DB_SQLITE_JOURNAL_MODE', 'WAL'),
+            // NORMAL is the recommended pairing with WAL: durable across
+            // crashes but without the fsync-per-commit penalty of FULL.
+            'synchronous' => env('DB_SQLITE_SYNCHRONOUS', 'NORMAL'),
             'transaction_mode' => 'DEFERRED',
         ],
 
@@ -67,7 +74,7 @@ return [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('WP_DB', 'old_wordpress'),
+            'database' => env('WP_DATABASE', env('WP_DB', 'old_wordpress')),
             'username' => env('WP_USER', 'root'),
             'password' => env('WP_PASSWORD', ''),
             'unix_socket' => env('WP_SOCKET', ''),

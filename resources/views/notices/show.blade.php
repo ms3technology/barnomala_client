@@ -13,10 +13,10 @@
                     @endif
                     <span class="text-sm font-semibold text-slate-500">Published {{ optional($notice->published_at)->format('d M Y') }}</span>
                 </div>
-                <h1 class="mt-4 text-2xl font-black text-slate-950">{{ $notice->title }}</h1>
+                <h1 class="font-bn mt-4 text-2xl font-black text-slate-950">{{ $notice->title }}</h1>
             </div>
 
-            <article class="prose mt-8 max-w-none whitespace-pre-line text-slate-700 prose-headings:text-slate-950 prose-a:text-slate-950">
+            <article class="font-bn prose mt-8 max-w-none whitespace-pre-line text-slate-700 prose-headings:text-slate-950 prose-a:text-slate-950">
                 {{ $notice->content }}
             </article>
 

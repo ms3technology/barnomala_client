@@ -14,14 +14,22 @@ return new class extends Migration
         // Schema::table('galleries', function (Blueprint $table) {
         //     $table->unsignedBigInteger('legacy_id')->nullable()->unique()->after('id');
         // });
-        
-        Schema::table('notices', function (Blueprint $table) {
-            $table->unsignedBigInteger('legacy_id')->nullable()->unique()->after('id');
-        });
 
-        Schema::table('news', function (Blueprint $table) {
-            $table->unsignedBigInteger('legacy_id')->nullable()->unique()->after('id');
-        });
+        // Defensive: notices/news were renamed/merged into `posts` in this
+        // codebase (see 2026_09_05_130002_migrate_content_to_posts_table). When
+        // running against a fresh SQLite copy we must skip silently rather
+        // than blow up with "no such table".
+        if (Schema::hasTable('notices')) {
+            Schema::table('notices', function (Blueprint $table) {
+                $table->unsignedBigInteger('legacy_id')->nullable()->unique()->after('id');
+            });
+        }
+
+        if (Schema::hasTable('news')) {
+            Schema::table('news', function (Blueprint $table) {
+                $table->unsignedBigInteger('legacy_id')->nullable()->unique()->after('id');
+            });
+        }
     }
 
     /**
@@ -32,13 +40,17 @@ return new class extends Migration
         Schema::table('galleries', function (Blueprint $table) {
             $table->dropColumn('legacy_id');
         });
-        
-        Schema::table('notices', function (Blueprint $table) {
-            $table->dropColumn('legacy_id');
-        });
 
-        Schema::table('news', function (Blueprint $table) {
-            $table->dropColumn('legacy_id');
-        });
+        if (Schema::hasTable('notices')) {
+            Schema::table('notices', function (Blueprint $table) {
+                $table->dropColumn('legacy_id');
+            });
+        }
+
+        if (Schema::hasTable('news')) {
+            Schema::table('news', function (Blueprint $table) {
+                $table->dropColumn('legacy_id');
+            });
+        }
     }
 };

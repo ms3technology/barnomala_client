@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -31,9 +32,33 @@ return new class extends Migration
             $table->text('permanent_address')->nullable();
             $table->date('joining_date')->nullable();
             $table->date('leaving_date')->nullable();
-            $table->enum('status', ['active', 'inactive', 'resigned'])->default('active');
+            // SQLite has no native ENUM type. Store as VARCHAR with a CHECK
+            // constraint so invalid values are still rejected at the DB layer.
+            $table->string('status', 16)->default('active');
             $table->timestamps();
         });
+
+        // SQLite CHECK constraints can only be added in the same CREATE TABLE
+        // statement on SQLite < 3.32, so we attach the guard via a trigger that
+        // mirrors the original MySQL ENUM semantics.
+        DB::statement(
+            "CREATE TRIGGER IF NOT EXISTS trg_staff_status_check
+             BEFORE INSERT ON staff
+             FOR EACH ROW
+             WHEN NEW.status NOT IN ('active', 'inactive', 'resigned')
+             BEGIN
+                 SELECT RAISE(ABORT, 'Invalid staff status value');
+             END"
+        );
+        DB::statement(
+            "CREATE TRIGGER IF NOT EXISTS trg_staff_status_check_update
+             BEFORE UPDATE ON staff
+             FOR EACH ROW
+             WHEN NEW.status NOT IN ('active', 'inactive', 'resigned')
+             BEGIN
+                 SELECT RAISE(ABORT, 'Invalid staff status value');
+             END"
+        );
     }
 
     /**
@@ -41,6 +66,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        DB::statement('DROP TRIGGER IF EXISTS trg_staff_status_check');
+        DB::statement('DROP TRIGGER IF EXISTS trg_staff_status_check_update');
         Schema::dropIfExists('staff');
     }
 };
