@@ -11,6 +11,7 @@ class Committee extends Model
     use HasFactory;
 
     protected $fillable = [
+        'legacy_id',
         'type',
         'name',
         'session',

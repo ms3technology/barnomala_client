@@ -16,6 +16,7 @@ class Staff extends Model
         'user_id',
         'legacy_id',
         'staff_code',
+        'order_index',
         'name',
         'department',
         'designation',

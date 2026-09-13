@@ -204,7 +204,7 @@ class PageController extends Controller
     {
         $committees = Committee::where('status', 'active')
             ->with(['members' => function ($query) {
-                $query->where('is_active', true)->orderBy('id');
+                $query->where('is_active', true)->orderBy('order_index');
             }])
             ->orderBy('order_index')
             ->get();

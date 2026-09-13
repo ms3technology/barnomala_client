@@ -26,11 +26,14 @@ class GalleryController extends Controller
 
         $items = $query->paginate(24)->withQueryString();
         $categories = Gallery::whereNotNull('category')->distinct()->pluck('category');
+        // SQLite has no YEAR(); derive distinct years in PHP so the same
+        // query works on MySQL/Postgres too.
         $years = Gallery::whereNotNull('date')
-            ->selectRaw('YEAR(date) as year')
-            ->distinct()
-            ->orderBy('year', 'desc')
-            ->pluck('year');
+            ->pluck('date')
+            ->map(fn ($d) => \Illuminate\Support\Carbon::parse($d)->year)
+            ->unique()
+            ->sortDesc()
+            ->values();
 
         return view('admin.gallery.index', compact('items', 'categories', 'years'));
     }

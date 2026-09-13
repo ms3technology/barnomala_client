@@ -34,10 +34,10 @@ class CommitteeSyncController extends Controller
                 }
 
                 $legacyId = $item['id'];
-                
+
                 // If body has only id, delete it
                 if (count($item) === 1) {
-                    $deleted = Committee::where('id', $legacyId)->delete();
+                    $deleted = Committee::where('legacy_id', $legacyId)->delete();
                     if ($deleted) $summary['deleted']++;
                     continue;
                 }
@@ -45,8 +45,25 @@ class CommitteeSyncController extends Controller
                 // Map data from request to Committee model attributes.
                 // The outbound payload uses `type` (see SyncCommitteeToSchoolJob),
                 // which maps to the local `type` column.
+                //
+                // `legacy_id` is the stable primary identifier from the
+                // source system, so we match on that for upserts. Backfill
+                // it for rows previously imported before the column existed.
+                $existing = Committee::where('legacy_id', $legacyId)->first();
+                if (!$existing) {
+                    // Pre-migration rows may still be keyed by the local PK
+                    // equal to the legacy id; migrate them on the fly so
+                    // future syncs stop creating duplicates.
+                    $existing = Committee::where('id', $legacyId)
+                        ->whereNull('legacy_id')
+                        ->first();
+                    if ($existing) {
+                        $existing->legacy_id = $legacyId;
+                    }
+                }
+
                 $data = [
-                    'id' => $legacyId,
+                    'legacy_id' => $legacyId,
                     'type' => $item['type'] ?? $item['committee_type'] ?? 'general',
                     'name' => $item['name'] ?? 'Unknown',
                     'session' => $item['session'] ?? null,
@@ -56,10 +73,12 @@ class CommitteeSyncController extends Controller
                     'note' => $item['note'] ?? null,
                 ];
 
-                $committee = Committee::updateOrCreate(
-                    ['id' => $legacyId],
-                    $data
-                );
+                if ($existing) {
+                    $existing->fill($data)->save();
+                    $committee = $existing;
+                } else {
+                    $committee = Committee::create($data);
+                }
 
                 // Sync members if provided. Whitelist only known fillable fields
                 // so unknown payload keys (e.g. nested relations) cannot leak in.
@@ -67,21 +86,39 @@ class CommitteeSyncController extends Controller
                     foreach ($item['members'] as $memberItem) {
                         if (!isset($memberItem['id'])) continue;
 
-                        CommitteeMember::updateOrCreate(
-                            ['id' => $memberItem['id']],
-                            array_intersect_key($memberItem, array_flip([
-                                'name',
-                                'designation',
-                                'father_name',
-                                'mother_name',
-                                'phone',
-                                'email',
-                                'photo',
-                                'joining_date',
-                                'leaving_date',
-                                'is_active',
-                            ])) + ['committee_id' => $committee->id]
-                        );
+                        $memberLegacyId = $memberItem['id'];
+                        $memberExisting = CommitteeMember::where('legacy_id', $memberLegacyId)->first();
+                        if (!$memberExisting) {
+                            $memberExisting = CommitteeMember::where('id', $memberLegacyId)
+                                ->whereNull('legacy_id')
+                                ->first();
+                            if ($memberExisting) {
+                                $memberExisting->legacy_id = $memberLegacyId;
+                            }
+                        }
+
+                        $memberData = array_intersect_key($memberItem, array_flip([
+                            'order_index',
+                            'name',
+                            'designation',
+                            'father_name',
+                            'mother_name',
+                            'phone',
+                            'email',
+                            'photo',
+                            'joining_date',
+                            'leaving_date',
+                            'is_active',
+                        ])) + [
+                            'committee_id' => $committee->id,
+                            'legacy_id' => $memberLegacyId,
+                        ];
+
+                        if ($memberExisting) {
+                            $memberExisting->fill($memberData)->save();
+                        } else {
+                            CommitteeMember::create($memberData);
+                        }
                     }
                 }
 

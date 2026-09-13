@@ -12,6 +12,8 @@ class CommitteeMember extends Model
 
     protected $fillable = [
         'committee_id',
+        'legacy_id',
+        'order_index',
         'name',
         'designation',
         'father_name',
