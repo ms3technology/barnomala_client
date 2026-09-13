@@ -5,12 +5,11 @@
 @section('content')
 <section class="py-16">
     <div class="mx-auto max-w-[90%] px-4 sm:px-6 lg:px-8">
-        <p class="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">Notices</p>
         <h1 class="mt-4 text-4xl font-black text-slate-950">Notice Board</h1>
 
         <div class="mt-10 space-y-5 font-bn">
             @forelse ($notices as $notice)
-                <a href="{{ route('notices.show', $notice) }}" class="block">
+                <a href="{{ route('notices.show', $notice) }}" class="block group">
                     <article class="rounded-3xl px-6 py-5 shadow-sm {{ $notice->is_urgent ? 'bg-rose-50' : 'bg-sky-50' }}">
                         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                             <div>
@@ -20,7 +19,7 @@
                                     @endif
                                     <span class="text-sm font-semibold text-slate-500">{{ optional($notice->published_at)->format('d M Y') }}</span>
                                 </div>
-                                <h2 class="mt-3 text-2xl font-black text-slate-950">{{ $notice->title }}</h2>
+                                <h2 class="mt-3 text-2xl font-black text-slate-950 group-hover:text-green-400">{{ $notice->title }}</h2>
                             </div>
                         </div>
                     </article>

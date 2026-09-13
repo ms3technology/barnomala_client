@@ -2,104 +2,454 @@
 
 @section('title', 'Download')
 
+@push('styles')
+<style>
+    .download-container {
+        width: calc(100% - 36px);
+        margin: 25px auto;
+    }
+
+    .download-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .download-header h1 {
+        font-size: 2.25rem;
+        font-weight: 900;
+        color: #0f172a;
+        margin: 0;
+    }
+
+    .search-area {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .search-input {
+        width: 260px;
+        height: 37px;
+        border: 1px solid #777;
+        padding: 4px 9px;
+        font-family: inherit;
+        font-size: 17px;
+        outline: none;
+        border-radius: 3px;
+    }
+
+    .search-input:focus {
+        border-color: #009b43;
+    }
+
+    .search-btn {
+        width: 38px;
+        height: 37px;
+        border: none;
+        border-radius: 3px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 19px;
+    }
+
+    /* Category Navigation */
+    .category-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 25px;
+    }
+
+    .category-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 14px;
+        border: 1px solid #e2e8f0;
+        border-radius: 9999px;
+        background: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        color: #334155;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .category-chip:hover {
+        border-color: #00a651;
+        color: #008d45;
+        background: #f0fdf4;
+    }
+
+    .category-chip i {
+        color: #00a651;
+        font-size: 13px;
+    }
+
+    /* Section heading */
+    .category-heading {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #e2e8f0;
+        margin: 35px 0 18px;
+        scroll-margin-top: 96px;
+    }
+
+    .category-icon-box {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: #f0fdf4;
+        color: #008d45;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .category-icon-box i { font-size: 18px; }
+
+    .category-heading h2 {
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: #0f172a;
+        margin: 0;
+    }
+
+    .category-heading .count {
+        font-size: 12px;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin: 0;
+    }
+
+    /* Table */
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .notice-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .notice-table th,
+    .notice-table td {
+        border: 1px solid #d1d1d1;
+        padding: 5px 6px;
+        vertical-align: middle;
+        word-wrap: break-word;
+    }
+
+    .notice-table th {
+        height: 37px;
+        background: #fafafa;
+        text-align: center;
+        font-size: 18px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .notice-table td {
+        height: 53px;
+        font-size: 17px;
+    }
+
+    .col-number  { width: 5%; text-align: center; font-weight: 600; }
+    .col-title   { width: 25%; }
+    .col-filename{ width: 40%; }
+    .col-filesize{ width: 10%;  text-align: center; white-space: nowrap; }
+    .col-action  { width: 20%;  text-align: center; }
+
+    .size-cell {
+        font-size: 13px;
+        color: #64748b;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+    }
+
+    .filename-cell {
+        font-size: 15px;
+        color: #0f172a;
+        font-weight: 500;
+        word-break: break-all;
+    }
+
+    .notice-title {
+        line-height: 1.55;
+        font-weight: 600;
+        color: #0f172a;
+    }
+
+    .cover-thumb {
+        max-width: 90px;
+        max-height: 60px;
+        object-fit: cover;
+        border: 1px solid #e2e8f0;
+        border-radius: 3px;
+    }
+
+    /* PDF / File Icon (CSS-drawn like sample) */
+    .file-icon {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: #000;
+        line-height: 1;
+        gap: 2px;
+    }
+
+    .file-icon .file-symbol {
+        position: relative;
+        width: 26px;
+        height: 30px;
+        border: 2px solid #111;
+        border-radius: 1px;
+        display: block;
+    }
+
+    .file-icon .file-symbol::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 10px;
+        height: 10px;
+        background: white;
+        border-left: 2px solid #111;
+        border-bottom: 2px solid #111;
+    }
+
+    .file-icon .file-symbol::after {
+        content: attr(data-ext);
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: Arial, sans-serif;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+    }
+
+    .empty-cell {
+        color: #cbd5e1;
+        font-size: 18px;
+    }
+
+    .table-footer {
+        text-align: right;
+        margin-top: 12px;
+        font-size: 15px;
+        color: #475569;
+    }
+
+    /* Empty state */
+    .empty-state {
+        margin-top: 50px;
+        border: 2px dashed #cbd5e1;
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 60px 20px;
+        text-align: center;
+        color: #64748b;
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        color: #cbd5e1;
+        margin-bottom: 12px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .download-container { width: calc(100% - 20px); margin: 15px auto; }
+        .download-header { flex-direction: column; align-items: stretch; }
+        .search-input { flex: 1; width: auto; }
+        .notice-table { min-width: 880px; }
+        .download-header h1 { font-size: 1.75rem; }
+    }
+</style>
+@endpush
+
 @section('content')
-<section class="py-12 md:py-16">
-    <div class="mx-auto max-w-[90%] px-4 sm:px-6 lg:px-8">
-        <p class="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">Resources</p>
-        <h1 class="mt-4 text-4xl md:text-5xl font-black text-slate-950">Download Center</h1>
-        
-        @if(empty($grouped))
-            <div class="mt-12 rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-12 text-center text-slate-500">
-                <i class="fas fa-folder-open text-4xl text-slate-300 mb-3"></i>
-                <p class="font-medium text-slate-600">No downloads are available right now.</p>
-                <p class="text-sm mt-1">Please check back later.</p>
+<section class="mx-auto max-w-5xl py-8 md:py-10">
+    <div class="download-container">
+
+        {{-- Top Bar --}}
+        <div class="download-header">
+            <h1>Resources</h1>
+
+            <form action="{{ url()->current() }}" method="GET" class="search-area" role="search">
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ request('q') }}"
+                    class="search-input"
+                    placeholder="Search downloads..."
+                    aria-label="Search downloads"
+                >
+                <button type="submit" class="search-btn" aria-label="Search">🔍</button>
+            </form>
+        </div>
+
+        @php
+            // Build per-post groups: each entry is one post with the artifacts
+            // that should be rendered as separate file-rows under it.
+            // The post-level columns (number, title, cover, published) are
+            // row-spanned across these artifact rows.
+            $q = trim((string) request('q', ''));
+            $groups = [];
+            $serial = 0;
+            $fileTotal = 0;
+
+            if (!$q) {
+                foreach ($downloads as $post) {
+                    $artifacts = $post->artifacts;
+                    if ($artifacts->isEmpty()) {
+                        continue;
+                    }
+                    $serial++;
+                    $fileTotal += $artifacts->count();
+                    $groups[] = [
+                        'post'      => $post,
+                        'serial'    => $serial,
+                        'artifacts' => $artifacts,
+                    ];
+                }
+            } else {
+                $needle = mb_strtolower($q);
+                foreach ($downloads as $post) {
+                    $titleHit = mb_stripos($post->title ?? '', $needle) !== false;
+                    $descHit  = mb_stripos($post->description ?? '', $needle) !== false;
+                    $matched  = $post->artifacts->filter(
+                        fn ($a) => mb_stripos($a->file_name ?? '', $needle) !== false
+                    )->values();
+
+                    if ($titleHit || $descHit) {
+                        $arts = $matched->isNotEmpty() ? $matched : $post->artifacts;
+                    } elseif ($matched->isNotEmpty()) {
+                        $arts = $matched;
+                    } else {
+                        continue;
+                    }
+                    if ($arts->isEmpty()) {
+                        continue;
+                    }
+                    $serial++;
+                    $fileTotal += $arts->count();
+                    $groups[] = [
+                        'post'      => $post,
+                        'serial'    => $serial,
+                        'artifacts' => $arts,
+                    ];
+                }
+            }
+        @endphp
+
+        @if($fileTotal === 0)
+            <div class="empty-state">
+                @if($q === '')
+                    <i class="fas fa-folder-open"></i>
+                    <p style="font-weight:600;color:#334155;margin:6px 0 2px;">No downloads are available right now.</p>
+                    <p style="font-size:14px;">Please check back later.</p>
+                @else
+                    <i class="fas fa-search"></i>
+                    <p style="font-weight:600;color:#334155;margin:6px 0 2px;">No results for "{{ $q }}"</p>
+                    <p style="font-size:14px;">Try a different keyword.</p>
+                @endif
             </div>
         @else
-            {{-- Quick Category Navigation --}}
-            <nav class="mt-10 flex flex-wrap gap-2">
-                @foreach($grouped as $typeKey => $bucket)
-                    <a href="#cat-{{ $typeKey }}"
-                       class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 shadow-sm hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all">
-                        <i class="fas {{ $bucket['icon'] }} text-indigo-500"></i>
-                        {{ $bucket['label'] }}
-                    </a>
-                @endforeach
-            </nav>
+            @php
+                $defaultCover = asset('images/default-news.png');
+            @endphp
+            <div class="table-wrapper">
+                <table class="notice-table">
+                    <thead>
+                        <tr>
+                            <th class="col-number">No</th>
+                            <th class="col-title">Post Title</th>
+                            <th class="col-filename">File Name</th>
+                            <th class="col-filesize">Size</th>
+                            <th class="col-action">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($groups as $group)
+                            @php
+                                $post         = $group['post'];
+                                $artifacts    = $group['artifacts'];
+                                $span         = $artifacts->count();
+                                $coverUrl     = $post->image_url ?? $defaultCover;
+                                $hasCustomCover = ($coverUrl !== $defaultCover);
+                            @endphp
+                            @foreach($artifacts as $j => $artifact)
+                                @php
+                                    $fileUrl  = '/storage/' . ltrim($artifact->file_path, '/');
+                                    $ext      = strtoupper(pathinfo($artifact->file_name, PATHINFO_EXTENSION));
+                                    $sizeKb   = $artifact->file_size / 1024;
+                                    $sizeText = $sizeKb >= 1024
+                                        ? number_format($sizeKb / 1024, 2) . ' MB'
+                                        : number_format($sizeKb, 1) . ' KB';
+                                @endphp
+                                <tr>
+                                    @if($j === 0)
+                                        <td class="col-number" rowspan="{{ $span }}">{{ $group['serial'] }}</td>
 
-            <div class="mt-12 space-y-12">
-                @foreach($grouped as $typeKey => $bucket)
-                    <section id="cat-{{ $typeKey }}" class="scroll-mt-24">
-                        <div class="flex items-center gap-3 border-b border-slate-200 pb-4">
-                            <div class="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                                <i class="fas {{ $bucket['icon'] }} text-lg"></i>
-                            </div>
-                            <div>
-                                <h2 class="text-2xl font-black text-slate-950">{{ $bucket['label'] }}</h2>
-                                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                                    {{ $bucket['items']->count() }} {{ \Illuminate\Support\Str::plural('item', $bucket['items']->count()) }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <ul class="mt-5 space-y-3">
-                            @foreach($bucket['items'] as $download)
-                                <li class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all">
-                                    <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                                        <div class="flex-1 min-w-0">
-                                            <div class="flex flex-wrap items-center gap-2">
-                                                @if($download->class_label)
-                                                    <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-slate-600">
-                                                        {{ $download->class_label }}
+                                        <td class="notice-title" rowspan="{{ $span }}" style="vertical-align: middle;">
+                                            {{ $post->title }}
+                                            @if($post->class_label)
+                                                <div>
+                                                    <span style="display:inline-block;color:#475569;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">
+                                                        {{ $post->class_label }}
                                                     </span>
-                                                @endif
-                                                <span class="text-xs font-semibold text-slate-400">
-                                                    Published {{ optional($download->published_at)->format('d M Y') }}
-                                                </span>
-                                            </div>
-                                            <h3 class="mt-2 text-lg font-bold text-slate-900">{{ $download->title }}</h3>
-                                            @if($download->description)
-                                                <p class="mt-1.5 text-sm text-slate-600 line-clamp-2">{{ $download->description }}</p>
+                                                </div>
                                             @endif
-                                        </div>
+                                            <div class="pt-2 text-xs italic font-normal">Published at {{ optional($post->published_at)->format('d-m-Y') ?? '—' }}</div>
+                                        </td>
+                                    @endif
 
-                                        <div class="flex flex-wrap items-center gap-2 md:flex-col md:items-stretch md:w-56 shrink-0">
-                                            @forelse($download->artifacts as $artifact)
-                                                @php
-                                                    $ext = strtolower(pathinfo($artifact->file_name, PATHINFO_EXTENSION));
-                                                    $icon = match(true) {
-                                                        $ext === 'pdf' => 'fa-file-pdf',
-                                                        in_array($ext, ['doc','docx'], true) => 'fa-file-word',
-                                                        in_array($ext, ['xls','xlsx'], true) => 'fa-file-excel',
-                                                        in_array($ext, ['ppt','pptx'], true) => 'fa-file-powerpoint',
-                                                        in_array($ext, ['zip','rar'], true) => 'fa-file-archive',
-                                                        in_array($ext, ['jpg','jpeg','png','gif','webp'], true) => 'fa-file-image',
-                                                        default => 'fa-file-alt',
-                                                    };
-                                                    $sizeKb = $artifact->file_size / 1024;
-                                                    $sizeText = $sizeKb >= 1024 ? number_format($sizeKb / 1024, 2) . ' MB' : number_format($sizeKb, 1) . ' KB';
-                                                @endphp
-                                                <a href="/storage/{{ ltrim($artifact->file_path, '/') }}"
-                                                   target="_blank" rel="noreferrer"
-                                                   class="group flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700">
-                                                    <span class="flex items-center gap-3 min-w-0">
-                                                        <i class="fas {{ $icon }} text-rose-500"></i>
-                                                        <span class="truncate" title="{{ $artifact->file_name }}">{{ $artifact->file_name }}</span>
-                                                    </span>
-                                                    <span class="flex items-center gap-2 shrink-0">
-                                                        <span class="text-[10px] uppercase tracking-wider text-slate-400">{{ $sizeText }}</span>
-                                                        <i class="fas fa-download text-indigo-500 group-hover:translate-y-0.5 transition-transform"></i>
-                                                    </span>
-                                                </a>
-                                            @empty
-                                                <span class="text-xs italic text-slate-400">No file attached.</span>
-                                            @endforelse
+                                    <td class="filename-cell">
+                                        <span class="text-sm" title="{{ $artifact->file_name }}">{{ $artifact->file_name }}</span>
+                                    </td>
+
+                                    <td class="col-filesize">
+                                        <span class="size-cell">{{ $sizeText }}</span>
+                                    </td>
+
+                                    <td class="col-action">
+                                        <div class="w-full justify-center flex gap-4 text-sm text-blue-600">
+                                            <a href="{{ $fileUrl }}" target="_blank" rel="noreferrer" class="hover:underline">
+                                                View
+                                            </a>
+                                            <a
+                                                download
+                                                href="{{ $fileUrl }}" class="hover:underline">
+                                                Download
+                                            </a>
                                         </div>
-                                    </div>
-                                </li>
+                                    </td>
+                                </tr>
                             @endforeach
-                        </ul>
-                    </section>
-                @endforeach
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-footer" style="text-align:right;margin-top:15px;font-weight:600;">
+                Showing {{ $fileTotal }} {{ \Illuminate\Support\Str::plural('file', $fileTotal) }}
             </div>
         @endif
     </div>

@@ -91,6 +91,7 @@ class PostController extends Controller
         }
 
         $post->update($validated);
+        $this->renameArtifacts($request, $post);
         $this->deleteArtifacts($request, $post);
         $this->storeFiles($request, $post);
 
@@ -131,9 +132,13 @@ class PostController extends Controller
             'artifacts' => ['nullable', 'array'],
             'artifacts.*' => ['file', 'max:20480'],
             'delete_artifacts' => ['nullable', 'array'],
+            'artifact_names' => ['nullable', 'array'],
+            'artifact_names.*' => ['nullable', 'string', 'max:255'],
+            'artifact_file_names' => ['nullable', 'array'],
+            'artifact_file_names.*' => ['nullable', 'string', 'max:255'],
         ]);
 
-        unset($validated['image'], $validated['artifacts'], $validated['delete_artifacts']);
+        unset($validated['image'], $validated['artifacts'], $validated['delete_artifacts'], $validated['artifact_names'], $validated['artifact_file_names']);
 
         return $validated;
     }
@@ -150,15 +155,21 @@ class PostController extends Controller
             default => 'downloads',
         };
 
-        foreach ($request->file('artifacts') as $file) {
+        $names = (array) $request->input('artifact_file_names', []);
+
+        foreach ($request->file('artifacts') as $index => $file) {
             if (!$file->isValid()) {
                 continue;
             }
 
+            $displayName = trim((string) ($names[$index] ?? ''));
+            $originalName = $file->getClientOriginalName();
+            $fileName = $displayName !== '' ? $displayName : $originalName;
+
             $path = $file->store($directory, 'public');
             $post->artifacts()->create([
                 'file_path' => $path,
-                'file_name' => $file->getClientOriginalName(),
+                'file_name' => $fileName,
                 'file_type' => $file->getClientMimeType(),
                 'file_size' => $file->getSize(),
             ]);
@@ -176,6 +187,25 @@ class PostController extends Controller
             if ($artifact) {
                 Storage::disk('public')->delete($artifact->file_path);
                 $artifact->delete();
+            }
+        }
+    }
+
+    private function renameArtifacts(Request $request, Post $post): void
+    {
+        $names = (array) $request->input('artifact_names', []);
+
+        foreach ($names as $artifactId => $newName) {
+            $newName = trim((string) $newName);
+
+            if ($newName === '') {
+                continue;
+            }
+
+            $artifact = $post->artifacts()->find($artifactId);
+            if ($artifact && $artifact->file_name !== $newName) {
+                $artifact->file_name = $newName;
+                $artifact->save();
             }
         }
     }

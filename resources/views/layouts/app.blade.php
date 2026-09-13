@@ -28,6 +28,7 @@
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body class="min-h-screen bg-slate-50 font-sans text-slate-800 antialiased">
     <div class="flex min-h-screen flex-col">

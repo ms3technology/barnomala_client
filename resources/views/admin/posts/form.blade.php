@@ -62,9 +62,25 @@
                 <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700 overflow-hidden">
                     <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-paperclip text-indigo-500"></i> Attachments</h3></div>
                     <div class="p-6">
-                        @if($isEditing && $post->artifacts->count())<div class="mb-5"><p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">Existing Files ({{ $post->artifacts->count() }})</p><div class="space-y-2">@foreach($post->artifacts as $artifact)<div x-data="{ marked: false }" x-show="!marked" class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-xl border border-slate-100 dark:border-slate-600"><div class="flex items-center gap-3 min-w-0"><i class="fas fa-file-alt text-indigo-500"></i><span class="text-sm font-semibold truncate">{{ $artifact->file_name }}</span></div><input type="hidden" name="delete_artifacts[{{ $artifact->id }}]" :value="marked ? 1 : 0"><button @click="marked = true" type="button" class="w-9 h-9 inline-flex items-center justify-center rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Delete file"><i class="fas fa-trash-alt text-xs"></i></button></div>@endforeach</div></div>@endif
+                        @if($isEditing && $post->artifacts->count())
+                        <div class="mb-5">
+                            <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">Existing Files ({{ $post->artifacts->count() }})</p>
+                            <div class="space-y-2">
+                                @foreach($post->artifacts as $artifact)
+                                <div x-data="{ marked: false }" x-show="!marked" class="flex items-center justify-between gap-3 p-3 bg-slate-50 dark:bg-slate-700/50 rounded-xl border border-slate-100 dark:border-slate-600">
+                                    <div class="flex items-center gap-3 min-w-0 flex-1">
+                                        <i class="fas fa-file-alt text-indigo-500 shrink-0"></i><input type="text" name="artifact_names[{{ $artifact->id }}]" value="{{ old('artifact_names.'.$artifact->id, $artifact->file_name) }}" maxlength="255" placeholder="File name" class="block w-full px-3 py-2 text-sm font-semibold rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+                                    </div>
+                                    <input type="hidden" name="delete_artifacts[{{ $artifact->id }}]" :value="marked ? 1 : 0">
+                                    <button @click="marked = true" type="button" class="w-9 h-9 inline-flex items-center justify-center rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors shrink-0" title="Delete file"><i class="fas fa-trash-alt text-xs"></i></button>
+                                </div>
+                                @endforeach
+                                @error('artifact_names.*') <p class="mt-2 text-xs text-red-500 font-medium">{{ $message }}</p> @enderror
+                            </div>
+                        </div>
+                        @endif
                         <div @click="$refs.attachmentsInput.click()" class="flex flex-col items-center justify-center px-6 py-8 border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-xl cursor-pointer hover:border-indigo-400 transition-all bg-slate-50/50 group"><i class="fas fa-cloud-upload-alt text-2xl text-slate-400 group-hover:text-indigo-500 mb-2"></i><p class="text-sm font-semibold text-slate-600 dark:text-slate-400">Click to add files</p><p class="text-xs text-slate-400 mt-1">Maximum 20 MB per file.</p><input type="file" name="artifacts[]" multiple x-ref="attachmentsInput" @change="handleAttachments($event)" class="hidden"></div>@error('artifacts.*') <p class="mt-2 text-xs text-red-500 font-medium">{{ $message }}</p> @enderror
-                        <template x-if="selectedFiles.length"><div class="mt-4 space-y-2"><p class="text-xs font-bold text-slate-500 uppercase tracking-wider">New Files (<span x-text="selectedFiles.length"></span>)</p><template x-for="(file, index) in selectedFiles" :key="index"><div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-xl"><div class="flex items-center gap-3 min-w-0"><i class="fas fa-file-alt text-indigo-500"></i><span class="text-sm font-semibold truncate" x-text="file.name"></span></div><button @click="removeFile(index)" type="button" class="text-slate-400 hover:text-red-500"><i class="fas fa-times"></i></button></div></template></div></template>
+                        <template x-if="selectedFiles.length"><div class="mt-4 space-y-2"><p class="text-xs font-bold text-slate-500 uppercase tracking-wider">New Files (<span x-text="selectedFiles.length"></span>)</p><template x-for="(file, index) in selectedFiles" :key="index"><div class="flex items-center justify-between gap-3 p-3 bg-slate-50 dark:bg-slate-700/50 rounded-xl"><div class="flex items-center gap-3 min-w-0 flex-1"><i class="fas fa-file-alt text-indigo-500 shrink-0"></i><input type="text" :name="`artifact_file_names[${index}]`" x-model="file.displayName" maxlength="255" placeholder="File name" class="block w-full px-3 py-2 text-sm font-semibold rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"></div><button @click="removeFile(index)" type="button" class="w-9 h-9 inline-flex items-center justify-center rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors shrink-0" title="Remove file"><i class="fas fa-times"></i></button></div></template></div></template>
                     </div>
                 </div>
             </div>
@@ -95,7 +111,10 @@ document.addEventListener('alpine:init', () => {
         get isDownload() { return !this.isNotice && !this.isNews; },
         handleAttachments(event) {
             Array.from(event.target.files).forEach(file => {
-                if (file.size <= 20 * 1024 * 1024 && !this.selectedFiles.some(item => item.name === file.name && item.size === file.size)) this.selectedFiles.push(file);
+                if (file.size <= 20 * 1024 * 1024 && !this.selectedFiles.some(item => item.name === file.name && item.size === file.size)) {
+                    file.displayName = file.name;
+                    this.selectedFiles.push(file);
+                }
             });
             this.syncInput();
         },

@@ -46,6 +46,17 @@
                     @endforelse
                 </div>
             </div>
+
+            <div class="mt-16 flex flex-wrap items-center justify-center gap-4">
+                <a href="{{ route('teachers.index') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-slate-700 shadow-sm transition-all duration-300 hover:border-accent hover:text-accent hover:shadow-md">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    Teachers
+                </a>
+                <a href="{{ route('teachers.former') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-slate-700 shadow-sm transition-all duration-300 hover:border-accent hover:text-accent hover:shadow-md">
+                    <i class="fas fa-history"></i>
+                    Former Teachers
+                </a>
+            </div>
         </div>
     </div>
 </section>
