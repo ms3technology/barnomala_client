@@ -4,11 +4,8 @@ use App\Http\Controllers\Api\CommitteeSyncController;
 use App\Http\Controllers\Api\DataTransferController;
 use App\Http\Controllers\Api\FileUploadController;
 use App\Http\Controllers\Api\GallerySyncController;
-use App\Http\Controllers\Api\NewsSyncController;
-use App\Http\Controllers\Api\NoticeSyncController;
 use App\Http\Controllers\Api\OptionSyncController;
-use App\Http\Controllers\Api\PostSyncController;
-use App\Http\Controllers\Api\SpeechSyncController;
+use App\Http\Controllers\Api\PostCrudController;
 use App\Http\Controllers\Api\StaffSyncController;
 use App\Http\Controllers\Api\TeacherSyncController;
 use App\Http\Controllers\Api\TransferExportController;
@@ -21,12 +18,20 @@ Route::prefix('v1')->group(function () {
         Route::post('teachers/sync', [TeacherSyncController::class, 'sync']);
         Route::post('staff/sync', [StaffSyncController::class, 'sync']);
         Route::post('committees/sync', [CommitteeSyncController::class, 'sync']);
-        Route::post('notices/sync', [NoticeSyncController::class, 'sync']);
-        Route::post('news/sync', [NewsSyncController::class, 'sync']);
         Route::post('galleries/sync', [GallerySyncController::class, 'sync']);
-        Route::post('speeches/sync', [SpeechSyncController::class, 'sync']);
-        Route::post('posts/sync', [PostSyncController::class, 'sync']);
-        Route::post('transfer/all', [DataTransferController::class, 'transferAll'])->name('api.transfer.all');
+
+        Route::get('posts', [PostCrudController::class, 'index']);
+        Route::get('posts/{type}', [PostCrudController::class, 'indexByType'])
+            ->where('type', '[a-z_]+');
+        Route::get('posts/{id}', [PostCrudController::class, 'show'])
+            ->where('id', '[0-9]+');
+
+        // write operation endpoints
+        Route::post('posts', [PostCrudController::class, 'store']);
+        Route::match(['put', 'patch'], 'posts/{id}', [PostCrudController::class, 'update'])
+            ->where('id', '[0-9]+');
+        Route::delete('posts/{id}', [PostCrudController::class, 'destroy'])
+            ->where('id', '[0-9]+');
     });
 
     Route::get('students', [TransferExportController::class, 'students']);
@@ -41,14 +46,5 @@ Route::prefix('v1')->group(function () {
     Route::get('committees', [TransferExportController::class, 'committees']);
     Route::get('governing-body', [TransferExportController::class, 'governingBody']);
     Route::get('options', [TransferExportController::class, 'options']);
-    Route::get('notices', [NoticeSyncController::class, 'index']);
-    Route::get('news', [NewsSyncController::class, 'index']);
     Route::get('galleries', [GallerySyncController::class, 'index']);
-    Route::get('speeches', [SpeechSyncController::class, 'index']);
-    Route::get('posts', [PostSyncController::class, 'index']);
-    Route::get('posts/{type}', [PostSyncController::class, 'indexByType'])
-        ->where('type', '[a-z_]+');
-    Route::get('posts/{type}/{id}', [PostSyncController::class, 'show'])
-        ->where('type', '[a-z_]+')
-        ->where('id', '[0-9]+');
 });

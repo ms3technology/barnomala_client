@@ -15,6 +15,7 @@ class Post extends Model
     public const POST_TYPES = [
         'notice' => 'Notice',
         'news' => 'News',
+        'download' => 'Downloads',
         'document' => 'Document',
         'admission_form' => 'Admission Form',
         'other_forms' => 'Other Forms',
@@ -27,13 +28,9 @@ class Post extends Model
 
     protected $fillable = [
         'type',
-        'source_type',
-        'source_id',
         'legacy_id',
         'title',
         'content',
-        'summary',
-        'description',
         'class_label',
         'published_at',
         'image_json',
@@ -44,7 +41,6 @@ class Post extends Model
     ];
 
     protected $casts = [
-        'source_id' => 'integer',
         'legacy_id' => 'integer',
         'published_at' => 'date',
         'image_json' => 'array',
@@ -66,17 +62,17 @@ class Post extends Model
 
     public function scopeNotices(Builder $query): Builder
     {
-        return $query->where('type', self::NOTICE)->where('source_type', self::NOTICE);
+        return $query->where('type', self::NOTICE);
     }
 
     public function scopeNews(Builder $query): Builder
     {
-        return $query->where('type', self::NEWS)->where('source_type', self::NEWS);
+        return $query->where('type', self::NEWS);
     }
 
     public function scopeDownloads(Builder $query): Builder
     {
-        return $query->where('source_type', 'download');
+        return $query->whereIn('type', array_keys(self::downloadTypes()));
     }
 
     public function getImageUrlAttribute(): string

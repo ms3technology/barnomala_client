@@ -21,9 +21,7 @@ class NewsController extends Controller
 
     public function show(Post $news): View
     {
-        if ($news->source_type !== 'news' || !$news->is_active) {
-            abort(404);
-        }
+        abort_unless($news->is_active, 404);
 
         $news->load('artifacts');
         

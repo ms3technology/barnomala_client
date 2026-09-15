@@ -26,7 +26,7 @@ class NoticeController extends Controller
 
     public function show(Post $notice): View
     {
-        abort_unless($notice->source_type === 'notice' && $notice->is_active, 404);
+        abort_unless($notice->is_active, 404);
 
         $notice->load('artifacts');
 

@@ -48,7 +48,6 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $validated = $this->validatePost($request);
-        $validated['source_type'] = $this->sourceType($validated['type']);
         $validated['is_active'] = $request->boolean('is_active', true);
         $validated['is_urgent'] = $request->boolean('is_urgent');
         $validated['is_featured'] = $request->boolean('is_featured');
@@ -57,7 +56,7 @@ class PostController extends Controller
         $post = Post::create($validated);
         $this->storeFiles($request, $post);
 
-        return redirect()->route('admin.posts.index', ['tab' => $this->tabFor($post)])
+        return redirect()->route('admin.posts.index', ['tab' => $post->type])
             ->with('success', 'Post created successfully.');
     }
 
@@ -75,7 +74,6 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         $validated = $this->validatePost($request);
-        $validated['source_type'] = $this->sourceType($validated['type']);
         $validated['is_active'] = $request->boolean('is_active', true);
         $validated['is_urgent'] = $request->boolean('is_urgent');
         $validated['is_featured'] = $request->boolean('is_featured');
@@ -95,7 +93,7 @@ class PostController extends Controller
         $this->deleteArtifacts($request, $post);
         $this->storeFiles($request, $post);
 
-        return redirect()->route('admin.posts.index', ['tab' => $this->tabFor($post)])
+        return redirect()->route('admin.posts.index', ['tab' => $post->type])
             ->with('success', 'Post updated successfully.');
     }
 
@@ -120,8 +118,6 @@ class PostController extends Controller
             'type' => ['required', 'string', Rule::in(array_keys($this->types()))],
             'title' => ['required', 'string', 'max:255'],
             'content' => [Rule::requiredIf(in_array($request->input('type'), [Post::NOTICE, Post::NEWS], true)), 'nullable', 'string'],
-            'summary' => ['nullable', 'string'],
-            'description' => ['nullable', 'string'],
             'class_label' => ['nullable', 'string', 'max:255'],
             'published_at' => ['required', 'date'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
@@ -149,7 +145,7 @@ class PostController extends Controller
             return;
         }
 
-        $directory = match ($post->source_type) {
+        $directory = match ($post->type) {
             Post::NOTICE => 'notices/artifacts',
             Post::NEWS => 'news/artifacts',
             default => 'downloads',
@@ -213,23 +209,5 @@ class PostController extends Controller
     private function types(): array
     {
         return Post::POST_TYPES;
-    }
-
-    private function sourceType(string $type): string
-    {
-        return match ($type) {
-            Post::NOTICE => Post::NOTICE,
-            Post::NEWS => Post::NEWS,
-            default => 'download',
-        };
-    }
-
-    private function tabFor(Post $post): string
-    {
-        if (in_array($post->source_type, [Post::NOTICE, Post::NEWS], true)) {
-            return $post->source_type;
-        }
-
-        return 'downloads';
     }
 }

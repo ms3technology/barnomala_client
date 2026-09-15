@@ -154,11 +154,8 @@ class WebsiteDefaultsSeeder extends Seeder
 
         foreach ($samples as $sample) {
             Post::query()->updateOrCreate(
-                ['source_type' => Post::NOTICE, 'title' => $sample['title']],
-                $sample + [
-                    'type' => Post::NOTICE,
-                    'source_type' => Post::NOTICE,
-                ]
+                ['type' => Post::NOTICE, 'title' => $sample['title']],
+                $sample + ['type' => Post::NOTICE]
             );
         }
     }

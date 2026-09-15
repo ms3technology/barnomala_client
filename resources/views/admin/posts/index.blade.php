@@ -104,7 +104,7 @@
                     @forelse($posts as $post)
                         @php
                             $style = $typeStyles[$post->type] ?? ['bg' => 'bg-slate-50', 'text' => 'text-slate-700', 'ring' => 'ring-slate-200/60'];
-                            $typeName = $post->source_type === 'document' ? \App\Models\Post::typeLabel($post->type) : ucfirst($post->type);
+                            $typeName = \App\Models\Post::typeLabel($post->type);
                             $imageUrl = $post->image_json['url'] ?? null;
                         @endphp
                         <tr class="post-row cursor-pointer group"
@@ -128,7 +128,7 @@
                                             <i class="fas fa-arrow-right row-arrow text-xs text-indigo-500"></i>
                                         </div>
                                         <div class="flex items-center gap-2 mt-1 text-xs text-slate-400">
-                                            @if($post->source_type === 'document' && $post->class_label)
+                                            @if($post->type === 'document' && $post->class_label)
                                                 <span class="inline-flex items-center gap-1">
                                                     <i class="fas fa-graduation-cap text-[10px]"></i>
                                                     {{ $post->class_label }}

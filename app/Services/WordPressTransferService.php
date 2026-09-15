@@ -406,7 +406,7 @@ class WordPressTransferService
                 $parsed = $this->extractContentAndMediaUrls((string) ($row->post_content ?? ''));
 
                 $notice = Post::query()->updateOrCreate(
-                    ['source_type' => Post::NOTICE, 'legacy_id' => $legacyId],
+                    ['type' => Post::NOTICE, 'legacy_id' => $legacyId],
                     [
                         'type' => Post::NOTICE,
                         'title' => trim((string) ($row->post_title ?? '')),
@@ -432,7 +432,6 @@ class WordPressTransferService
 
                     PostArtifact::query()->create([
                         'post_id' => $notice->id,
-                        'source_type' => Post::NOTICE,
                         'file_path' => $artifactData['file_path'],
                         'file_name' => $artifactData['file_name'],
                         'file_type' => $artifactData['file_type'],
@@ -489,11 +488,10 @@ class WordPressTransferService
                 $parsed = $this->extractContentAndMediaUrls((string) ($row->post_content ?? ''));
 
                 $news = Post::query()->updateOrCreate(
-                    ['source_type' => Post::NEWS, 'legacy_id' => $legacyId],
+                    ['type' => Post::NEWS, 'legacy_id' => $legacyId],
                     [
                         'type' => Post::NEWS,
                         'title' => trim((string) ($row->post_title ?? '')),
-                        'summary' => Str::limit($parsed['text'], 220, ''),
                         'content' => $parsed['text'] !== '' ? $parsed['text'] : null,
                         'published_at' => $row->post_date,
                         'is_active' => true,
@@ -518,7 +516,6 @@ class WordPressTransferService
 
                     PostArtifact::query()->create([
                         'post_id' => $news->id,
-                        'source_type' => Post::NEWS,
                         'file_path' => $artifactData['file_path'],
                         'file_name' => $artifactData['file_name'],
                         'file_type' => $artifactData['file_type'],

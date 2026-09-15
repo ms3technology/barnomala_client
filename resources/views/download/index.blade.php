@@ -332,13 +332,13 @@
             } else {
                 $needle = mb_strtolower($q);
                 foreach ($downloads as $post) {
-                    $titleHit = mb_stripos($post->title ?? '', $needle) !== false;
-                    $descHit  = mb_stripos($post->description ?? '', $needle) !== false;
-                    $matched  = $post->artifacts->filter(
+                    $titleHit  = mb_stripos($post->title ?? '', $needle) !== false;
+                    $contentHit = mb_stripos($post->content ?? '', $needle) !== false;
+                    $matched   = $post->artifacts->filter(
                         fn ($a) => mb_stripos($a->file_name ?? '', $needle) !== false
                     )->values();
 
-                    if ($titleHit || $descHit) {
+                    if ($titleHit || $contentHit) {
                         $arts = $matched->isNotEmpty() ? $matched : $post->artifacts;
                     } elseif ($matched->isNotEmpty()) {
                         $arts = $matched;

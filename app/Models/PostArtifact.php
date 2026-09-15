@@ -10,8 +10,6 @@ class PostArtifact extends Model
 {
     protected $fillable = [
         'post_id',
-        'source_type',
-        'source_id',
         'file_path',
         'file_name',
         'file_type',
@@ -19,7 +17,6 @@ class PostArtifact extends Model
     ];
 
     protected $casts = [
-        'source_id' => 'integer',
         'file_size' => 'integer',
     ];
 
