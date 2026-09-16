@@ -43,8 +43,6 @@ class CommitteeSyncController extends Controller
                 }
 
                 // Map data from request to Committee model attributes.
-                // The outbound payload uses `type` (see SyncCommitteeToSchoolJob),
-                // which maps to the local `type` column.
                 //
                 // `legacy_id` is the stable primary identifier from the
                 // source system, so we match on that for upserts. Backfill
@@ -64,7 +62,6 @@ class CommitteeSyncController extends Controller
 
                 $data = [
                     'legacy_id' => $legacyId,
-                    'type' => $item['type'] ?? $item['committee_type'] ?? 'general',
                     'name' => $item['name'] ?? 'Unknown',
                     'session' => $item['session'] ?? null,
                     'description' => $item['description'] ?? null,
@@ -98,7 +95,6 @@ class CommitteeSyncController extends Controller
                         }
 
                         $memberData = array_intersect_key($memberItem, array_flip([
-                            'order_index',
                             'name',
                             'designation',
                             'father_name',
@@ -106,6 +102,7 @@ class CommitteeSyncController extends Controller
                             'phone',
                             'email',
                             'photo',
+                            'order_index',
                             'joining_date',
                             'leaving_date',
                             'is_active',

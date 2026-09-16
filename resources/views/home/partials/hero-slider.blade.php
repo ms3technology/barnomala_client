@@ -23,15 +23,15 @@
                         ভর্তি ও নোটিশ
                     </span>
                     <svg class="w-6 h-6 text-indigo-300 relative z-10 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                    <a href="{{ route('notices.index') }}" class="relative z-10 text-sm font-bold text-white underline-offset-4 hover:underline transition-all">সব দেখুন</a>
                 </div>
-                <div class="bg-white border-x border-b border-gray-100 rounded-b-2xl flex-1 overflow-hidden shadow-[0_10px_30px_rgba(8,112,184,0.05)] hover:shadow-[0_15px_40px_rgba(8,112,184,0.08)] transition-all">
-                    <div class="p-4 space-y-3 overflow-y-auto h-full scrollbar-thin scrollbar-thumb-indigo-100 scrollbar-track-transparent">
+                <div class="flex-1 overflow-hidden">
+                    <div class="p-2 space-y-3 overflow-y-auto max-h-96 scrollbar-thin scrollbar-thumb-indigo-100 scrollbar-track-transparent">
                         @foreach($notices as $notice)
-                            <div class="group/item border border-gray-50 bg-gray-50/50 rounded-xl p-4 hover:bg-indigo-50/80 hover:border-indigo-100 transition-all duration-300">
-                                <a href="{{ route('notices.show', $notice->id) }}" class="flex gap-4 items-start">
-                                    <div class="bg-white text-indigo-700 w-13 h-13 rounded-xl shrink-0 flex flex-col items-center justify-center font-bold shadow-sm border border-indigo-50 transition-all duration-300 transform group-hover/item:-translate-y-1">
-                                        <span class="text-base leading-none">{{ formatDateBN($notice->published_at, 'day') }}</span>
-                                        <span class="text-[10px] uppercase font-bold tracking-wider mt-1 opacity-80">{{ formatDateBN($notice->published_at, 'month') }}</span>
+                            <div class="group/item border border-gray-100 bg-white rounded-xl px-4 py-3 hover:bg-indigo-50/80 hover:border-indigo-100 transition-all duration-300">
+                                <a href="{{ route('notices.show', $notice->id) }}" class="flex gap-4 items-center">
+                                    <div class="bg-white text-indigo-700 w-26 h-8 text-sm rounded-xl shrink-0 flex items-center justify-center font-bold shadow-sm border border-indigo-50 transition-all duration-300 transform group-hover/item:-translate-y-1">
+                                        <span class="text-base leading-none">{{ formatDateBN($notice->published_at, 'day') }} - {{ formatDateBN($notice->published_at, 'month') }}</span>
                                     </div>
                                     <div class="flex-1">
                                         @if($notice->is_urgent)

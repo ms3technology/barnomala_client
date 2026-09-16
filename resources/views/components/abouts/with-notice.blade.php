@@ -61,13 +61,14 @@
                             <span class="w-1.5 h-6 bg-yellow-400 rounded-full inline-block shadow-[0_0_10px_rgba(250,204,21,0.5)]"></span>
                             সর্বশেষ নোটিশ
                         </span>
+                        <a href="{{ route('notices.index') }}" class="relative z-10 text-sm font-bold text-white underline-offset-4 hover:underline transition-all">সব দেখুন</a>
                     </div>
                     <div class="flex-1 overflow-hidden">
                         <div class="p-2 space-y-3 overflow-y-auto max-h-96 scrollbar-thin scrollbar-thumb-indigo-100 scrollbar-track-transparent">
                             @foreach($notices as $notice)
                                 <div class="group/item border border-gray-100 bg-white rounded-xl px-4 py-3 hover:bg-indigo-50/80 hover:border-indigo-100 transition-all duration-300">
-                                    <a href="{{ route('notices.show', $notice->id) }}" class="flex gap-4 items-start">
-                                        <div class="bg-white text-indigo-700 w-22 h-8 text-sm rounded-xl shrink-0 flex items-center justify-center font-bold shadow-sm border border-indigo-50 transition-all duration-300 transform group-hover/item:-translate-y-1">
+                                    <a href="{{ route('notices.show', $notice->id) }}" class="flex gap-4 items-center">
+                                        <div class="bg-white text-indigo-700 w-26 h-8 text-sm rounded-xl shrink-0 flex items-center justify-center font-bold shadow-sm border border-indigo-50 transition-all duration-300 transform group-hover/item:-translate-y-1">
                                             <span class="text-base leading-none">{{ formatDateBN($notice->published_at, 'day') }} - {{ formatDateBN($notice->published_at, 'month') }}</span>
                                         </div>
                                         <div class="flex-1">

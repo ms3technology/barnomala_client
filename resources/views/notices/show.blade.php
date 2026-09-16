@@ -13,10 +13,10 @@
                     @endif
                     <span class="text-sm font-semibold text-slate-500">Published {{ optional($notice->published_at)->format('d M Y') }}</span>
                 </div>
-                <h1 class="font-bn mt-4 text-2xl font-black text-slate-950">{{ $notice->title }}</h1>
+                <h1 class="font-bn mt-2 text-2xl font-black text-slate-950">{{ $notice->title }}</h1>
             </div>
 
-            <article class="font-bn prose max-w-none whitespace-pre-line text-slate-700 prose-headings:text-slate-950 prose-a:text-slate-950">
+            <article class="font-bn pt-2 pb-4 prose max-w-none text-slate-700 prose-headings:text-slate-950 prose-a:text-slate-950">
                 {{ $notice->content }}
             </article>
 
@@ -27,7 +27,7 @@
             @endphp
 
             @if($imageArtifacts->isNotEmpty())
-                <section class="mt-12 space-y-8">
+                <section class="space-y-8">
                     @foreach($imageArtifacts as $image)
                         <div class="w-1/2 overflow-hidden border-4 border-slate-100 shadow-xl">
                             <img src="/storage/{{ ltrim($image->file_path, '/') }}" alt="{{ $image->file_name }}" class="w-full h-auto">
@@ -37,12 +37,12 @@
             @endif
 
             @if($pdfArtifacts->isNotEmpty())
-                <section class="mt-12">
+                <section>
                     @foreach ($pdfArtifacts as $pdfArtifact)
                         @php $pdfUrl = '/storage/' . ltrim($pdfArtifact->file_path, '/'); @endphp
                         <div class="overflow-hidden border border-slate-50 bg-white">
                             {{-- Header --}}
-                            <div class="flex flex-col gap-4 border-b border-slate-100 p-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div class="flex flex-col gap-4 border-b border-slate-100 p-2 sm:flex-row sm:items-center sm:justify-between">
                                 <div class="flex items-center gap-4">
                                     <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-50">
                                         <svg class="h-4 w-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

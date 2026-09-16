@@ -165,10 +165,10 @@
     }
 
     .col-number  { width: 5%; text-align: center; font-weight: 600; }
-    .col-title   { width: 25%; }
-    .col-filename{ width: 40%; }
+    .col-title   { width: 35%; }
+    .col-filename{ width: 35%; }
     .col-filesize{ width: 10%;  text-align: center; white-space: nowrap; }
-    .col-action  { width: 20%;  text-align: center; }
+    .col-action  { width: 15%;  text-align: center; }
 
     .size-cell {
         font-size: 13px;
@@ -188,6 +188,11 @@
         line-height: 1.55;
         font-weight: 600;
         color: #0f172a;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: normal;
+        height: auto;
+        max-height: none;
     }
 
     .cover-thumb {
@@ -285,7 +290,7 @@
 @endpush
 
 @section('content')
-<section class="mx-auto max-w-5xl py-8 md:py-10">
+<section class="mx-auto max-w-6xl py-8 md:py-10">
     <div class="download-container">
 
         {{-- Top Bar --}}

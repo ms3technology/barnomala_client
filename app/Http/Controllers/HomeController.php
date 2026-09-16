@@ -51,7 +51,7 @@ class HomeController extends Controller
             ->get();
 
         $generalCommitteeMembers = CommitteeMember::whereHas('committee', function ($query) {
-                $query->where('type', 'general')->where('status', 'active');
+                $query->where('status', 'active');
             })
             ->where('is_active', true)
             ->orderBy('created_at', 'asc')

@@ -12,7 +12,6 @@ class Committee extends Model
 
     protected $fillable = [
         'legacy_id',
-        'type',
         'name',
         'session',
         'description',

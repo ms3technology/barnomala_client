@@ -9,17 +9,17 @@
 
         <div class="mt-10 space-y-5 font-bn">
             @forelse ($notices as $notice)
-                <a href="{{ route('notices.show', $notice) }}" class="block group">
-                    <article class="rounded-3xl px-6 py-5 shadow-sm {{ $notice->is_urgent ? 'bg-rose-50' : 'bg-sky-50' }}">
+                <a href="{{ route('notices.show', $notice) }}" class="block group hover:bg-slate-100">
+                    <article class="p-2 border-y border-slate-300">
                         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                             <div>
                                 <div class="flex flex-wrap items-center gap-3">
                                     @if ($notice->is_urgent)
-                                        <span class="rounded-full bg-rose-600 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-white">Urgent</span>
+                                        <span class="rounded-full bg-rose-500 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-white">Urgent</span>
                                     @endif
                                     <span class="text-sm font-semibold text-slate-500">{{ optional($notice->published_at)->format('d M Y') }}</span>
                                 </div>
-                                <h2 class="mt-3 text-2xl font-black text-slate-950 group-hover:text-green-400">{{ $notice->title }}</h2>
+                                <h2 class="mt-2 text-2xl font-black text-slate-950 group-hover:text-slate-800">{{ $notice->title }}</h2>
                             </div>
                         </div>
                     </article>
