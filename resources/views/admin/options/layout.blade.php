@@ -31,6 +31,7 @@
                             'student_demographics' => 'Student Demographics (Charts)',
                             'featured_news' => 'Featured News Section',
                             'gallery' => 'Photo Gallery Section',
+                            'show_lecturers_section' => 'Display Lecturers on Teachers Page',
                             'general_committee' => 'Committee Section',
                         ];
                     @endphp

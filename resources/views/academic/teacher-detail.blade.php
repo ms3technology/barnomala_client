@@ -20,9 +20,20 @@
                     <div class="sticky top-8 space-y-10">
                         <!-- Profile Card -->
                         <div class="relative group rounded-4xl overflow-hidden shadow-2xl bg-slate-100 aspect-square">
-                            @if($teacher->photo)
-                                <img src="{{ $teacher->photo }}" 
-                                     alt="{{ $teacher->teacher_name }}" 
+                            @php
+                                $hideFemalePhoto = ($options['institute.branding.hide_female_teacher_photo'] ?? '0') === '1';
+                                $customFemaleRaw = $options['institute.branding.female_teacher_photo_json'] ?? null;
+                                $customFemale = is_array($customFemaleRaw)
+                                    ? $customFemaleRaw
+                                    : (is_string($customFemaleRaw) && $customFemaleRaw !== '' ? (json_decode($customFemaleRaw, true) ?: []) : []);
+                                $usePlaceholder = $hideFemalePhoto && strtolower((string) ($teacher->gender ?? '')) === 'female' && empty($teacher->photo);
+                                $displayPhoto = $usePlaceholder
+                                    ? (!empty($customFemale['url']) ? $customFemale['url'] : asset('images/female-teacher.png'))
+                                    : ($teacher->photo ?: null);
+                            @endphp
+                            @if($displayPhoto)
+                                <img src="{{ $displayPhoto }}"
+                                     alt="{{ $teacher->teacher_name }}"
                                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                             @else
                                 <div class="w-full h-full flex items-center justify-center bg-slate-200">

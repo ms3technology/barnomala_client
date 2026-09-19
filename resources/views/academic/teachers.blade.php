@@ -6,17 +6,27 @@
 <section class="py-16">
     <div class="mx-auto max-w-[90%] px-4 sm:px-6 lg:px-8">
         <div>
-            <p class="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">Academic Team</p>
             <h1 class="mt-4 text-4xl font-black text-slate-950">Our Dedicated Teachers</h1>
 
             <div class="mt-12">
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 gap-8">
                     @forelse($teachers as $teacher)
+                    @php
+                        $hideFemalePhoto = ($options['institute.branding.hide_female_teacher_photo'] ?? '0') === '1';
+                        $customFemaleRaw = $options['institute.branding.female_teacher_photo_json'] ?? null;
+                        $customFemale = is_array($customFemaleRaw)
+                            ? $customFemaleRaw
+                            : (is_string($customFemaleRaw) && $customFemaleRaw !== '' ? (json_decode($customFemaleRaw, true) ?: []) : []);
+                        $usePlaceholder = $hideFemalePhoto && strtolower((string) ($teacher->gender ?? '')) === 'female' && empty($teacher->photo);
+                        $displayPhoto = $usePlaceholder
+                            ? (!empty($customFemale['url']) ? $customFemale['url'] : asset('images/female-teacher.png'))
+                            : ($teacher->photo ?: null);
+                    @endphp
                     <div class="group relative flex flex-col overflow-hidden rounded-2xl bg-slate-50 border border-slate-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                         <a href="{{ route('teachers.show', $teacher->id) }}" class="block aspect-square overflow-hidden bg-slate-200">
-                            @if($teacher->photo)
-                                <img src="{{ $teacher->photo }}" 
-                                    alt="{{ $teacher->teacher_name }}" 
+                            @if($displayPhoto)
+                                <img src="{{ $displayPhoto }}"
+                                    alt="{{ $teacher->teacher_name }}"
                                     class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
                             @else
                                 <div class="w-full h-full flex items-center justify-center bg-slate-200">
@@ -43,17 +53,77 @@
                 </div>
             </div>
 
-            <div class="mt-16 flex flex-wrap items-center justify-center gap-4">
-                <a href="{{ route('lecturers.index') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-slate-700 shadow-sm transition-all duration-300 hover:border-accent hover:text-accent hover:shadow-md">
-                    <i class="fas fa-user-graduate"></i>
-                    Lecturers
-                </a>
-                <a href="{{ route('teachers.former') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-slate-700 shadow-sm transition-all duration-300 hover:border-accent hover:text-accent hover:shadow-md">
-                    <i class="fas fa-history"></i>
-                    Former Teachers
-                </a>
-            </div>
+            @if(!$showLecturersSection)
+                <div class="mt-16 flex flex-wrap items-center justify-center gap-4">
+                    <a href="{{ route('lecturers.index') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-slate-700 shadow-sm transition-all duration-300 hover:border-accent hover:text-accent hover:shadow-md">
+                        <i class="fas fa-user-graduate"></i>
+                        Lecturers
+                    </a>
+                    <a href="{{ route('teachers.former') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-slate-700 shadow-sm transition-all duration-300 hover:border-accent hover:text-accent hover:shadow-md">
+                        <i class="fas fa-history"></i>
+                        Former Teachers
+                    </a>
+                </div>
+            @endif
         </div>
+
+        @if($showLecturersSection)
+            <div class="mt-16">
+                <h1 class="mt-4 text-4xl font-black text-slate-950">Our Dedicated Lecturers</h1>
+
+                <div class="mt-12">
+                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 gap-8">
+                        @forelse($lecturers as $lecturer)
+                        @php
+                            $hideFemalePhoto = ($options['institute.branding.hide_female_teacher_photo'] ?? '0') === '1';
+                            $customFemaleRaw = $options['institute.branding.female_teacher_photo_json'] ?? null;
+                            $customFemale = is_array($customFemaleRaw)
+                                ? $customFemaleRaw
+                                : (is_string($customFemaleRaw) && $customFemaleRaw !== '' ? (json_decode($customFemaleRaw, true) ?: []) : []);
+                            $usePlaceholder = $hideFemalePhoto && strtolower((string) ($lecturer->gender ?? '')) === 'female' && empty($lecturer->photo);
+                            $displayPhoto = $usePlaceholder
+                                ? (!empty($customFemale['url']) ? $customFemale['url'] : asset('images/female-teacher.png'))
+                                : ($lecturer->photo ?: null);
+                        @endphp
+                        <div class="group relative flex flex-col overflow-hidden rounded-2xl bg-slate-50 border border-slate-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                            <a href="{{ route('teachers.show', $lecturer->id) }}" class="block aspect-square overflow-hidden bg-slate-200">
+                                @if($displayPhoto)
+                                    <img src="{{ $displayPhoto }}"
+                                        alt="{{ $lecturer->teacher_name }}"
+                                        class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center bg-slate-200">
+                                        <i class="fas fa-user-tie text-slate-400 text-6xl"></i>
+                                    </div>
+                                @endif
+                            </a>
+                            <div class="flex flex-1 flex-col p-2">
+                                <h3 class="font-black text-slate-900 group-hover:text-accent transition-colors">
+                                    <a href="{{ route('teachers.show', $lecturer->id) }}">{{ $lecturer->teacher_name }}</a>
+                                </h3>
+                                <p class="text-xs font-bold text-accent uppercase tracking-wider mt-1">{{ $lecturer->designation }}</p>
+                                @if($lecturer->department)
+                                    <p class="text-xs font-semibold text-slate-500 mt-2">{{ $lecturer->department }}</p>
+                                @endif
+                            </div>
+                        </div>
+                        @empty
+                        <div class="col-span-full py-20 text-center bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
+                            <i class="fas fa-user-graduate text-slate-200 text-6xl mb-6"></i>
+                            <p class="text-slate-400 font-bold">No lecturers recorded yet.</p>
+                        </div>
+                        @endforelse
+                    </div>
+                </div>
+                
+                <div class="mt-16 flex flex-wrap items-center justify-center gap-4">
+                    <a href="{{ route('teachers.former') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-slate-700 shadow-sm transition-all duration-300 hover:border-accent hover:text-accent hover:shadow-md">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        Former Teachers
+                    </a>
+                </div>
+            </div>
+        @endif
     </div>
 </section>
 @endsection

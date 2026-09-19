@@ -6,11 +6,22 @@
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-6">
         @foreach($teachers as $teacher)
+            @php
+                $hideFemalePhoto = ($options['institute.branding.hide_female_teacher_photo'] ?? '0') === '1';
+                $customFemaleRaw = $options['institute.branding.female_teacher_photo_json'] ?? null;
+                $customFemale = is_array($customFemaleRaw)
+                    ? $customFemaleRaw
+                    : (is_string($customFemaleRaw) && $customFemaleRaw !== '' ? (json_decode($customFemaleRaw, true) ?: []) : []);
+                $usePlaceholder = $hideFemalePhoto && strtolower((string) ($teacher->gender ?? '')) === 'female' && empty($teacher->photo);
+                $displayPhoto = $usePlaceholder
+                    ? (!empty($customFemale['url']) ? $customFemale['url'] : asset('images/female-teacher.png'))
+                    : ($teacher->photo ?: null);
+            @endphp
             <a href="{{ route('teachers.show', $teacher->id) }}" class="block">
                 <div class="bg-white rounded-xl shadow-md overflow-hidden group hover:shadow-xl transition duration-300 border border-slate-100">
                     <div class="aspect-square overflow-hidden bg-slate-100">
-                        @if($teacher->photo)
-                            <img src="{{ $teacher->photo }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="{{ $teacher->teacher_name }}">
+                        @if($displayPhoto)
+                            <img src="{{ $displayPhoto }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="{{ $teacher->teacher_name }}">
                         @else
                             <div class="w-full h-full flex items-center justify-center text-slate-300">
                                 <i class="fas fa-user-tie text-4xl"></i>

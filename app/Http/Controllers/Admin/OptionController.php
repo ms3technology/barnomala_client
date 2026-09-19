@@ -239,6 +239,7 @@ class OptionController extends Controller
             'student_demographics',
             'featured_news',
             'gallery',
+            'show_lecturers_section',
         ];
 
         $layout = [];
@@ -594,6 +595,26 @@ class OptionController extends Controller
             $path = $this->imageService->convertToWebp($request->file('about_image'), 'about');
             Option::updateOrCreate(
                 ['option_key' => 'institute.about.image_json'],
+                [
+                    'option_value' => json_encode(['url' => Storage::url($path), 'path' => $path]),
+                    'value_type' => 'json'
+                ]
+            );
+        }
+
+        // Handle Female Teacher Placeholder Photo Upload (custom photo)
+        if ($request->hasFile('female_teacher_photo')) {
+            $oldOption = Option::where('option_key', 'institute.branding.female_teacher_photo_json')->first();
+            if ($oldOption) {
+                $oldData = json_decode($oldOption->option_value, true);
+                if (is_array($oldData) && isset($oldData['path'])) {
+                    Storage::disk('public')->delete($oldData['path']);
+                }
+            }
+
+            $path = $this->imageService->convertToWebp($request->file('female_teacher_photo'), 'branding');
+            Option::updateOrCreate(
+                ['option_key' => 'institute.branding.female_teacher_photo_json'],
                 [
                     'option_value' => json_encode(['url' => Storage::url($path), 'path' => $path]),
                     'value_type' => 'json'

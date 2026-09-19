@@ -135,7 +135,25 @@ class PageController extends Controller
             ->whereRaw("LOWER(COALESCE(designation, '')) NOT LIKE ?", ['%lecturer%'])
             ->orderBy('priority_index', 'asc')
             ->get();
-        return view('academic.teachers', array_merge($this->getPublicPageData(), compact('teachers')));
+
+        $layoutRaw = Option::where('option_key', 'institute.homepage.layout')->value('option_value');
+        $layout = is_string($layoutRaw) ? json_decode($layoutRaw, true) : [];
+        $layout = is_array($layout) ? $layout : [];
+
+        $showLecturersSection = (bool) ($layout['show_lecturers_section'] ?? false);
+
+        $lecturers = collect();
+        if ($showLecturersSection) {
+            $lecturers = Teacher::where('status', true)
+                ->whereRaw('LOWER(COALESCE(designation, \'\')) LIKE ?', ['%lecturer%'])
+                ->orderBy('priority_index', 'asc')
+                ->get();
+        }
+
+        return view('academic.teachers', array_merge(
+            $this->getPublicPageData(),
+            compact('teachers', 'lecturers', 'showLecturersSection')
+        ));
     }
 
     public function lecturers(): View
