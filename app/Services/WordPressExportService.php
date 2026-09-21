@@ -223,23 +223,57 @@ class WordPressExportService
         return ['success' => true, 'count' => count($rows), 'data' => $rows];
     }
 
-    public function exportExamResults(): array
+    public function exportExamResults(?int $lastId = null, int $limit = 10000): array
     {
-        $rows = $this->rows(
-            'SELECT r.*, c.className, g.groupName, s.sectionName, e.examName
+        $sql = 'SELECT r.*, c.className, g.groupName, s.sectionName, e.examName
              FROM ct_result r
              LEFT JOIN ct_class c ON r.resClass = c.classid
              LEFT JOIN ct_group g ON r.resgroup = g.groupId
              LEFT JOIN ct_section s ON r.resSec = s.sectionid
-             LEFT JOIN ct_exam e ON r.resExam = e.examid
-             ORDER BY r.resultYear DESC, r.resExam DESC, r.resClass ASC, CAST(r.resStdRoll AS UNSIGNED) ASC'
-        );
+             LEFT JOIN ct_exam e ON r.resExam = e.examid';
 
-        if ($rows === []) {
-            return ['success' => true, 'data' => []];
+        $bindings = [];
+
+        if ($lastId !== null) {
+            $sql .= ' WHERE r.resultId > ?';
+            $bindings[] = $lastId;
         }
 
-        return ['success' => true, 'count' => count($rows), 'data' => $rows];
+        // FIX: Must order by resultId to match the WHERE clause
+        $sql .= ' ORDER BY r.resultId ASC';
+
+        if ($limit > 0) {
+            $sql .= ' LIMIT ?';
+            // Ensure strict integer binding if your DB wrapper requires it
+            $bindings[] = (int)$limit; 
+        }
+
+        $rows = $this->rows($sql, $bindings);
+
+        if ($rows === []) {
+            return [
+                'success' => true,
+                'data' => [],
+                'pagination' => [
+                    'last_id' => null,
+                    'has_more' => false,
+                    'limit' => $limit,
+                ],
+            ];
+        }
+
+        $lastResultId = (int)end($rows)['resultId'];
+
+        return [
+            'success' => true,
+            'count' => count($rows),
+            'data' => $rows,
+            'pagination' => [
+                'last_id' => $lastResultId,
+                'has_more' => count($rows) === $limit,
+                'limit' => $limit,
+            ],
+        ];
     }
 
     public function exportSliderImages(): array

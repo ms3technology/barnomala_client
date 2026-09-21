@@ -49,7 +49,10 @@ class TransferExportController extends Controller
 
     public function examResults(): JsonResponse
     {
-        return response()->json($this->exportService->exportExamResults());
+        $lastId = request()->query('last_id') ? (int) request()->query('last_id') : null;
+        $limit = (int) request()->query('limit', 10000);
+
+        return response()->json($this->exportService->exportExamResults($lastId, $limit));
     }
 
     public function sliderImages(): JsonResponse
