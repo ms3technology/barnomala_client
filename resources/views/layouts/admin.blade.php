@@ -206,9 +206,6 @@
 
                 <div class="flex-1 flex items-center justify-between">
                     <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 bg-linear-to-r from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center shadow-md lg:hidden">
-                            <i class="fas fa-shield-halved text-white text-sm"></i>
-                        </div>
                         <h2 class="text-lg font-semibold text-slate-800 dark:text-slate-100">@yield('title')</h2>
                     </div>
 
@@ -221,7 +218,7 @@
             <!-- Page Content -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto main-scroll bg-slate-50 dark:bg-slate-900">
                 @include('layouts.partials.flash')
-                <div class="p-6 md:p-8">
+                <div class="p-0 md:p-6">
                     @yield('content')
                 </div>
             </main>

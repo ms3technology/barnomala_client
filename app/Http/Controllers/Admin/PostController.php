@@ -47,7 +47,7 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $this->validatePost($request);
+        $validated = $this->applyLexicalPayload($this->validatePost($request));
         $validated['is_active'] = $request->boolean('is_active', true);
         $validated['is_urgent'] = $request->boolean('is_urgent');
         $validated['is_featured'] = $request->boolean('is_featured');
@@ -73,7 +73,7 @@ class PostController extends Controller
 
     public function update(Request $request, Post $post)
     {
-        $validated = $this->validatePost($request);
+        $validated = $this->applyLexicalPayload($this->validatePost($request), $post);
         $validated['is_active'] = $request->boolean('is_active', true);
         $validated['is_urgent'] = $request->boolean('is_urgent');
         $validated['is_featured'] = $request->boolean('is_featured');
@@ -117,7 +117,8 @@ class PostController extends Controller
         $validated = $request->validate([
             'type' => ['required', 'string', Rule::in(array_keys($this->types()))],
             'title' => ['required', 'string', 'max:255'],
-            'content' => [Rule::requiredIf(in_array($request->input('type'), [Post::NOTICE, Post::NEWS], true)), 'nullable', 'string'],
+            'content' => ['nullable', 'string'],
+            'content_lexical' => ['nullable', 'string'],
             'class_label' => ['nullable', 'string', 'max:255'],
             'published_at' => ['required', 'date'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
@@ -137,6 +138,72 @@ class PostController extends Controller
         unset($validated['image'], $validated['artifacts'], $validated['delete_artifacts'], $validated['artifact_names'], $validated['artifact_file_names']);
 
         return $validated;
+    }
+
+    /**
+     * Merge the lexical JSON payload into the validated dataset:
+     * - decode `content_lexical` into a structured array (model cast handles persistence)
+     * - derive `content` (the plain-text mirror) from it so downstream
+     *   read-only renderers keep working
+     */
+    private function applyLexicalPayload(array $payload, ?Post $post = null): array
+    {
+        $raw = $payload['content_lexical'] ?? null;
+
+        if ($raw !== null) {
+            $raw = trim((string) $raw);
+        }
+
+        $decoded = null;
+        if ($raw !== null && $raw !== '') {
+            $decoded = json_decode($raw, true);
+            if (!is_array($decoded)) {
+                $decoded = null;
+            }
+        }
+
+        if ($decoded !== null) {
+            $payload['content_lexical'] = $decoded;
+            $payload['content'] = $this->extractLexicalPlainText($decoded) ?: ($payload['content'] ?? '');
+        } else {
+            // Empty / invalid lexical payload: don't clobber existing data on update.
+            if ($post !== null) {
+                unset($payload['content_lexical']);
+            } else {
+                $payload['content_lexical'] = null;
+            }
+        }
+
+        return $payload;
+    }
+
+    /**
+     * Walk a Lexical state tree and concatenate leaf text nodes. Block-level
+     * nodes gain a soft paragraph break so the legacy `content` column
+     * stays readable when editors use multiple blocks.
+     */
+    private function extractLexicalPlainText(array $node): string
+    {
+        $text = '';
+
+        if (isset($node['text']) && is_string($node['text'])) {
+            $text .= $node['text'];
+        }
+
+        if (isset($node['children']) && is_array($node['children'])) {
+            foreach ($node['children'] as $child) {
+                if (is_array($child)) {
+                    $text .= $this->extractLexicalPlainText($child);
+                }
+            }
+        }
+
+        $type = $node['type'] ?? null;
+        if (in_array($type, ['paragraph', 'heading', 'quote', 'listitem'], true) && $text !== '') {
+            $text .= "\n\n";
+        }
+
+        return $text;
     }
 
     private function storeFiles(Request $request, Post $post): void

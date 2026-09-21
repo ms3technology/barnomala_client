@@ -43,6 +43,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     })->name('dashboard');
 
     Route::resource('posts', AdminPostController::class)->except('show');
+
     Route::resource('gallery', AdminGalleryController::class);
     Route::resource('speeches', AdminSpeechController::class);
     Route::post('speeches/quick', [AdminSpeechController::class, 'storeQuick'])->name('speeches.quick');

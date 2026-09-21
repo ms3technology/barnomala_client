@@ -15,7 +15,15 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
+        "@lexical/code": "^0.51.0",
+        "@lexical/history": "^0.51.0",
+        "@lexical/link": "^0.51.0",
+        "@lexical/list": "^0.51.0",
+        "@lexical/markdown": "^0.51.0",
+        "@lexical/rich-text": "^0.51.0",
+        "@lexical/table": "^0.51.0",
         "@vitejs/plugin-vue": "^6.0.5",
+        "lexical": "^0.51.0",
         "vue": "^3.5.30"
     }
 }

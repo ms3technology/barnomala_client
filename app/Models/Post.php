@@ -15,7 +15,6 @@ class Post extends Model
     public const POST_TYPES = [
         'notice' => 'Notice',
         'news' => 'News',
-        'download' => 'Downloads',
         'document' => 'Document',
         'admission_form' => 'Admission Form',
         'other_forms' => 'Other Forms',
@@ -34,6 +33,7 @@ class Post extends Model
         'class_label',
         'published_at',
         'image_json',
+        'content_lexical',
         'is_active',
         'is_urgent',
         'is_featured',
@@ -44,6 +44,7 @@ class Post extends Model
         'legacy_id' => 'integer',
         'published_at' => 'date',
         'image_json' => 'array',
+        'content_lexical' => 'array',
         'is_active' => 'boolean',
         'is_urgent' => 'boolean',
         'is_featured' => 'boolean',
