@@ -63,11 +63,11 @@ export function createSelect({ title, ariaLabel, options, value, onChange, attr 
         if (opt.value === value) el.selected = true;
         select.appendChild(el);
     }
-    select.addEventListener('mousedown', (event) => event.preventDefault());
-    select.addEventListener('change', (event) => {
-        event.preventDefault();
-        onChange?.(select.value, select);
-    });
+    if (typeof onChange === 'function') {
+        select.addEventListener('change', (event) => {
+            onChange(select.value, select, event);
+        });
+    }
     return select;
 }
 
@@ -122,18 +122,62 @@ export function createDropdown({ label, icon, title, content, onToggle }) {
 
     let open = false;
     let restore = null;
+
+    /**
+     * Position the dropdown content relative to the toggle button using
+     * `position: fixed` so it can escape the toolbar's `overflow-x: auto`
+     * clip and paint above the editor surface. The content is portalled to
+     * `document.body` while open and returned to its host on close.
+     */
+    const positionContent = () => {
+        const rect = button.getBoundingClientRect();
+        const gap = 6;
+        const contentWidth = content.offsetWidth || 200;
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        // Default: left-aligned to the toggle's left edge.
+        let left = rect.left;
+        // If the dropdown would overflow the viewport on the right, flip it.
+        if (left + contentWidth + 8 > viewportWidth) {
+            left = Math.max(8, rect.right - contentWidth);
+        }
+        // Keep at least 8px from the left edge.
+        if (left < 8) left = 8;
+
+        let top = rect.bottom + gap;
+        // If the dropdown would overflow the viewport on the bottom, flip
+        // it above the toggle instead.
+        const estimatedHeight = content.offsetHeight || 240;
+        if (top + estimatedHeight + 8 > viewportHeight && rect.top - estimatedHeight - gap > 8) {
+            top = rect.top - estimatedHeight - gap;
+        }
+
+        content.style.left = `${Math.round(left)}px`;
+        content.style.top = `${Math.round(top)}px`;
+        content.style.minWidth = `${Math.round(rect.width)}px`;
+    };
+
+    const reposition = () => {
+        if (open) positionContent();
+    };
+
     const close = () => {
         if (!open) return;
         open = false;
-        content.style.display = 'none';
+        if (content.parentElement === document.body) {
+            document.body.removeChild(content);
+        }
         button.setAttribute('aria-expanded', 'false');
         wrap.classList.remove('lex-tb-dropdown--open');
         document.removeEventListener('mousedown', onDocClick, true);
         document.removeEventListener('keydown', onKeyDown, true);
+        window.removeEventListener('resize', reposition);
+        window.removeEventListener('scroll', reposition, true);
         onToggle?.(false);
     };
     const onDocClick = (event) => {
-        if (!wrap.contains(event.target)) close();
+        if (!wrap.contains(event.target) && !content.contains(event.target)) close();
     };
     const onKeyDown = (event) => {
         if (event.key === 'Escape') {
@@ -155,12 +199,18 @@ export function createDropdown({ label, icon, title, content, onToggle }) {
         // current selection context, so the click that opens the dropdown
         // doesn't blow it away.
         restore = snapshotSelection(window.__lexicalActiveEditor);
-        open = true;
+        // Portal the content out to body so it escapes the toolbar's
+        // overflow clip and can paint over the editor.
+        document.body.appendChild(content);
         content.style.display = '';
+        positionContent();
+        open = true;
         button.setAttribute('aria-expanded', 'true');
         wrap.classList.add('lex-tb-dropdown--open');
         document.addEventListener('mousedown', onDocClick, true);
         document.addEventListener('keydown', onKeyDown, true);
+        window.addEventListener('resize', reposition);
+        window.addEventListener('scroll', reposition, true);
         onToggle?.(true);
     };
 
@@ -168,13 +218,19 @@ export function createDropdown({ label, icon, title, content, onToggle }) {
     button.addEventListener('click', toggle);
 
     wrap.appendChild(button);
-    wrap.appendChild(content);
 
     return {
         root: wrap,
         open: () => { if (!open) toggle(); },
         close,
         isOpen: () => open,
+        /** Detach the content from body (if portalled) and tear down listeners. */
+        destroy: () => {
+            if (open) close();
+            else if (content.parentElement === document.body) {
+                document.body.removeChild(content);
+            }
+        },
         /** Restore the editor selection. Call from inside an editor click handler. */
         restoreSelection: () => {
             if (restore) {

@@ -9,16 +9,16 @@
  */
 import {
     createEditor,
-    createEmptyHistoryState,
-    registerHistory,
     $getSelection,
     $isRangeSelection,
     $createParagraphNode,
     $createTextNode,
 } from 'lexical';
+import { registerHistory, createEmptyHistoryState } from '@lexical/history';
 import {
     HeadingNode,
     QuoteNode,
+    registerRichText,
 } from '@lexical/rich-text';
 import {
     ListNode,
@@ -29,7 +29,7 @@ import {
     $createListNode,
     $createListItemNode,
 } from '@lexical/list';
-import { LinkNode } from '@lexical/link';
+import { LinkNode, $toggleLink, TOGGLE_LINK_COMMAND } from '@lexical/link';
 import {
     TableNode,
     TableRowNode,
@@ -107,11 +107,25 @@ export function createLexicalEditor(rootEl, toolbarEl, hiddenInput, config) {
     });
 
     // ── Register plugins ────────────────────────────────────────────────────
+    registerRichText(editor);
     registerHistory(editor, createEmptyHistoryState(), 300);
     registerList(editor);
     registerCheckList(editor);
     registerTablePlugin(editor);
     registerTableSelectionObserver(editor, false);
+
+    // Handle the toolbar's link commands. Lexical's link package only
+    // ships its built-in `TOGGLE_LINK_COMMAND` listener via the newer
+    // `LinkExtension` builder — register it explicitly here so the
+    // toolbar's "Insert / edit link" popover and the Cmd/Ctrl+K shortcut
+    // actually wrap the selection in a LinkNode. Without this the command
+    // fires but nothing happens, which is why the link tool was a no-op.
+    editor.registerCommand(TOGGLE_LINK_COMMAND, (payload) => {
+        editor.update(() => {
+            $toggleLink(payload ?? null);
+        }, { discrete: true });
+        return true;
+    }, 1);
 
     // Markdown shortcuts (#, ##, >, -, *, 1., **, *, _, `, ~~)
     registerMarkdownShortcuts(editor, TRANSFORMERS);

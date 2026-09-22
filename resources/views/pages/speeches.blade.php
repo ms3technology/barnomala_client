@@ -34,7 +34,9 @@
                                 <span class="absolute -left-4 -top-8 text-8xl font-serif text-slate-100 opacity-50 select-none">"</span>
                                 <h2 class="text-3xl font-black text-slate-950 relative z-10">{{ $speech->title }}</h2>
                                 <div class="mt-8 prose prose-slate prose-lg max-w-none text-slate-600 leading-relaxed">
-                                    {!! nl2br(e($speech->speech)) !!}
+                                    <x-lexical.content-renderer
+                                        :state="$speech->speech_lexical"
+                                        :fallback="nl2br(e($speech->speech))" />
                                 </div>
                                 <span class="absolute -right-4 bottom-0 text-8xl font-serif text-slate-100 opacity-50 select-none">"</span>
                             </div>

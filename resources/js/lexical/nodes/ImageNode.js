@@ -7,6 +7,7 @@
  * removes the node when clicked.
  */
 import { DecoratorNode } from 'lexical';
+import { findAncestorAttr, removeByKey } from '../utils/dom.js';
 
 export class ImageNode extends DecoratorNode {
     __src;
@@ -49,6 +50,7 @@ export class ImageNode extends DecoratorNode {
         const wrapper = document.createElement('span');
         wrapper.className = 'lex-image-wrapper';
         wrapper.setAttribute('contenteditable', 'false');
+        wrapper.setAttribute('data-lexical-node-key', this.__key);
 
         const img = document.createElement('img');
         img.className = 'lex-image';
@@ -65,14 +67,8 @@ export class ImageNode extends DecoratorNode {
         remove.setAttribute('aria-label', 'Remove image');
         remove.textContent = '×';
         remove.addEventListener('click', (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            // Lexical exposes the node from the DOM element through `getNodeFromDOMNode`.
-            import('lexical').then(({ $getNearestNodeFromDOMNode, $getSelection, $isRangeSelection }) => {
-                const node = $getNearestNodeFromDOMNode(remove);
-                if (!node) return;
-                node.remove();
-            });
+            const key = findAncestorAttr(remove, 'data-lexical-node-key');
+            removeByKey(event, key);
         });
 
         wrapper.appendChild(img);

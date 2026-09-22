@@ -66,10 +66,17 @@
                                 <div class="relative flex-1 z-10 group/speech overflow-hidden">
                                     <span class="text-7xl font-serif text-indigo-100 absolute -top-8 -left-2 select-none group-hover:text-indigo-200 transition-colors">“</span>
                                     @php
-                                        $speechText = $speech['speech'] ?? $speech->speech;
+                                        $speechLexical = is_array($speech) ? ($speech['speech_lexical'] ?? null) : $speech->speech_lexical;
+                                        $speechPlain   = is_array($speech) ? ($speech['speech']        ?? '') : $speech->speech;
+                                        // Inside the carousel we truncate to a
+                                        // ~52vh box, so fall back to plain text
+                                        // when no Lexical state exists yet.
+                                        $speechFallback = is_string($speechPlain) ? nl2br(e($speechPlain)) : '';
                                     @endphp
                                     <div lang="bn" class="font-bn max-h-52 overflow-y-auto scrollbar-hide text-slate-600 text-justify px-4 leading-relaxed bg-white">
-                                        {{ $speechText }}
+                                        <x-lexical.content-renderer
+                                            :state="$speechLexical"
+                                            :fallback="$speechFallback" />
                                     </div>
                                     <div class="absolute bottom-0 left-0 right-0 h-8 bg-linear-to-t from-white to-transparent pointer-events-none opacity-0 group-hover/speech:opacity-100 transition-opacity"></div>
                                 </div>

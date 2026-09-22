@@ -5,8 +5,8 @@
  * canonical element-format strings.
  */
 import { FORMAT_ELEMENT_COMMAND } from 'lexical';
-import { $getSelection, $isRangeSelection } from 'lexical';
 import { createButton } from './shared.js';
+import { getActiveAlignment } from '../utils/format.js';
 
 const ALIGNMENTS = [
     { value: 'left', icon: 'align-left', title: 'Align left', aria: 'Align left' },
@@ -33,27 +33,8 @@ export function mountAlignment(editor, container, config) {
         container.appendChild(btn);
     }
 
-    const getCurrentAlignment = () => {
-        let align = 'left';
-        editor.getEditorState().read(() => {
-            const selection = $getSelection();
-            if (!$isRangeSelection(selection)) return;
-            const node = selection.anchor.getNode();
-            let parent = node.getKey() === 'root' ? node : node.getParent();
-            while (parent) {
-                const format = parent.getFormat?.();
-                if (typeof format === 'string' && ['left', 'center', 'right', 'justify'].includes(format)) {
-                    align = format;
-                    return;
-                }
-                parent = parent.getParent();
-            }
-        });
-        return align;
-    };
-
     const refresh = () => {
-        const current = getCurrentAlignment();
+        const current = getActiveAlignment(editor);
         for (const [value, btn] of Object.entries(buttons)) {
             btn.classList.toggle('is-active', value === current);
             btn.setAttribute('aria-pressed', value === current ? 'true' : 'false');

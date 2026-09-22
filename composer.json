@@ -33,7 +33,8 @@
         },
         "files": [
             "app/Helpers/settings.php",
-            "app/Helpers/bangla.php"
+            "app/Helpers/bangla.php",
+            "app/Helpers/lexical.php"
         ]
     },
     "autoload-dev": {

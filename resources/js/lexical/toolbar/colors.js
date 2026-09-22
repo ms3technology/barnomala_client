@@ -87,6 +87,8 @@ export function mountColors(editor, container, config) {
     return {
         destroy() {
             unregister();
+            textDropdown.destroy();
+            highlightDropdown.destroy();
             textDropdown.root.remove();
             highlightDropdown.root.remove();
         },

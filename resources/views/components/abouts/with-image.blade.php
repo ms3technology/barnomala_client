@@ -43,8 +43,17 @@
 
                     <div class="space-y-6">
                         <div class="relative group/text">
+                            @php
+                                $aboutText = $options['institute.about.text']
+                                    ?? 'আমাদের শিক্ষা প্রতিষ্ঠান একটি ঐতিহ্যবাহী বিদ্যাপীঠ। দীর্ঘ পথচলায় আমরা অসংখ্য মেধাবী শিক্ষার্থী উপহার দিয়েছি যারা দেশ ও দশের কল্যাণে নিয়োজিত।';
+                                $aboutTextFallback = is_string($aboutText) && ! lexical_is_state($aboutText)
+                                    ? $aboutText
+                                    : '';
+                            @endphp
                             <div class="h-48 overflow-y-auto scrollbar-hide text-slate-600 text-lg leading-relaxed font-medium prose prose-slate max-w-none">
-                                {!! $options['institute.about.text'] ?? 'আমাদের শিক্ষা প্রতিষ্ঠান একটি ঐতিহ্যবাহী বিদ্যাপীঠ। দীর্ঘ পথচলায় আমরা অসংখ্য মেধাবী শিক্ষার্থী উপহার দিয়েছি যারা দেশ ও দশের কল্যাণে নিয়োজিত।' !!}
+                                <x-lexical.content-renderer
+                                    :state="$aboutText"
+                                    :fallback="$aboutTextFallback" />
                             </div>
                             <div class="absolute bottom-0 left-0 right-0 h-4 bg-linear-to-t from-white to-transparent pointer-events-none opacity-0 group-hover/text:opacity-100 transition-opacity"></div>
                         </div>

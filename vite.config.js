@@ -8,8 +8,9 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
+                'resources/css/lexical-editor.css',
                 'resources/js/app.js',
-                'resources/js/lexical-editor.js',
+                'resources/js/lexical/index.js',
             ],
             refresh: true,
         }),

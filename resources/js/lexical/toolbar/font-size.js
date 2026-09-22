@@ -4,7 +4,7 @@
  * Exposes a `<select>` for picking an explicit size plus two buttons for
  * stepping one size up or down. Sizes are tracked in px via inline style.
  */
-import { $getSelection, $isRangeSelection } from 'lexical';
+import { $getSelection, $isRangeSelection, $setSelection, $getRoot } from 'lexical';
 import { $patchStyleText } from '@lexical/selection';
 import { createButton, createSelect } from './shared.js';
 import { getActiveInlineStyle } from '../utils/format.js';
@@ -20,7 +20,8 @@ function formatSize(px) {
 }
 
 export function mountFontSize(editor, container, config) {
-    const options = [{ label: 'Default', value: '' }, ...config.fontSizes];
+    const options = [{ label: 'Default Size', value: '' }, ...config.fontSizes];
+    let lastSelection = null;
 
     const select = createSelect({
         title: 'Font size',
@@ -31,15 +32,52 @@ export function mountFontSize(editor, container, config) {
 
     const apply = (value) => {
         editor.update(() => {
-            const selection = $getSelection();
+            if (lastSelection) {
+                try {
+                    $setSelection(lastSelection);
+                } catch (_) {}
+            }
+            let selection = $getSelection();
+            if (!$isRangeSelection(selection)) {
+                const root = $getRoot();
+                const firstChild = root.getFirstChild();
+                if (firstChild) {
+                    firstChild.select();
+                    selection = $getSelection();
+                }
+            }
             if ($isRangeSelection(selection)) {
-                $patchStyleText(selection, { 'font-size': value });
+                $patchStyleText(selection, { 'font-size': value || null });
             }
         }, { discrete: true });
         editor.focus();
     };
 
-    select.addEventListener('change', () => apply(select.value));
+    const snapshot = () => {
+        editor.getEditorState().read(() => {
+            const selection = $getSelection();
+            if ($isRangeSelection(selection)) {
+                lastSelection = selection.clone();
+            }
+        });
+    };
+
+    const unregister = editor.registerUpdateListener(({ editorState }) => {
+        editorState.read(() => {
+            const selection = $getSelection();
+            if ($isRangeSelection(selection)) {
+                lastSelection = selection.clone();
+            }
+        });
+        refresh();
+    });
+
+    select.addEventListener('focus', snapshot);
+    select.addEventListener('mousedown', snapshot);
+
+    select.addEventListener('change', () => {
+        apply(select.value);
+    });
 
     const incBtn = createButton({
         icon: 'plus',
@@ -71,18 +109,17 @@ export function mountFontSize(editor, container, config) {
 
     const refresh = () => {
         const current = getActiveInlineStyle(editor, 'font-size') || '';
-        if (Array.from(select.options).some((o) => o.value === current)) {
-            select.value = current;
-        } else {
-            select.value = '';
-        }
+        const curPx = parseSize(current);
+        const match = Array.from(select.options).find(
+            (o) => parseSize(o.value) === curPx
+        );
+        select.value = match ? match.value : '';
     };
 
     container.appendChild(decBtn);
     container.appendChild(select);
     container.appendChild(incBtn);
 
-    const unregister = editor.registerUpdateListener(() => refresh());
     refresh();
 
     return {

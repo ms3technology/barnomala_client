@@ -4,10 +4,10 @@
  * Replaces the current block via `FORMAT_ELEMENT_COMMAND`. The dropdown
  * label stays in sync with `getActiveBlockType` on every editor update.
  */
-import { FORMAT_ELEMENT_COMMAND, $createParagraphNode, $setBlocksType } from 'lexical';
-import { $createHeadingNode } from '@lexical/rich-text';
-import { $createQuoteNode } from '@lexical/rich-text';
-import { $getSelection, $isRangeSelection } from 'lexical';
+import { FORMAT_ELEMENT_COMMAND } from 'lexical';
+import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
+import { $setBlocksType } from '@lexical/selection';
+import { $createParagraphNode, $getSelection, $isRangeSelection } from 'lexical';
 import { createDropdown, createButton } from './shared.js';
 import { getActiveBlockType } from '../utils/format.js';
 
@@ -102,6 +102,7 @@ export function mountBlockType(editor, container, config) {
     return {
         destroy() {
             unregister();
+            dropdown.destroy();
             dropdown.root.remove();
         },
     };

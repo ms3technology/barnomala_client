@@ -21,10 +21,6 @@ class OptionRegistry
                         'label' => 'About Title',
                         'type' => 'text',
                     ],
-                    'institute.about.text' => [
-                        'label' => 'About Text',
-                        'type' => 'textarea',
-                    ],
                     'institute.about.button_text' => [
                         'label' => 'About Button Text',
                         'type' => 'text',
@@ -33,6 +29,22 @@ class OptionRegistry
                         'label' => 'Footer Text',
                         'type' => 'textarea',
                         'placeholder' => 'Enter text for the footer section',
+                    ],
+                    'institute.contact.address' => [
+                        'label' => 'Full Address',
+                        'type' => 'textarea',
+                    ],
+                    'institute.contact.phone' => [
+                        'label' => 'Phone Number',
+                        'type' => 'text',
+                    ],
+                    'institute.contact.email' => [
+                        'label' => 'Email Address',
+                        'type' => 'email',
+                    ],
+                    'institute.contact.map_link' => [
+                        'label' => 'Google Map Link',
+                        'type' => 'textarea',
                     ],
                 ]
             ],
@@ -75,29 +87,6 @@ class OptionRegistry
                         'label' => 'Visitor Counter (Auto)',
                         'type' => 'number',
                         'placeholder' => 'Enter visitor count',
-                    ],
-                ]
-            ],
-            'contact' => [
-                'label' => 'Contact Info',
-                'description' => 'Physical address and communication details.',
-                'icon' => 'fas fa-address-book',
-                'options' => [
-                    'institute.contact.address' => [
-                        'label' => 'Full Address',
-                        'type' => 'textarea',
-                    ],
-                    'institute.contact.phone' => [
-                        'label' => 'Phone Number',
-                        'type' => 'text',
-                    ],
-                    'institute.contact.email' => [
-                        'label' => 'Email Address',
-                        'type' => 'email',
-                    ],
-                    'institute.contact.map_link' => [
-                        'label' => 'Google Map Link',
-                        'type' => 'textarea',
                     ],
                 ]
             ],

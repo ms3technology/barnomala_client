@@ -99,14 +99,9 @@ export function getActiveInlineStyle(editor, property) {
     editor.getEditorState().read(() => {
         const selection = $getSelection();
         if (!$isRangeSelection(selection)) return;
-        const nodes = selection.isCollapsed()
-            ? [selection.anchor.getNode()]
-            : selection.getNodes();
-        for (const node of nodes) {
-            if (!$isTextNode(node)) continue;
-            const style = node.getStyle();
-            if (!style) continue;
-            for (const part of style.split(';')) {
+
+        if (selection.isCollapsed() && selection.style) {
+            for (const part of selection.style.split(';')) {
                 const [prop, ...rest] = part.split(':');
                 if (prop && prop.trim() === property) {
                     value = rest.join(':').trim();
@@ -114,8 +109,62 @@ export function getActiveInlineStyle(editor, property) {
                 }
             }
         }
+
+        const nodes = selection.isCollapsed()
+            ? [selection.anchor.getNode()]
+            : selection.getNodes();
+        for (const node of nodes) {
+            if ($isTextNode(node)) {
+                const style = node.getStyle();
+                if (!style) continue;
+                for (const part of style.split(';')) {
+                    const [prop, ...rest] = part.split(':');
+                    if (prop && prop.trim() === property) {
+                        value = rest.join(':').trim();
+                        return;
+                    }
+                }
+            } else if (typeof node.getTextStyle === 'function') {
+                const style = node.getTextStyle();
+                if (!style) continue;
+                for (const part of style.split(';')) {
+                    const [prop, ...rest] = part.split(':');
+                    if (prop && prop.trim() === property) {
+                        value = rest.join(':').trim();
+                        return;
+                    }
+                }
+            }
+        }
     });
     return value;
+}
+
+/**
+ * Lexical stores the per-element text-alignment as a small numeric code on
+ * `ElementNode.__format` (1 = left, 2 = center, 3 = right, 4 = justify,
+ * 0 = default/inherit). Walk up from the current selection and translate
+ * it to the canonical alignment name used by the toolbar UI.
+ *
+ * @returns {'left'|'center'|'right'|'justify'}
+ */
+export function getActiveAlignment(editor) {
+    let align = 'left';
+    editor.getEditorState().read(() => {
+        const selection = $getSelection();
+        if (!$isRangeSelection(selection)) return;
+        const node = selection.anchor.getNode();
+        let parent = node.getKey() === 'root' ? node : node.getParent();
+        while (parent) {
+            const format = typeof parent.getFormat === 'function' ? parent.getFormat() : null;
+            if (format === 2) { align = 'center'; return; }
+            if (format === 3) { align = 'right'; return; }
+            if (format === 4) { align = 'justify'; return; }
+            if (format === 1) { align = 'left'; return; }
+            parent = parent.getParent();
+        }
+    });
+    return align;
 }
 
 /** Detect whether the current selection (collapsed or not) sits inside a link. */

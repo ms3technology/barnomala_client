@@ -17,7 +17,9 @@
             </div>
 
             <article class="font-bn pt-2 pb-4 prose max-w-none text-slate-700 prose-headings:text-slate-950 prose-a:text-slate-950">
-                {{ $notice->content }}
+                <x-lexical.content-renderer
+                    :state="$notice->content_lexical"
+                    :fallback="nl2br(e($notice->content))" />
             </article>
 
             @php 

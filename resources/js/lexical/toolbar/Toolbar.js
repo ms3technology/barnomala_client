@@ -54,6 +54,10 @@ export function mountToolbar(editor, container, config) {
     handles.push(mountLists(editor, container, config));
     container.appendChild(divider());
 
+    // Alignment (right after the checklist so it sits beside the list tools)
+    handles.push(mountAlignment(editor, container, config));
+    container.appendChild(divider());
+
     // Fonts
     handles.push(mountFontFamily(editor, container, config));
     handles.push(mountFontSize(editor, container, config));
@@ -61,13 +65,13 @@ export function mountToolbar(editor, container, config) {
 
     // Inline format
     handles.push(mountTextFormat(editor, container, config));
-    handles.push(mountColors(editor, container, config));
     container.appendChild(divider());
 
-    // Alignment + link
-    handles.push(mountAlignment(editor, container, config));
-    container.appendChild(divider());
+    // Link (sits immediately before text color / highlight color)
     handles.push(mountLink(editor, container, config));
+
+    // Colors
+    handles.push(mountColors(editor, container, config));
 
     // ── Keyboard shortcuts ────────────────────────────────────────────────
     const onKeyDown = (event) => {

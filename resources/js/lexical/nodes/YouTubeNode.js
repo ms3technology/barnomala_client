@@ -5,6 +5,7 @@
  * to the parent document.
  */
 import { DecoratorNode } from 'lexical';
+import { findAncestorAttr, removeByKey } from '../utils/dom.js';
 
 export class YouTubeNode extends DecoratorNode {
     __videoId;
@@ -29,6 +30,7 @@ export class YouTubeNode extends DecoratorNode {
         const wrapper = document.createElement('div');
         wrapper.className = 'lex-youtube';
         wrapper.setAttribute('contenteditable', 'false');
+        wrapper.setAttribute('data-lexical-node-key', this.__key);
 
         const iframe = document.createElement('iframe');
         iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(this.__videoId)}`;
@@ -46,12 +48,8 @@ export class YouTubeNode extends DecoratorNode {
         remove.setAttribute('aria-label', 'Remove video');
         remove.textContent = '×';
         remove.addEventListener('click', (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            import('lexical').then(({ $getNearestNodeFromDOMNode }) => {
-                const node = $getNearestNodeFromDOMNode(remove);
-                if (node) node.remove();
-            });
+            const key = findAncestorAttr(remove, 'data-lexical-node-key');
+            removeByKey(event, key);
         });
 
         wrapper.appendChild(iframe);

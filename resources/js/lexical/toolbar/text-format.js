@@ -6,18 +6,7 @@
  * applied via inline `background-color` style so it round-trips through
  * JSON without a custom node.
  */
-import {
-    FORMAT_TEXT_COMMAND,
-    $isTextNode,
-    $getSelection,
-    $isRangeSelection,
-    SELECTION_CHANGE_COMMAND,
-    COMMAND_PRIORITY_LOW,
-} from 'lexical';
-import { $patchStyleText } from '@lexical/selection';
-import { $setBlocksType } from 'lexical';
-import { $createParagraphNode } from 'lexical';
-import { createButton, createDivider } from './shared.js';
+import { FORMAT_TEXT_COMMAND } from 'lexical';
 import {
     IS_BOLD,
     IS_ITALIC,
@@ -27,7 +16,9 @@ import {
     IS_SUBSCRIPT,
     IS_SUPERSCRIPT,
 } from 'lexical';
-import { hasFormatFlag, getActiveInlineStyle } from '../utils/format.js';
+import { $isTextNode, $getSelection, $isRangeSelection } from 'lexical';
+import { createButton, createDivider } from './shared.js';
+import { hasFormatFlag } from '../utils/format.js';
 
 const FORMAT_BIT_BY_FORMAT = {
     bold: IS_BOLD,
@@ -38,20 +29,6 @@ const FORMAT_BIT_BY_FORMAT = {
     subscript: IS_SUBSCRIPT,
     superscript: IS_SUPERSCRIPT,
 };
-
-/**
- * Read the active highlight color for the current selection.
- */
-function getActiveHighlight(editor) {
-    return getActiveInlineStyle(editor, 'background-color') || '';
-}
-
-/**
- * Read the active text color for the current selection.
- */
-function getActiveTextColor(editor) {
-    return getActiveInlineStyle(editor, 'color') || '';
-}
 
 export function mountTextFormat(editor, container, config) {
     const buttons = {};
@@ -83,31 +60,6 @@ export function mountTextFormat(editor, container, config) {
     container.append(bold, italic, underline, strike, code, sub, sup);
     container.appendChild(createDivider());
 
-    // Highlight — toggle button + small palette accessible via "More".
-    const highlight = createButton({
-        icon: 'highlight',
-        title: 'Highlight color',
-        ariaLabel: 'Highlight color',
-        attr: { 'data-toolbar-action': 'format-highlight' },
-    });
-    const applyHighlight = (color) => {
-        editor.update(() => {
-            const selection = $getSelection();
-            if ($isRangeSelection(selection)) {
-                $patchStyleText(selection, { 'background-color': color });
-            }
-        }, { discrete: true });
-        editor.focus();
-    };
-    highlight.addEventListener('click', () => {
-        const current = getActiveHighlight(editor);
-        const idx = config.highlightColors.indexOf(current);
-        const next = config.highlightColors[(idx + 1) % config.highlightColors.length] || config.highlightColors[0];
-        applyHighlight(next);
-    });
-    buttons.highlight = highlight;
-    container.appendChild(highlight);
-
     // Clear formatting
     const clear = createButton({
         icon: 'clear',
@@ -115,7 +67,7 @@ export function mountTextFormat(editor, container, config) {
         ariaLabel: 'Clear formatting',
         attr: { 'data-toolbar-action': 'clear-formatting' },
     });
-    const clearFormatting = () => {
+    clear.addEventListener('click', () => {
         editor.update(() => {
             const selection = $getSelection();
             if (!$isRangeSelection(selection)) return;
@@ -128,21 +80,13 @@ export function mountTextFormat(editor, container, config) {
             }
         }, { discrete: true });
         editor.focus();
-    };
-    clear.addEventListener('click', clearFormatting);
+    });
     container.appendChild(clear);
 
     container.appendChild(createDivider());
 
     const refresh = () => {
         for (const [format, btn] of Object.entries(buttons)) {
-            if (format === 'highlight') {
-                const c = getActiveHighlight(editor);
-                btn.classList.toggle('is-active', !!c);
-                if (c) btn.style.setProperty('--lex-tb-highlight', c);
-                else btn.style.removeProperty('--lex-tb-highlight');
-                continue;
-            }
             const bit = FORMAT_BIT_BY_FORMAT[format];
             if (bit === undefined) continue;
             const active = hasFormatFlag(editor, bit);
@@ -163,6 +107,4 @@ export function mountTextFormat(editor, container, config) {
     };
 }
 
-// Re-export the highlight/text color getters so colors.js can re-use them
-// without importing the format module directly.
-export { getActiveHighlight, getActiveTextColor, applyHighlight };
+export {};

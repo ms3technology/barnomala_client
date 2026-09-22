@@ -79,7 +79,10 @@ class SpeechController extends Controller
      */
     public function create()
     {
-        return view('admin.speeches.create');
+        return view('admin.speeches.form', [
+            'speech' => new Speech(['is_active' => true]),
+            'isEditing' => false,
+        ]);
     }
 
     /**
@@ -90,10 +93,13 @@ class SpeechController extends Controller
         $validated = $request->validate([
             'name' => 'nullable|string|max:255',
             'title' => 'required|string|max:255',
-            'speech' => 'required|string',
+            'speech' => 'nullable|string',
+            'speech_lexical' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'is_active' => 'boolean',
         ]);
+
+        $validated = $this->applyLexicalPayload($validated);
 
         $imageJson = null;
         if ($request->hasFile('image')) {
@@ -125,7 +131,10 @@ class SpeechController extends Controller
      */
     public function edit(Speech $speech)
     {
-        return view('admin.speeches.edit', compact('speech'));
+        return view('admin.speeches.form', [
+            'speech' => $speech,
+            'isEditing' => true,
+        ]);
     }
 
     /**
@@ -136,10 +145,13 @@ class SpeechController extends Controller
         $validated = $request->validate([
             'name' => 'nullable|string|max:255',
             'title' => 'required|string|max:255',
-            'speech' => 'required|string',
+            'speech' => 'nullable|string',
+            'speech_lexical' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'is_active' => 'boolean',
         ]);
+
+        $validated = $this->applyLexicalPayload($validated, $speech);
 
         if ($request->hasFile('image')) {
             // Delete old image
@@ -170,5 +182,71 @@ class SpeechController extends Controller
 
         return redirect()->route('admin.speeches.index')
             ->with('success', 'Speech deleted successfully.');
+    }
+
+    /**
+     * Merge the lexical JSON payload into the validated dataset:
+     * - decode `speech_lexical` into a structured array (model cast handles persistence)
+     * - derive `speech` (the plain-text mirror) from it so downstream
+     *   read-only renderers keep working
+     */
+    private function applyLexicalPayload(array $payload, ?Speech $speech = null): array
+    {
+        $raw = $payload['speech_lexical'] ?? null;
+
+        if ($raw !== null) {
+            $raw = trim((string) $raw);
+        }
+
+        $decoded = null;
+        if ($raw !== null && $raw !== '') {
+            $decoded = json_decode($raw, true);
+            if (!is_array($decoded)) {
+                $decoded = null;
+            }
+        }
+
+        if ($decoded !== null) {
+            $payload['speech_lexical'] = $decoded;
+            $payload['speech'] = $this->extractLexicalPlainText($decoded) ?: ($payload['speech'] ?? '');
+        } else {
+            // Empty / invalid lexical payload: don't clobber existing data on update.
+            if ($speech !== null) {
+                unset($payload['speech_lexical']);
+            } else {
+                $payload['speech_lexical'] = null;
+            }
+        }
+
+        return $payload;
+    }
+
+    /**
+     * Walk a Lexical state tree and concatenate leaf text nodes. Block-level
+     * nodes gain a soft paragraph break so the legacy `speech` column
+     * stays readable when editors use multiple blocks.
+     */
+    private function extractLexicalPlainText(array $node): string
+    {
+        $text = '';
+
+        if (isset($node['text']) && is_string($node['text'])) {
+            $text .= $node['text'];
+        }
+
+        if (isset($node['children']) && is_array($node['children'])) {
+            foreach ($node['children'] as $child) {
+                if (is_array($child)) {
+                    $text .= $this->extractLexicalPlainText($child);
+                }
+            }
+        }
+
+        $type = $node['type'] ?? null;
+        if (in_array($type, ['paragraph', 'heading', 'quote', 'listitem'], true) && $text !== '') {
+            $text .= "\n\n";
+        }
+
+        return $text;
     }
 }

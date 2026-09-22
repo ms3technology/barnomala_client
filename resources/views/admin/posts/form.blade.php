@@ -102,7 +102,7 @@
         @csrf
         @if($isEditing) @method('PUT') @endif
 
-        <div class="bg-white border border-slate-200 rounded-lg p-5">
+        <div class="bg-white p-4">
             <div class="flex flex-col md:flex-row gap-4">
                 <div class="w-full md:w-1/3">
                     <label for="type" class="block text-sm font-semibold text-slate-700 mb-1.5">Post Type *</label>
@@ -119,8 +119,8 @@
             </div>
         </div>
 
-        <div class="flex flex-col lg:flex-row gap-4 mt-4">
-            <div class="w-full md:w-2/3 bg-white border border-slate-200 rounded-lg p-5">
+        <div class="flex flex-col lg:flex-row gap-4">
+            <div class="w-full md:w-2/3 bg-white p-4">
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">
@@ -128,15 +128,6 @@
                         </label>
 
                         @php
-                            // Initial editor state priority:
-                            //   1. `old('content_lexical')` from a validation
-                            //      round-trip — preserves the user's draft.
-                            //   2. `$post->content_lexical` from the database.
-                            //   3. `$post->content` plain text — the editor
-                            //      builder on the client side will assemble a
-                            //      valid Lexical state from it (the server-side
-                            //      shape may not match Lexical's expected wire
-                            //      format strictly across versions).
                             if (old('content_lexical') !== null) {
                                 $lexicalValue = json_decode(old('content_lexical'), true);
                             } elseif (!empty($post->content_lexical)) {
@@ -144,12 +135,6 @@
                             } else {
                                 $lexicalValue = null;
                             }
-
-                            // Plain-text fallback lives only in a data attribute —
-                            // never inside the editor itself. The JS reads it
-                            // and calls Lexical's `$createParagraphNode` /
-                            // `$createTextNode` helpers to build a guaranteed-
-                            // valid initial state.
                             $plainFallback = $post->content ?? '';
                         @endphp
 
@@ -211,11 +196,11 @@
             </div>
 
             <div class="w-full md:w-1/3 space-y-6">
-                <div x-show="isNews" x-cloak class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700 overflow-hidden">
+                <div x-show="isNews" x-cloak class="bg-white overflow-hidden">
                     <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-image text-indigo-500"></i> Cover Image</h3></div>
                     <div class="p-6"><div class="mb-4 aspect-video rounded-xl overflow-hidden border-2 border-dashed border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 flex items-center justify-center"><template x-if="coverPreview"><img :src="coverPreview" alt="Cover preview" class="w-full h-full object-cover"></template><template x-if="!coverPreview && existingCover"><img :src="existingCover" alt="Current cover" class="w-full h-full object-cover"></template><template x-if="!coverPreview && !existingCover"><i class="fas fa-camera text-3xl text-slate-400"></i></template></div><div @click="$refs.coverInput.click()" class="flex items-center justify-center px-4 py-4 border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-xl cursor-pointer hover:border-indigo-400 transition-all bg-slate-50/50 group"><i class="fas fa-upload mr-3 text-slate-400 group-hover:text-indigo-500"></i><span class="text-sm font-semibold text-slate-600 dark:text-slate-400" x-text="existingCover ? 'Change cover image' : 'Choose cover image'"></span><input type="file" name="image" accept="image/*" x-ref="coverInput" @change="handleCoverImage($event)" class="hidden"></div>@error('image') <p class="mt-2 text-xs text-red-500 font-medium">{{ $message }}</p> @enderror</div>
                 </div>
-                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700 overflow-hidden">
+                <div class="bg-white overflow-hidden">
                     <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-paperclip text-indigo-500"></i> Attachments</h3></div>
                     <div class="p-6">
                         @if($isEditing && $post->artifacts->count())
@@ -237,17 +222,15 @@
                         <template x-if="selectedFiles.length"><div class="mb-5 space-y-2"><template x-for="(file, index) in selectedFiles" :key="index"><div class="flex items-center justify-between gap-3"><div class="flex items-center gap-3 min-w-0 flex-1"><i class="fas fa-file-alt text-indigo-500 shrink-0"></i><input type="text" :name="`artifact_file_names[${index}]`" x-model="file.displayName" maxlength="255" placeholder="File name" class="block w-full px-3 py-2 text-sm font-semibold rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"></div><button @click="removeFile(index)" type="button" class="w-9 h-9 inline-flex items-center justify-center rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors shrink-0" title="Remove file"><i class="fas fa-times"></i></button></div></template></div></template>
                         <div @click="$refs.attachmentsInput.click()" class="flex flex-col items-center justify-center px-6 py-8 border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-xl cursor-pointer hover:border-indigo-400 transition-all bg-slate-50/50 group"><i class="fas fa-cloud-upload-alt text-2xl text-slate-400 group-hover:text-indigo-500 mb-2"></i><p class="text-sm font-semibold text-slate-600 dark:text-slate-400">Click to add files</p><p class="text-xs text-slate-400 mt-1">Maximum 20 MB per file.</p><input type="file" name="artifacts[]" multiple x-ref="attachmentsInput" @change="handleAttachments($event)" class="hidden"></div>@error('artifacts.*') <p class="mt-2 text-xs text-red-500 font-medium">{{ $message }}</p> @enderror
                     </div>
-                </div>
-            </div>
-        </div>
+                </div>               
 
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700 overflow-hidden mt-6">
-            <div class="p-6">
-                <div class="flex flex-col md:flex-row md:items-center gap-6 flex-wrap">
-                    <div class="md:flex-1 md:max-w-[200px]"><label for="published_at" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Publication Date *</label><input type="date" name="published_at" id="published_at" value="{{ old('published_at', optional($post->published_at)->format('Y-m-d') ?: now()->format('Y-m-d')) }}" class="block w-full px-3 py-2.5 text-sm font-bold rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white shadow-sm" required>@error('published_at') <p class="mt-1.5 text-xs text-red-500 font-medium">{{ $message }}</p> @enderror</div>
-                    <div class="flex items-center gap-3"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Published</span><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" name="is_active" value="1" {{ old('is_active', $post->is_active) ? 'checked' : '' }} class="sr-only peer"><div class="w-10 h-5.5 bg-slate-200 dark:bg-slate-600 rounded-full peer peer-checked:bg-indigo-600 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:after:translate-x-4.5"></div></label></div>
-                    <div x-show="isNotice" x-cloak class="flex items-center gap-3"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Urgent Notice</span><input type="checkbox" name="is_urgent" value="1" {{ old('is_urgent', $post->is_urgent) ? 'checked' : '' }} class="h-5 w-5 rounded border-slate-300 text-red-500 focus:ring-red-500"></div>
-                    <div x-show="isNews" x-cloak class="flex items-center gap-3"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Featured</span><input type="checkbox" name="is_featured" value="1" {{ old('is_featured', $post->is_featured) ? 'checked' : '' }} class="h-5 w-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500"></div>
+                <div class="bg-white overflow-hidden p-6">
+                    <div class="flex flex-col gap-6">
+                        <div class="md:flex-1 md:max-w-50"><label for="published_at" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Publication Date *</label><input type="date" name="published_at" id="published_at" value="{{ old('published_at', optional($post->published_at)->format('Y-m-d') ?: now()->format('Y-m-d')) }}" class="block w-full px-3 py-2.5 text-sm font-bold rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white shadow-sm" required>@error('published_at') <p class="mt-1.5 text-xs text-red-500 font-medium">{{ $message }}</p> @enderror</div>
+                        <div class="flex items-center gap-3"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Published</span><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" name="is_active" value="1" {{ old('is_active', $post->is_active) ? 'checked' : '' }} class="sr-only peer"><div class="w-10 h-5.5 bg-slate-200 dark:bg-slate-600 rounded-full peer peer-checked:bg-indigo-600 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:after:translate-x-4.5"></div></label></div>
+                        <div x-show="isNotice" x-cloak class="flex items-center gap-3"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Urgent Notice</span><input type="checkbox" name="is_urgent" value="1" {{ old('is_urgent', $post->is_urgent) ? 'checked' : '' }} class="h-5 w-5 rounded border-slate-300 text-red-500 focus:ring-red-500"></div>
+                        <div x-show="isNews" x-cloak class="flex items-center gap-3"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Featured</span><input type="checkbox" name="is_featured" value="1" {{ old('is_featured', $post->is_featured) ? 'checked' : '' }} class="h-5 w-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500"></div>
+                    </div>
                 </div>
             </div>
         </div>

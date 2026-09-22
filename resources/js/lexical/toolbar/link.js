@@ -128,6 +128,7 @@ export function mountLink(editor, container, config) {
     return {
         destroy() {
             unregister();
+            dropdown.destroy();
             dropdown.root.remove();
         },
     };

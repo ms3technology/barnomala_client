@@ -35,25 +35,39 @@ class OptionController extends Controller
     /**
      * Display branding management.
      */
-    public function branding(ThemeService $theme)
+    public function branding()
     {
         // Load branding keys (accent color, header bg, show_top_header, logo, banner, etc.)
         $brandingOptions = Option::where('option_key', 'like', 'institute.branding.%')
-            ->get()->pluck('option_value', 'option_key');
-
-        // Load the keys the Section Designs card writes to (institute.theme.*)
-        // so its @foreach can read the currently selected value for each section.
-        $themeOptions = Option::where('option_key', 'like', 'institute.theme.%')
             ->get()->pluck('option_value', 'option_key');
 
         // Load about keys (side_panel_type, image_json, etc.)
         $aboutOptions = Option::where('option_key', 'like', 'institute.about.%')
             ->get()->pluck('option_value', 'option_key');
 
+        $options = $brandingOptions->union($aboutOptions);
+
+        return view('admin.options.branding', compact('options'));
+    }
+
+    /**
+     * Display theme management (top-header toggle + section designs).
+     */
+    public function theme(ThemeService $theme)
+    {
+        $brandingOptions = Option::where('option_key', 'like', 'institute.branding.%')
+            ->get()->pluck('option_value', 'option_key');
+
+        $themeOptions = Option::where('option_key', 'like', 'institute.theme.%')
+            ->get()->pluck('option_value', 'option_key');
+
+        $aboutOptions = Option::where('option_key', 'like', 'institute.about.%')
+            ->get()->pluck('option_value', 'option_key');
+
         $options = $brandingOptions->union($themeOptions)->union($aboutOptions);
 
         $themeSections = $theme->sections();
-        return view('admin.options.branding', compact('options', 'theme', 'themeSections'));
+        return view('admin.options.theme', compact('options', 'theme', 'themeSections'));
     }
 
     /**
@@ -448,18 +462,22 @@ class OptionController extends Controller
     }
 
     /**
+     * Keys whose stored value is a serialized JSON document (e.g. the
+     * Lexical rich-text editor's state). They get value_type = 'json';
+     * everything else is a plain string.
+     */
+    private const JSON_OPTION_KEYS = [
+        'institute.about.text',
+    ];
+
+    /**
      * Update branding
      */
     public function updateBranding(Request $request)
     {
         $settings = $request->get('settings', []);
 
-        foreach ($settings as $key => $value) {
-            Option::updateOrCreate(
-                ['option_key' => $key],
-                ['option_value' => (string) $value, 'value_type' => 'string']
-            );
-        }
+        $this->persistSettings($settings);
 
         // Handle Logo Upload
         if ($request->hasFile('logo')) {
@@ -628,6 +646,41 @@ class OptionController extends Controller
         }
 
         return redirect()->back()->with('success', 'Branding updated successfully.');
+    }
+
+    /**
+     * Persist a flat `settings[...]` payload to the `options` table.
+     *
+     * Keys listed in {@see JSON_OPTION_KEYS} are stored with
+     * `value_type = 'json'`; everything else is stored as a plain string.
+     */
+    private function persistSettings(array $settings): void
+    {
+        foreach ($settings as $key => $value) {
+            Option::updateOrCreate(
+                ['option_key' => $key],
+                [
+                    'option_value' => (string) $value,
+                    'value_type' => in_array($key, self::JSON_OPTION_KEYS, true) ? 'json' : 'string',
+                ]
+            );
+        }
+    }
+
+    /**
+     * Update theme settings (top-header toggle + section designs).
+     */
+    public function updateTheme(Request $request)
+    {
+        $settings = $request->get('settings', []);
+        $this->persistSettings($settings);
+
+        // Flush the cached options map so subsequent reads see the new values.
+        if (function_exists('setting_forget')) {
+            setting_forget();
+        }
+
+        return redirect()->route('admin.theme.index')->with('success', 'Theme settings updated successfully.');
     }
 
     /**

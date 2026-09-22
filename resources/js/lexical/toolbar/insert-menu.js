@@ -16,6 +16,7 @@ import {
     INSERT_DATE_COMMAND,
 } from '../commands/registry.js';
 import { INSERT_TABLE_COMMAND } from '@lexical/table';
+import { TOGGLE_LINK_COMMAND } from '@lexical/link';
 import { extractYouTubeId, sanitizeUrl } from '../utils/sanitize.js';
 
 function makeItemButton({ label, icon, onClick }) {
@@ -93,11 +94,7 @@ export function mountInsertMenu(editor, container, config) {
                 close();
                 return;
             }
-            // Lazy import so the toolbar doesn't pull in the link plugin
-            // for users who never use this item.
-            import('@lexical/link').then(({ TOGGLE_LINK_COMMAND }) => {
-                editor.dispatchCommand(TOGGLE_LINK_COMMAND, safe);
-            });
+            editor.dispatchCommand(TOGGLE_LINK_COMMAND, safe);
             close();
         },
         'youtube': (close) => {
@@ -146,6 +143,7 @@ export function mountInsertMenu(editor, container, config) {
 
     return {
         destroy() {
+            dropdown.destroy();
             dropdown.root.remove();
         },
     };

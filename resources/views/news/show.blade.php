@@ -24,7 +24,9 @@
                     @endif
 
                     <div class="prose prose-slate prose-lg max-w-none text-slate-700 leading-relaxed font-medium">
-                        {!! nl2br($news->content) !!}
+                        <x-lexical.content-renderer
+                            :state="$news->content_lexical"
+                            :fallback="nl2br(e($news->content))" />
                     </div>
 
                     @php

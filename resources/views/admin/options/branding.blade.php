@@ -28,12 +28,6 @@
                         <i class="fas fa-paint-brush mr-1.5 md:mr-2"></i>
                         Branding &amp; Visuals
                     </button>
-                    <button type="button" @click="activeTab = 'layout'"
-                        :class="activeTab === 'layout' ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'"
-                        class="px-4 md:px-5 py-3.5 md:py-4 text-xs md:text-sm font-bold border-b-2 transition-all duration-200 whitespace-nowrap">
-                        <i class="fas fa-layer-group mr-1.5 md:mr-2"></i>
-                        Layout &amp; Theme
-                    </button>
                     <button type="button" @click="activeTab = 'teachers'"
                         :class="activeTab === 'teachers' ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'"
                         class="px-4 md:px-5 py-3.5 md:py-4 text-xs md:text-sm font-bold border-b-2 transition-all duration-200 whitespace-nowrap">
@@ -278,23 +272,19 @@
                 </script>
 
                 {{-- Colors & About Image --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
+                <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
                     {{-- Header Background Color --}}
                     <div class="bg-slate-50/50 dark:bg-slate-700/30 rounded-xl p-5 border border-slate-100 dark:border-slate-600">
                         <label class="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                             <i class="fas fa-fill-drip text-indigo-500"></i>
-                            Header Background
+                            Banner Background
                         </label>
-                        <div class="flex items-center gap-4 p-3 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl">
+                        <div class="flex items-center gap-4">
                             <input type="color" name="settings[institute.branding.header_bg]" value="{{ $options['institute.branding.header_bg'] ?? '#ffffff' }}"
                                     class="h-10 w-16 rounded-lg cursor-pointer border-none bg-transparent">
                             <span class="text-xs font-mono font-bold text-slate-600 dark:text-slate-300 uppercase">{{ $options['institute.branding.header_bg'] ?? '#ffffff' }}</span>
-                            <span class="ml-auto text-[10px] text-slate-400 font-medium">Click to change</span>
-                        </div>
-                    </div>
-
-                    {{-- Accent Color --}}
-                    <div class="bg-slate-50/50 dark:bg-slate-700/30 rounded-xl p-5 border border-slate-100 dark:border-slate-600">
+                            </div>
+                        <br>
                         <label class="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                             <i class="fas fa-paint-brush text-indigo-500"></i>
                             Accent Color
@@ -315,7 +305,7 @@
                             <div class="flex items-center gap-3">
                                 <div class="relative">
                                     <input type="color" x-model="selectedColor"
-                                        class="w-10 h-10 rounded-lg border border-slate-300 dark:border-slate-600 p-0.5 cursor-pointer">
+                                        class="w-10 h-10 rounded-lg p-0.5 cursor-pointer">
                                 </div>
                                 <div class="relative flex-1">
                                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -334,7 +324,7 @@
                         @php
                             $aboutImageRaw = $options['institute.about.image_json'] ?? null;
                             $aboutImage = is_array($aboutImageRaw) ? $aboutImageRaw : (is_string($aboutImageRaw) && $aboutImageRaw !== '' ? (json_decode($aboutImageRaw, true) ?: []) : []);
-                        @endphp>
+                        @endphp
                         <label class="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                             <i class="fas fa-image text-indigo-500"></i>
                             About Image
@@ -369,174 +359,93 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- About Text (Lexical rich-text editor) has been moved to the Theme page. --}}
             </div>
 
-            {{-- Tab 2: Layout & Theme --}}
-            <div x-show="activeTab === 'layout'" x-cloak class="p-6 md:p-8">
-                <div class="space-y-6">
-                    {{-- Top Header Toggle --}}
-                    <div class="bg-slate-50/50 dark:bg-slate-700/30 rounded-xl p-5 border border-slate-100 dark:border-slate-600">
-                        @php
-                            $showTopHeader = ($options['institute.branding.show_top_header'] ?? '1') === '1';
-                        @endphp
-                        <label for="institute.branding.show_top_header"
-                            class="flex items-center justify-between gap-4 cursor-pointer">
-                            <div class="flex items-start gap-4 min-w-0">
-                                <span class="shrink-0 w-12 h-12 rounded-xl bg-linear-to-br from-indigo-100 to-purple-100 dark:from-indigo-500/20 dark:to-purple-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
-                                    <i class="fas fa-window-maximize text-lg"></i>
-                                </span>
-                                <div class="min-w-0">
-                                    <p class="text-sm font-bold text-slate-800 dark:text-slate-200">Top Header Bar</p>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Show the dark contact strip (phone, email, social links, online apply)</p>
-                                </div>
+            {{-- Tab 2: Teachers --}}
+            <div x-show="activeTab === 'teachers'" x-cloak class="p-6 md:p-8 space-y-6">
+                @php
+                    $hideFemalePhoto = ($options['institute.branding.hide_female_teacher_photo'] ?? '0') === '1';
+                    $femalePhotoRaw = $options['institute.branding.female_teacher_photo_json'] ?? null;
+                    $femalePhoto = is_array($femalePhotoRaw)
+                        ? $femalePhotoRaw
+                        : (is_string($femalePhotoRaw) && $femalePhotoRaw !== '' ? (json_decode($femalePhotoRaw, true) ?: []) : []);
+                @endphp
+
+                {{-- Hide Female Teacher Photo Toggle --}}
+                <div class="bg-slate-50/50 dark:bg-slate-700/30 rounded-xl p-5 border border-slate-100 dark:border-slate-600">
+                    <div class="flex items-center justify-between gap-4">
+                        <label for="institute.branding.hide_female_teacher_photo" class="flex items-start gap-4 cursor-pointer min-w-0 flex-1">
+                            <div class="min-w-0">
+                                <p class="font-bold text-slate-800 dark:text-slate-200">Hide Female Teacher Photos</p>
                             </div>
-                            <span class="relative inline-flex items-center shrink-0">
-                                <input type="hidden" name="settings[institute.branding.show_top_header]" value="0">
-                                <input type="checkbox" id="institute.branding.show_top_header"
-                                    name="settings[institute.branding.show_top_header]" value="1"
-                                    class="peer sr-only"
-                                    {{ $showTopHeader ? 'checked' : '' }}>
-                                <span class="w-12 h-6 bg-slate-300 dark:bg-slate-600 rounded-full peer-checked:bg-linear-to-r peer-checked:from-indigo-500 peer-checked:to-purple-500 transition-all duration-300"></span>
-                                <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md transform peer-checked:translate-x-6 peer-checked:shadow-lg transition-all duration-300"></span>
-                            </span>
                         </label>
+                        <span class="relative inline-flex items-center shrink-0">
+                            <input type="hidden" name="settings[institute.branding.hide_female_teacher_photo]" value="0">
+                            <input type="checkbox" id="institute.branding.hide_female_teacher_photo"
+                                name="settings[institute.branding.hide_female_teacher_photo]" value="1"
+                                class="peer sr-only"
+                                {{ $hideFemalePhoto ? 'checked' : '' }}>
+                            <span class="w-12 h-6 bg-slate-300 dark:bg-slate-600 rounded-full peer-checked:bg-linear-to-r peer-checked:from-pink-500 peer-checked:to-rose-500 transition-all duration-300"></span>
+                            <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md transform peer-checked:translate-x-6 peer-checked:shadow-lg transition-all duration-300"></span>
+                        </span>
                     </div>
 
-                    {{-- Theme Sections --}}
-                    <div class="bg-slate-50/50 dark:bg-slate-700/30 rounded-xl p-5 border border-slate-100 dark:border-slate-600">
-                        <label class="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                            <i class="fas fa-palette text-indigo-500"></i>
-                            Section Designs
+                    {{-- Custom placeholder uploader --}}
+                    <div class="mt-5 pt-5 border-t border-slate-200 dark:border-slate-600"
+                        x-data="{
+                            preview: '{{ $femalePhoto['url'] ?? '' }}',
+                            handleFemalePhotoChange(e) {
+                                const file = e.target.files[0];
+                                if (file) this.preview = URL.createObjectURL(file);
+                            },
+                            clearCustomPhoto() {
+                                this.preview = '';
+                                const input = document.getElementById('female_teacher_photo_input');
+                                if (input) input.value = '';
+                            }
+                        }">
+                        <label class="block text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <i class="fas fa-image text-pink-500"></i>
+                            Custom Female Teacher Photo
                         </label>
-
-                        @if(empty($themeSections))
-                            <div class="text-center py-8 bg-slate-50/50 dark:bg-slate-700/30 rounded-xl border border-dashed border-slate-200 dark:border-slate-600">
-                                <div class="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center mx-auto mb-3">
-                                    <i class="fas fa-info-circle text-slate-400 text-xl"></i>
-                                </div>
-                                <p class="text-sm text-slate-500 dark:text-slate-400 italic">No theme sections registered.</p>
-                            </div>
-                        @else
-                            <div class="space-y-6">
-                                @foreach($themeSections as $sectionKey => $section)
-                                    @php
-                                        $optionKey    = $theme->optionKey($sectionKey);
-                                        $available    = $theme->available($sectionKey);
-                                        $currentValue = $theme->currentValue($sectionKey);
-                                        if (!array_key_exists((string) $currentValue, $available)) {
-                                            $currentValue = $theme->defaultFor($sectionKey);
-                                        }
-                                        $isDesign     = $theme->typeOf($sectionKey) === 'design';
-                                        $labelSuffix  = $isDesign ? ' Design' : '';
-                                    @endphp
-                                    <div x-data="{ selected: '{{ $currentValue }}' }">
-                                        <label class="block text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2.5">
-                                            {{ $section['label'] ?? ucfirst($sectionKey) }}{{ $labelSuffix }}
-                                        </label>
-
-                                        <input type="hidden" name="settings[{{ $optionKey }}]" x-model="selected">
-
-                                        <div class="flex flex-wrap gap-3">
-                                            @foreach($available as $valueKey => $valueLabel)
-                                                <div @click="selected = '{{ $valueKey }}'"
-                                                        :class="selected === '{{ $valueKey }}' ? 'ring-1 ring-indigo-500 bg-indigo-50 dark:bg-indigo-500/10 border-indigo-300 dark:border-indigo-600 shadow-sm' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700/50'"
-                                                        class="w-fit flex items-center gap-3 px-3.5 py-2.5 rounded-lg border cursor-pointer transition-all duration-150 select-none">
-                                                    <i :class="selected === '{{ $valueKey }}' ? 'fa-solid fa-square-check text-indigo-600 dark:text-indigo-400' : 'fa-regular fa-square text-slate-300 dark:text-slate-500'" class="text-lg shrink-0"></i>
-                                                    <span class="text-sm font-medium text-slate-700 dark:text-slate-200 leading-tight">{{ $valueLabel }}</span>
-                                                </div>
-                                            @endforeach
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-start">
+                            <div class="md:col-span-1">
+                                <div class="relative group aspect-square bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-600 border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-2xl overflow-hidden flex items-center justify-center transition-all duration-300 hover:border-pink-300 dark:hover:border-pink-500 hover:shadow-lg">
+                                    <template x-if="preview">
+                                        <img :src="preview" class="max-w-full max-h-full object-contain p-2">
+                                    </template>
+                                    <template x-if="!preview">
+                                        <div class="text-center p-3">
+                                            <i class="fas fa-user-circle text-slate-300 dark:text-slate-500 text-3xl mb-1"></i>
+                                            <p class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase">No Custom Photo</p>
+                                            <p class="text-[9px] text-slate-400 dark:text-slate-500 mt-1 leading-tight">Falls back to <code>images/female-teacher.png</code></p>
                                         </div>
-                                    </div>
-                                @endforeach
+                                    </template>
+                                    <label class="absolute inset-0 bg-linear-to-t from-pink-900/80 to-rose-900/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center cursor-pointer backdrop-blur-sm">
+                                        <div class="text-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                            <i class="fas fa-cloud-upload-alt text-xl text-white mb-1"></i>
+                                            <span class="block text-white text-[10px] font-black uppercase tracking-widest">Change Photo</span>
+                                        </div>
+                                        <input type="file" id="female_teacher_photo_input"
+                                            name="female_teacher_photo" class="hidden" accept="image/*"
+                                            @change="handleFemalePhotoChange">
+                                    </label>
+                                </div>
                             </div>
-                        @endif
+                            <div class="md:col-span-2 text-xs text-slate-500 dark:text-slate-400 space-y-2">
+                                <p><i class="fas fa-info-circle text-pink-500 mr-1"></i> Upload a square image (PNG/JPG/WebP). It will be converted to WebP for performance.</p>
+                                <p><i class="fas fa-eye-slash text-pink-500 mr-1"></i> Used <strong>only</strong> when the toggle above is on and the teacher is marked as female in their profile.</p>
+                                <p><i class="fas fa-undo text-pink-500 mr-1"></i> If no custom photo is uploaded, the built-in <code class="text-[10px] bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">public/images/female-teacher.png</code> is used.</p>
+                                <button type="button" x-show="preview" @click="clearCustomPhoto"
+                                    class="mt-2 inline-flex items-center gap-1.5 text-[11px] font-bold text-pink-600 hover:text-pink-700 uppercase tracking-widest">
+                                    <i class="fas fa-times-circle"></i> Clear preview
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            {{-- Tab: Teachers --}}
-            <div x-show="activeTab === 'teachers'" x-cloak class="p-6 md:p-8 space-y-6">
-                    @php
-                        $hideFemalePhoto = ($options['institute.branding.hide_female_teacher_photo'] ?? '0') === '1';
-                        $femalePhotoRaw = $options['institute.branding.female_teacher_photo_json'] ?? null;
-                        $femalePhoto = is_array($femalePhotoRaw)
-                            ? $femalePhotoRaw
-                            : (is_string($femalePhotoRaw) && $femalePhotoRaw !== '' ? (json_decode($femalePhotoRaw, true) ?: []) : []);
-                    @endphp
-
-                    {{-- Hide Female Teacher Photo Toggle --}}
-                    <div class="bg-slate-50/50 dark:bg-slate-700/30 rounded-xl p-5 border border-slate-100 dark:border-slate-600">
-                        <div class="flex items-center justify-between gap-4">
-                            <label for="institute.branding.hide_female_teacher_photo" class="flex items-start gap-4 cursor-pointer min-w-0 flex-1">
-                                <div class="min-w-0">
-                                    <p class="font-bold text-slate-800 dark:text-slate-200">Hide Female Teacher Photos</p>
-                                </div>
-                            </label>
-                            <span class="relative inline-flex items-center shrink-0">
-                                <input type="hidden" name="settings[institute.branding.hide_female_teacher_photo]" value="0">
-                                <input type="checkbox" id="institute.branding.hide_female_teacher_photo"
-                                    name="settings[institute.branding.hide_female_teacher_photo]" value="1"
-                                    class="peer sr-only"
-                                    {{ $hideFemalePhoto ? 'checked' : '' }}>
-                                <span class="w-12 h-6 bg-slate-300 dark:bg-slate-600 rounded-full peer-checked:bg-linear-to-r peer-checked:from-pink-500 peer-checked:to-rose-500 transition-all duration-300"></span>
-                                <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md transform peer-checked:translate-x-6 peer-checked:shadow-lg transition-all duration-300"></span>
-                            </span>
-                        </div>
-
-                        {{-- Custom placeholder uploader --}}
-                        <div class="mt-5 pt-5 border-t border-slate-200 dark:border-slate-600"
-                            x-data="{
-                                preview: '{{ $femalePhoto['url'] ?? '' }}',
-                                handleFemalePhotoChange(e) {
-                                    const file = e.target.files[0];
-                                    if (file) this.preview = URL.createObjectURL(file);
-                                },
-                                clearCustomPhoto() {
-                                    this.preview = '';
-                                    const input = document.getElementById('female_teacher_photo_input');
-                                    if (input) input.value = '';
-                                }
-                            }">
-                            <label class="block text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                                <i class="fas fa-image text-pink-500"></i>
-                                Custom Female Teacher Photo
-                            </label>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-start">
-                                <div class="md:col-span-1">
-                                    <div class="relative group aspect-square bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-600 border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-2xl overflow-hidden flex items-center justify-center transition-all duration-300 hover:border-pink-300 dark:hover:border-pink-500 hover:shadow-lg">
-                                        <template x-if="preview">
-                                            <img :src="preview" class="max-w-full max-h-full object-contain p-2">
-                                        </template>
-                                        <template x-if="!preview">
-                                            <div class="text-center p-3">
-                                                <i class="fas fa-user-circle text-slate-300 dark:text-slate-500 text-3xl mb-1"></i>
-                                                <p class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase">No Custom Photo</p>
-                                                <p class="text-[9px] text-slate-400 dark:text-slate-500 mt-1 leading-tight">Falls back to <code>images/female-teacher.png</code></p>
-                                            </div>
-                                        </template>
-                                        <label class="absolute inset-0 bg-linear-to-t from-pink-900/80 to-rose-900/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center cursor-pointer backdrop-blur-sm">
-                                            <div class="text-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                                <i class="fas fa-cloud-upload-alt text-xl text-white mb-1"></i>
-                                                <span class="block text-white text-[10px] font-black uppercase tracking-widest">Change Photo</span>
-                                            </div>
-                                            <input type="file" id="female_teacher_photo_input"
-                                                name="female_teacher_photo" class="hidden" accept="image/*"
-                                                @change="handleFemalePhotoChange">
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="md:col-span-2 text-xs text-slate-500 dark:text-slate-400 space-y-2">
-                                    <p><i class="fas fa-info-circle text-pink-500 mr-1"></i> Upload a square image (PNG/JPG/WebP). It will be converted to WebP for performance.</p>
-                                    <p><i class="fas fa-eye-slash text-pink-500 mr-1"></i> Used <strong>only</strong> when the toggle above is on and the teacher is marked as female in their profile.</p>
-                                    <p><i class="fas fa-undo text-pink-500 mr-1"></i> If no custom photo is uploaded, the built-in <code class="text-[10px] bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">public/images/female-teacher.png</code> is used.</p>
-                                    <button type="button" x-show="preview" @click="clearCustomPhoto"
-                                        class="mt-2 inline-flex items-center gap-1.5 text-[11px] font-bold text-pink-600 hover:text-pink-700 uppercase tracking-widest">
-                                        <i class="fas fa-times-circle"></i> Clear preview
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
             </div>
         </div>
     </form>

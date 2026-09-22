@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\SpeechController as AdminSpeechController;
 use App\Http\Controllers\Admin\OptionController as AdminOptionController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
+use App\Http\Controllers\Admin\EditorUploadController as AdminEditorUploadController;
 use App\Http\Controllers\Admin\DataTransferController as AdminDataTransferController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\RedirectToBranchController;
@@ -44,6 +45,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     Route::resource('posts', AdminPostController::class)->except('show');
 
+    Route::post('editor/upload-image', [AdminEditorUploadController::class, 'upload'])->name('editor.upload-image');
+
     Route::resource('gallery', AdminGalleryController::class);
     Route::resource('speeches', AdminSpeechController::class);
     Route::post('speeches/quick', [AdminSpeechController::class, 'storeQuick'])->name('speeches.quick');
@@ -51,6 +54,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     Route::get('branding', [AdminOptionController::class, 'branding'])->name('branding.index');
     Route::post('branding', [AdminOptionController::class, 'updateBranding'])->name('branding.update');
+
+    Route::get('theme', [AdminOptionController::class, 'theme'])->name('theme.index');
+    Route::post('theme', [AdminOptionController::class, 'updateTheme'])->name('theme.update');
 
     Route::get('sliders', [AdminOptionController::class, 'slider'])->name('sliders.index');
     Route::post('sliders', [AdminOptionController::class, 'updateSlider'])->name('sliders.update');
