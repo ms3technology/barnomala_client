@@ -182,7 +182,8 @@ class LexicalRenderer
         if ($inner === '') {
             return '';
         }
-        return '<p class="lex-paragraph">' . $inner . '</p>' . "\n";
+        [$class, $alignAttr] = $this->alignmentAttrs($node, 'lex-paragraph');
+        return '<p class="' . $class . '"' . $alignAttr . '>' . $inner . '</p>' . "\n";
     }
 
     protected function renderHeading(array $node): string
@@ -196,7 +197,8 @@ class LexicalRenderer
         if ($inner === '') {
             return '';
         }
-        return '<' . $tag . ' class="' . $class . '">' . $inner . '</' . $tag . '>' . "\n";
+        [$class, $alignAttr] = $this->alignmentAttrs($node, $class);
+        return '<' . $tag . ' class="' . $class . '"' . $alignAttr . '>' . $inner . '</' . $tag . '>' . "\n";
     }
 
     protected function renderQuote(array $node): string
@@ -205,7 +207,8 @@ class LexicalRenderer
         if ($inner === '') {
             return '';
         }
-        return '<blockquote class="lex-quote">' . $inner . '</blockquote>' . "\n";
+        [$class, $alignAttr] = $this->alignmentAttrs($node, 'lex-quote');
+        return '<blockquote class="' . $class . '"' . $alignAttr . '>' . $inner . '</blockquote>' . "\n";
     }
 
     protected function renderList(array $node): string
@@ -232,7 +235,8 @@ class LexicalRenderer
         if ($inner === '') {
             return '';
         }
-        return '<' . $tag . ' class="' . $class . '"' . $startAttr . '>' . $inner . '</' . $tag . '>' . "\n";
+        [$class, $alignAttr] = $this->alignmentAttrs($node, $class);
+        return '<' . $tag . ' class="' . $class . '"' . $startAttr . $alignAttr . '>' . $inner . '</' . $tag . '>' . "\n";
     }
 
     protected function renderListItem(array $node): string
@@ -464,6 +468,29 @@ class LexicalRenderer
             }
         }
         return $out;
+    }
+
+    /**
+     * Resolve the text alignment saved by Lexical's `FORMAT_ELEMENT_COMMAND`
+     * (which writes `format` / `format_` on the element node) and return a
+     * tuple of `[classNameWithAlignModifier, inlineStyleAttr]`.
+     *
+     * Lexical's canonical element-format values are `left | center | right |
+     * justify`. Anything else (including the empty string and `null`) falls
+     * back to no modification so the rendered HTML stays clean.
+     */
+    protected function alignmentAttrs(array $node, string $baseClass): array
+    {
+        $format = $node['format'] ?? $node['format_'] ?? '';
+        $format = is_string($format) ? strtolower(trim($format)) : '';
+        $allowed = ['left', 'center', 'right', 'justify'];
+        if ($format === '' || !in_array($format, $allowed, true)) {
+            return [$baseClass, ''];
+        }
+
+        $class = trim($baseClass . ' lex-align-' . $format);
+        $style = 'text-align:' . $format . ';';
+        return [$class, ' style="' . $this->escape($style) . '"'];
     }
 
     // ── Escaping / sanitisation ─────────────────────────────────────────────

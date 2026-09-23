@@ -76,7 +76,7 @@ return [
             'with-image'  => 'With About Image',
         ],
     ],
-
+    
     'navigation' => [
         'label'      => 'Navigation Bar',
         'option_key' => 'institute.theme.navigation',

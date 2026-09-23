@@ -748,3 +748,13 @@
 .lex-rendered details.lex-collapsible-container[open] > .lex-collapsible-content {
     display: block;
 }
+
+/* ── Text alignment emitted by the PHP renderer ─────────────────────────────
+   Lexical's `FORMAT_ELEMENT_COMMAND` writes `format` / `format_` on each
+   block-level node (paragraph, heading, quote, list). The renderer surfaces
+   that as `lex-align-{left|center|right|justify}` *and* an inline `text-align`
+   style, so alignment stays intact even if this stylesheet isn't loaded.   */
+.lex-rendered .lex-align-left    { text-align: left; }
+.lex-rendered .lex-align-center  { text-align: center; }
+.lex-rendered .lex-align-right   { text-align: right; }
+.lex-rendered .lex-align-justify { text-align: justify; }

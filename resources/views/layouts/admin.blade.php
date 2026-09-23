@@ -131,6 +131,14 @@
                         <span>Home Slider</span>
                     </a>
 
+                    <a href="{{ route('admin.about.index') }}"
+                       class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.about.*') ? 'bg-white/5 text-white' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
+                        <div class="w-5 h-5 flex items-center justify-center rounded-lg {{ request()->routeIs('admin.about.*') ? 'bg-linear-to-r from-indigo-500 to-purple-500' : 'bg-slate-800/50' }} mr-3 shrink-0 transition-colors">
+                            <i class="fas fa-paragraph text-sm"></i>
+                        </div>
+                        <span>About Text</span>
+                    </a>
+
                     <div class="pt-4 text-xs font-semibold text-slate-500 uppercase tracking-wider px-3">System Settings</div>
 
                     <a href="{{ route('admin.branding.index') }}" 
@@ -146,7 +154,7 @@
                         <div class="w-5 h-5 flex items-center justify-center rounded-lg {{ request()->routeIs('admin.theme.*') ? 'bg-linear-to-r from-indigo-500 to-purple-500' : 'bg-slate-800/50' }} mr-3 shrink-0 transition-colors">
                             <i class="fas fa-layer-group text-sm"></i>
                         </div>
-                        <span>Theme & About</span>
+                        <span>Theme</span>
                     </a>
 
                     <a href="{{ route('admin.settings.index') }}"

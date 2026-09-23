@@ -6,7 +6,7 @@ use App\Http\Controllers\Concerns\BuildsPublicPageData;
 use App\Models\Post;
 use App\Models\Speech;
 use App\Models\Teacher;
-use App\Models\CommitteeMember;
+use App\Models\Committee;
 use App\Models\Gallery;
 
 class HomeController extends Controller
@@ -50,12 +50,14 @@ class HomeController extends Controller
             ->take(12)
             ->get();
 
-        $generalCommitteeMembers = CommitteeMember::whereHas('committee', function ($query) {
-                $query->where('status', 'active');
-            })
-            ->where('is_active', true)
-            ->orderBy('created_at', 'asc')
-            ->get();
+        $committees = Committee::where('status', 'active')
+            ->with(['members' => function ($query) {
+                $query->where('is_active', true)->orderBy('order_index')->orderBy('created_at');
+            }])
+            ->orderBy('order_index')
+            ->get()
+            ->filter(fn ($committee) => $committee->members->isNotEmpty())
+            ->values();
 
         $stats = [
             ['label' => 'Classes', 'count' => $options['institute.stats.classes_count'] ?? $options['totalClasses'] ?? null],
@@ -87,7 +89,7 @@ class HomeController extends Controller
             'galleryItems' => $galleryItems,
             'sliderImages' => $sliderImages,
             'teachers' => $teachers,
-            'generalCommitteeMembers' => $generalCommitteeMembers,
+            'committees' => $committees,
             'stats' => $stats,
             'quickLinks' => $quickLinks,
         ]));

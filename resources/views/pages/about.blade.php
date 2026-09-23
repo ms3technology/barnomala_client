@@ -56,7 +56,14 @@
                 </div>
 
                 <div class="prose prose-slate prose-lg max-w-none text-slate-600 leading-relaxed text-justify">
-                    {!! nl2br(e($aboutText)) !!}
+                    @php
+                        $aboutTextFallback = is_string($aboutText) && ! lexical_is_state($aboutText)
+                            ? $aboutText
+                            : '';
+                    @endphp
+                    <x-lexical.content-renderer
+                        :state="$aboutText"
+                        :fallback="$aboutTextFallback" />
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-8">

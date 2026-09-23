@@ -675,12 +675,59 @@ class OptionController extends Controller
         $settings = $request->get('settings', []);
         $this->persistSettings($settings);
 
+        // Handle Female Teacher Placeholder Photo Upload (custom photo)
+        if ($request->hasFile('female_teacher_photo')) {
+            $oldOption = Option::where('option_key', 'institute.branding.female_teacher_photo_json')->first();
+            if ($oldOption) {
+                $oldData = json_decode($oldOption->option_value, true);
+                if (is_array($oldData) && isset($oldData['path'])) {
+                    Storage::disk('public')->delete($oldData['path']);
+                }
+            }
+
+            $path = $this->imageService->convertToWebp($request->file('female_teacher_photo'), 'branding');
+            Option::updateOrCreate(
+                ['option_key' => 'institute.branding.female_teacher_photo_json'],
+                [
+                    'option_value' => json_encode(['url' => Storage::url($path), 'path' => $path]),
+                    'value_type' => 'json'
+                ]
+            );
+        }
+
         // Flush the cached options map so subsequent reads see the new values.
         if (function_exists('setting_forget')) {
             setting_forget();
         }
 
         return redirect()->route('admin.theme.index')->with('success', 'Theme settings updated successfully.');
+    }
+
+    /**
+     * Display the About Text editor (Lexical rich-text).
+     */
+    public function about()
+    {
+        $options = Option::where('option_key', 'like', 'institute.about.%')
+            ->get()->pluck('option_value', 'option_key');
+
+        return view('admin.options.about', compact('options'));
+    }
+
+    /**
+     * Update the About Text (Lexical rich-text editor payload).
+     */
+    public function updateAbout(Request $request)
+    {
+        $settings = $request->get('settings', []);
+        $this->persistSettings($settings);
+
+        // Flush the cached options map so subsequent reads see the new values.
+        if (function_exists('setting_forget')) {
+            setting_forget();
+        }
+
+        return redirect()->route('admin.about.index')->with('success', 'About text updated successfully.');
     }
 
     /**

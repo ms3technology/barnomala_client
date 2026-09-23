@@ -58,6 +58,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('theme', [AdminOptionController::class, 'theme'])->name('theme.index');
     Route::post('theme', [AdminOptionController::class, 'updateTheme'])->name('theme.update');
 
+    Route::get('about-text', [AdminOptionController::class, 'about'])->name('about.index');
+    Route::post('about-text', [AdminOptionController::class, 'updateAbout'])->name('about.update');
+
     Route::get('sliders', [AdminOptionController::class, 'slider'])->name('sliders.index');
     Route::post('sliders', [AdminOptionController::class, 'updateSlider'])->name('sliders.update');
 

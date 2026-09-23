@@ -64,8 +64,8 @@
             @include('home.partials.teachers', ['teachers' => $teachers])
         @endif
 
-        @if(($layout['general_committee'] ?? true) && isset($generalCommitteeMembers))
-            @include('home.partials.general-committee', ['generalCommitteeMembers' => $generalCommitteeMembers])
+        @if(($layout['general_committee'] ?? true) && isset($committees))
+            @include('home.partials.general-committee', ['committees' => $committees])
         @endif
 
         @if($layout['featured_news'] ?? true)

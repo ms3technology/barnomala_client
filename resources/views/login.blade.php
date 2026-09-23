@@ -38,9 +38,6 @@
                 <h1 class="text-xl font-bold tracking-tight text-slate-800 sm:text-2xl">
                     {{ $schoolName }}
                 </h1>
-                <p class="mt-2.5 text-sm text-slate-500 font-medium">
-                    পাসওয়ার্ড ছাড়া এক ক্লিকে লগইন করুন
-                </p>
 
                 @if($showError)
                     <div class="mt-6 animate-fade-in">
